@@ -1,0 +1,175 @@
+/* --- Estructura Principal --- */
+.patricia-sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f9ff 100%);
+  border-right: 1px solid #d7ecfa;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  font-size: var(--sidebar-font-size, 13px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* --- Logo --- */
+.patricia-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.patricia-logo h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #17405e;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.patricia-logo span {
+  font-size: 11px;
+  color: var(--accent-color);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.patricia-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Menú --- */
+.patricia-menu {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+.patricia-menu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari y Opera */
+}
+
+.patricia-menu li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  margin: 4px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: var(--sidebar-font-size, 13px);
+  color: #4a6b83;
+  transition: 0.2s;
+}
+
+.patricia-menu li:hover {
+  background: #eaf5fd;
+  color: var(--accent-color);
+}
+
+.patricia-menu .active-menu-item {
+  background: var(--accent-color);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menu-emoji {
+  font-size: 17px;
+  width: 20px;
+  display: inline-flex;
+}
+
+/* --- Botón Nueva Reserva --- */
+.btn-reserva {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start !important;
+  background: var(--accent-color) !important;
+  color: white !important;
+  padding: 16px !important;
+  border-radius: 16px !important;
+  margin: 10px 0 !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  font-size: var(--sidebar-font-size, 13px);
+}
+
+.btn-reserva:hover {
+  filter: brightness(1.1);
+}
+
+/* --- Footer --- */
+.patricia-admin-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #d7ecfa;
+}
+
+.admin-avatar {
+  width: 40px;
+  height: 40px;
+  background: #dbeefe;
+  color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px !important;
+}
+
+/* --- LOGO Y FOOTER SIEMPRE FIJOS (no escalan con font-size) --- */
+.patricia-logo h2,
+.patricia-logo span,
+.admin-info .name,
+.admin-info .role {
+  font-size: 14px !important;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+.patricia-layout.dark-mode .patricia-sidebar {
+  background: #0f172a;
+  border-right: 1px solid #1e293b;
+}
+
+.patricia-layout.dark-mode .patricia-menu li {
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode .patricia-menu li:hover {
+  background: #1e293b;
+  color: var(--accent-color);
+}
+
+.patricia-layout.dark-mode .patricia-menu .active-menu-item {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.patricia-layout.dark-mode .patricia-logo h2 {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .patricia-admin-footer {
+  border-top: 1px solid #1e293b;
+}
+
+
+/* footer patrica y gabriel */
+.admin-info .role.role-nombre {
+  font-size: 12px !important;
+  font-weight: 600;
+  color: var(--accent-color);
+  letter-spacing: 0.02em;
+}

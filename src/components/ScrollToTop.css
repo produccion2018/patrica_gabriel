@@ -1,0 +1,28 @@
+.pwb-scroll-top-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #00000033;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.pwb-scroll-top-btn:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+.pwb-scroll-top-svg {
+  width: 24px;
+  height: 24px;
+}

@@ -1,0 +1,218 @@
+.patricia-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6f9;
+  position: relative;
+}
+
+.mireya-content {
+  flex: 1;
+  padding: 24px;
+  background: #f4f6f9;
+  overflow-y: auto;
+  position: relative;
+}
+
+.gabriel-middle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 24px 0;
+}
+
+/* BOTÓN HAMBURGUESA */
+/* EN DESKTOP NO SE VE */
+.patricia-mobile-toggle {
+  display: none;
+}
+
+/* OVERLAY MOBILE */
+.patricia-sidebar-overlay {
+  display: none;
+}
+
+/* =========================
+   HISTORIAL CLIENTES
+========================= */
+
+.historial-card {
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-left: 5px solid #38bdf8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.historial-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fecha-tag {
+  font-size: 0.85em;
+  background: #f0f9ff;
+  color: #0369a1;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.search-input {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  width: 250px;
+  max-width: 100%;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px #38bdf81a;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+.patricia-layout.dark-mode {
+  background: #0f172a;
+}
+
+.patricia-layout.dark-mode .mireya-content {
+  background: #111827;
+  color: #f8fafc;
+}
+
+.patricia-layout.dark-mode .gabriel-middle-grid {
+  background: transparent;
+}
+
+.patricia-layout.dark-mode h1,
+.patricia-layout.dark-mode h2,
+.patricia-layout.dark-mode h3,
+.patricia-layout.dark-mode h4,
+.patricia-layout.dark-mode h5,
+.patricia-layout.dark-mode h6 {
+  color: #f8fafc;
+}
+
+.patricia-layout.dark-mode p,
+.patricia-layout.dark-mode span,
+.patricia-layout.dark-mode label,
+.patricia-layout.dark-mode strong {
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode input,
+.patricia-layout.dark-mode textarea,
+.patricia-layout.dark-mode select {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: white;
+}
+
+.patricia-layout.dark-mode .historial-card {
+  background: #1e293b;
+  border-left: 5px solid #0ea5e9;
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .fecha-tag {
+  background: #0f172a;
+  color: #7dd3fc;
+}
+
+.patricia-layout.dark-mode .search-input {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: white;
+}
+
+.patricia-layout.dark-mode .patricia-mobile-toggle {
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid #334155;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .gabriel-middle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mireya-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .patricia-layout {
+    display: block;
+  }
+
+  .mireya-content {
+    width: 100%;
+    padding: 70px 14px 18px;
+  }
+
+  /* ACÁ SÍ aparece el hamburguesa */
+  .patricia-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1201;
+    width: 46px;
+    height: 46px;
+    border: none;
+    border-radius: 12px;
+    background: #0f172a;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  }
+
+  .patricia-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 1198;
+  }
+
+  .historial-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+/* adminscrol */
+/* --- CONEXIÓN DE COLOR PARA LA FLECHA (Scroll) --- */
+/* Esta regla busca tu botón de scroll donde sea que esté en la página */
+.pwb-scroll-top-btn {
+  background-color: var(--accent-color) !important;
+}
+
+/* --- TAMAÑO DE LETRA DINÁMICO --- */
+/* Al cambiar la clase en el HTML raíz (que ya lo hace el Context), 
+   estos selectores ajustan el texto de toda la aplicación */
+html.font-chico { font-size: 12px; }
+html.font-normal { font-size: 14px; }
+html.font-grande { font-size: 17px; }

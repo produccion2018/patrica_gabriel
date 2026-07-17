@@ -1,0 +1,354 @@
+/* =========================
+   PANEL CONFIGURACIÓN — REDISEÑO
+========================= */
+
+:root {
+  --base-font-size: 14px;
+  --cfg-surface: #ffffff;
+  --cfg-surface-muted: #f8fafc;
+  --cfg-border: #e6eaf1;
+  --cfg-border-soft: #eef1f6;
+  --cfg-text-primary: #0f172a;
+  --cfg-text-secondary: #64748b;
+  --cfg-text-tertiary: #94a3b8;
+}
+
+body.font-chico { --base-font-size: 12px; }
+body.font-normal { --base-font-size: 14px; }
+body.font-grande { --base-font-size: 16px; }
+
+.admin-oscuro-panel,
+.admin-oscuro-panel p,
+.admin-oscuro-panel h4,
+.admin-oscuro-panel button,
+.config-segmentado button {
+  font-size: var(--base-font-size);
+}
+
+/* ===== Contenedor ===== */
+.admin-oscuro-panel {
+  background: var(--cfg-surface);
+  border: 1px solid var(--cfg-border-soft);
+  border-radius: 20px;
+  padding: 36px;
+  max-width: 640px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 18px 40px -20px rgba(15, 23, 42, 0.14);
+}
+
+/* ===== Header ===== */
+.admin-oscuro-header {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--cfg-border-soft);
+  margin-bottom: 4px;
+}
+
+.admin-oscuro-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin-bottom: 8px;
+}
+
+.admin-oscuro-header h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--cfg-text-primary);
+}
+
+.admin-oscuro-header p {
+  margin-top: 6px;
+  color: var(--cfg-text-secondary);
+  font-size: 14px;
+}
+
+/* ===== Filas ===== */
+.config-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 0;
+  border-top: 1px solid var(--cfg-border-soft);
+  min-height: 70px;
+  gap: 20px;
+}
+
+.config-row-column {
+  align-items: center;
+}
+
+.admin-oscuro-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-oscuro-left h4 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--cfg-text-primary);
+  letter-spacing: -0.005em;
+}
+
+.admin-oscuro-left p {
+  margin: 3px 0 0;
+  color: var(--cfg-text-secondary);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.admin-oscuro-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent-color) 12%, white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+/* ===== Switch modo oscuro ===== */
+.admin-oscuro-toggle {
+  width: 50px;
+  height: 28px;
+  border: none;
+  border-radius: 50px;
+  background: #dbe1ea;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background-color 0.25s ease;
+}
+
+.admin-oscuro-toggle:hover {
+  filter: brightness(0.97);
+}
+
+.admin-oscuro-ball {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-oscuro-toggle.active {
+  background: var(--accent-color);
+}
+
+.admin-oscuro-toggle.active .admin-oscuro-ball {
+  transform: translateX(22px);
+}
+
+/* ===== Foto de perfil ===== */
+.config-avatar-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.config-avatar-preview {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent-color) 14%, white);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  border: 1px solid var(--cfg-border);
+  flex-shrink: 0;
+}
+
+.config-avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.config-btn-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--cfg-border);
+  background: var(--cfg-surface);
+  color: var(--cfg-text-primary);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.config-btn-secundario:hover {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 6%, white);
+}
+
+/* ===== Segmentado (tamaño de letra) ===== */
+.config-segmentado {
+  display: flex;
+  background: var(--cfg-surface-muted);
+  border: 1px solid var(--cfg-border-soft);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.config-segmentado button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--cfg-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.config-segmentado button:hover {
+  color: var(--cfg-text-primary);
+}
+
+.config-segmentado button.active {
+  background: var(--cfg-surface);
+  color: var(--accent-color);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.config-aa {
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ===== Colores de acento ===== */
+.config-colores {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.config-color-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.config-color-swatch.es-blanco {
+  border: 1px solid var(--cfg-border);
+}
+
+.config-color-swatch:hover {
+  transform: translateY(-2px);
+}
+
+.config-color-swatch.active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px currentColor;
+}
+
+.config-color-check {
+  color: #ffffff;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+}
+
+.config-color-swatch.es-blanco .config-color-check {
+  color: #0f172a;
+  filter: none;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+.patricia-layout.dark-mode .admin-oscuro-panel {
+  background: #1e293b;
+  border-color: #2c3a4f;
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .admin-oscuro-header,
+.patricia-layout.dark-mode .config-row {
+  border-color: #2c3a4f;
+}
+
+.patricia-layout.dark-mode .admin-oscuro-header h3,
+.patricia-layout.dark-mode .admin-oscuro-left h4 {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .admin-oscuro-header p,
+.patricia-layout.dark-mode .admin-oscuro-left p {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .admin-oscuro-icon {
+  background: color-mix(in srgb, var(--accent-color) 22%, #1e293b);
+}
+
+.patricia-layout.dark-mode .config-segmentado {
+  background: #0f172a;
+  border-color: #2c3a4f;
+}
+
+.patricia-layout.dark-mode .config-segmentado button {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .config-segmentado button.active {
+  background: #334155;
+  color: var(--accent-color);
+}
+
+.patricia-layout.dark-mode .config-btn-secundario {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .config-btn-secundario:hover {
+  border-color: var(--accent-color);
+}
+
+.patricia-layout.dark-mode .config-color-swatch.es-blanco {
+  border-color: #334155;
+}
+
+.patricia-layout.dark-mode .admin-oscuro-toggle {
+  background: #334155;
+}
+
+/* =========================
+   FLECHA "SUBIR" (AdminScrollTop)
+========================= */
+.admin-scroll-top {
+  background-color: var(--accent-color);
+  transition: background-color 0.3s ease;
+}

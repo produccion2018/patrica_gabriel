@@ -1,0 +1,291 @@
+/* AdminGalleryFull.css — vista completa "Galería" (modo claro, celeste cielo) */
+
+.gallery2-panel {
+  background: linear-gradient(180deg, #eaf6ff 0%, #ffffff 40%);
+  border: 1px solid #dbeefc;
+  border-radius: 18px;
+  padding: 28px 30px;
+  box-shadow: 0 4px 15px rgba(56, 132, 200, 0.06);
+}
+
+.gallery2-header h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f2940;
+  margin: 0 0 4px 0;
+}
+
+.gallery2-header p {
+  font-size: 13px;
+  color: #64809a;
+  margin: 0 0 24px 0;
+}
+
+.gallery2-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.gallery2-card {
+  background: #ffffff;
+  border: 1px solid #dbeefc;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery2-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.12);
+}
+
+.gallery2-card-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery2-card-body {
+  padding: 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gallery2-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gallery2-card-title h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2940;
+  margin: 0;
+}
+
+.gallery2-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gallery2-subtext {
+  font-size: 12px;
+  color: #8aa3b8;
+  margin: 0;
+}
+
+.gallery2-promo-preview {
+  font-size: 12px;
+  color: #35576f;
+  background: #f1f9ff;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gallery2-link {
+  font-size: 12px;
+  color: #2196f3;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.gallery2-link:hover {
+  text-decoration: underline;
+}
+
+/* ───────── Modo edición ───────── */
+
+.gallery2-edit-box {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gallery2-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.gallery2-field label {
+  font-size: 12px;
+  color: #5d7689;
+  font-weight: 600;
+}
+
+.gallery2-field input:not([type="file"]) {
+  border: 1px solid #cfe6f7;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #0f2940;
+  background: #f7fbff;
+  outline: none;
+}
+
+.gallery2-field input:focus {
+  border-color: #2196f3;
+}
+
+/* Campo grande para escribir la promoción con comodidad */
+.gallery2-field textarea {
+  border: 1px solid #cfe6f7;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #0f2940;
+  background: #f7fbff;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.gallery2-field textarea:focus {
+  border-color: #2196f3;
+}
+
+.gallery2-file-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #2196f3;
+  border: 1px dashed #9fd3f5;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: #f1f9ff;
+}
+
+.gallery2-file-label input[type="file"] {
+  display: none;
+}
+
+.gallery2-file-name {
+  font-size: 11px;
+  color: #5d7689;
+  margin: 2px 0 0 0;
+}
+
+.gallery2-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.gallery2-save-btn,
+.gallery2-cancel-btn {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gallery2-save-btn {
+  background: #2196f3;
+  color: #fff;
+}
+
+.gallery2-save-btn:hover {
+  background: #1b86df;
+}
+
+.gallery2-cancel-btn {
+  background: #eef4f9;
+  color: #5d7689;
+}
+
+.gallery2-cancel-btn:hover {
+  background: #e2ecf3;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+
+.patricia-layout.dark-mode .gallery2-panel {
+  background: linear-gradient(180deg, #1e293b 0%, #111827 40%);
+  border: 1px solid #334155;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.patricia-layout.dark-mode .gallery2-header h2 {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .gallery2-header p {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .gallery2-card {
+  background: #111827;
+  border: 1px solid #334155;
+}
+
+.patricia-layout.dark-mode .gallery2-card-title h4 {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .gallery2-subtext {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .gallery2-promo-preview {
+  color: #cbd5e1;
+  background: #1e293b;
+}
+
+.patricia-layout.dark-mode .gallery2-link {
+  color: #38bdf8;
+}
+
+.patricia-layout.dark-mode .gallery2-field label {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .gallery2-field input:not([type="file"]),
+.patricia-layout.dark-mode .gallery2-field textarea {
+  border: 1px solid #334155;
+  color: #f1f5f9;
+  background: #1e293b;
+}
+
+.patricia-layout.dark-mode .gallery2-file-label {
+  color: #38bdf8;
+  border: 1px dashed #334155;
+  background: #1e293b;
+}
+
+.patricia-layout.dark-mode .gallery2-file-name {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .gallery2-cancel-btn {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode .gallery2-cancel-btn:hover {
+  background: #475569;
+}

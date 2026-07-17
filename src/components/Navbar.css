@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  padding:24px 70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  z-index:9999;
+  transition:0.4s;
+}
+
+.navbar-scrolled{
+  background: rgba(10,30,36,0.42);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid #ffffff14;
+  box-shadow: 0 10px 30px #00000014;
+}
+
+.logo{
+  font-size:44px;
+  font-family:'Cormorant Garamond', serif;
+  font-weight:700;
+  color:white;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:34px;
+}
+
+.nav-links button,
+.nav-links a{
+  position:relative;
+  background:none;
+  border:none;
+  color: rgba(255,255,255,0.96);
+  font-size:15px;
+  font-weight:500;
+  cursor:pointer;
+  transition:0.3s;
+  letter-spacing:0.3px;
+  text-decoration:none;
+}
+
+.nav-links button::after,
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-8px;
+  width:0%;
+  height:2px;
+  border-radius:20px;
+  background:#58b7d7;
+  transition:0.35s ease;
+}
+
+.nav-links button:hover::after,
+.nav-links a:hover::after{
+  width:100%;
+}
+
+.nav-links button:hover,
+.nav-links a:hover{
+  color:white;
+}
+
+.right-navbar{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.language-selector{
+  position:relative;
+}
+
+/* BOTÓN IDIOMA */
+
+.language-btn{
+  height:52px;
+  padding:0 18px;
+  border-radius:18px;
+  border:none;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(16px);
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+
+/* DROPDOWN */
+
+.language-dropdown{
+  position:absolute;
+  top:68px;
+  right:0;
+  width:220px;
+  background:white;
+  border-radius:22px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  z-index:99999;
+}
+
+.language-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.language-item:hover{
+  background:#f5f5f5;
+}
+
+/* BOTÓN RESERVA */
+
+.reserve-btn{
+  height:52px;
+  padding:0 24px;
+  border:none;
+  border-radius:18px;
+  background:#0f3945;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.reserve-btn:hover{
+  transform:translateY(-2px);
+}
+
+/* MOBILE MENU BUTTON — ícono que gira suave al abrir/cerrar */
+
+.mobile-menu-btn{
+  display:none;
+  background:none;
+  border:none;
+  color:white;
+  cursor:pointer;
+  padding:6px;
+  border-radius:10px;
+  transition:transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+}
+
+.mobile-menu-btn svg{
+  transition:transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display:block;
+}
+
+.mobile-menu-btn.is-open{
+  background: rgba(255,255,255,0.1);
+}
+
+.mobile-menu-btn.is-open svg{
+  transform:rotate(90deg);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:992px){
+
+  .navbar{
+    padding:20px;
+  }
+
+  .logo{
+    font-size:34px;
+  }
+
+  .mobile-menu-btn{
+    display:block;
+  }
+
+  .nav-links{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:100%;
+    height:100vh;
+    background: linear-gradient(to bottom, rgba(7,20,26,0.96), rgba(7,20,26,0.92));
+    backdrop-filter: blur(20px);
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:30px;
+    transition:right 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .nav-active{
+    right:0;
+  }
+
+  .nav-links button,
+  .nav-links a{
+    font-size:28px;
+    font-family:'Cormorant Garamond', serif;
+    letter-spacing:1px;
+  }
+
+  /* Efecto "fum fum fum": cada opción aparece con un
+     pequeño delay una después de la otra, en vez de
+     salir todas juntas de golpe. Solo corre cuando el
+     menú está abierto (.nav-active). */
+  .nav-links button,
+  .nav-links a{
+    opacity:0;
+    transform:translateY(24px);
+  }
+
+  .nav-active button,
+  .nav-active a{
+    animation:navItemIn 0.55s ease forwards;
+  }
+
+  .nav-active button:nth-child(1){ animation-delay:0.08s; }
+  .nav-active button:nth-child(2){ animation-delay:0.15s; }
+  .nav-active button:nth-child(3){ animation-delay:0.22s; }
+  .nav-active a:nth-child(4){ animation-delay:0.29s; }
+  .nav-active button:nth-child(5){ animation-delay:0.36s; }
+  .nav-active button:nth-child(6){ animation-delay:0.43s; }
+
+  @keyframes navItemIn{
+    from{
+      opacity:0;
+      transform:translateY(24px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+
+  .reserve-btn{
+    display:none;
+  }
+}
+
+/* RESERVA MOBILE */
+
+.mobile-reserve-btn{
+  display:none;
+}
+
+@media(max-width:992px){
+
+  .mobile-reserve-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:none;
+    background:#0f3945;
+    color:white;
+    padding:14px 24px;
+    border-radius:16px;
+    font-size:20px;
+    cursor:pointer;
+    margin-top:10px;
+  }
+
+  .reserve-btn{
+    display:none;
+  }
+}

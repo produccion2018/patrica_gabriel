@@ -1,0 +1,308 @@
+/* ==========================================
+   HEADER PRINCIPAL — LÓGICA INVERTIDA
+   Por defecto (modo claro general) = oscuro
+   .dark-mode (modo oscuro general) = celeste/blanco
+========================================== */
+.mireya-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+  padding: 24px 28px;
+  background: #0f1623;
+  border: 1px solid #1f2937;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 20px #00000040,
+    0 1px 4px #00000026;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.mireya-header::before {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1d4ed822 0%, transparent 70%);
+  top: -140px;
+  right: -60px;
+  pointer-events: none;
+}
+
+.mireya-header::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1d4ed822 0%, transparent 70%);
+  bottom: -100px;
+  right: 200px;
+  pointer-events: none;
+}
+
+.mireya-header > * {
+  position: relative;
+  z-index: 2;
+}
+
+.mireya-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mireya-left-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mireya-header-icon {
+  flex-shrink: 0;
+  color: #7dd3fc;
+}
+
+.gabriel-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mireya-subtitle {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.gabriel-wave {
+  display: inline-block;
+  animation: wave 1.8s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+  0%   { transform: rotate(0deg); }
+  10%  { transform: rotate(14deg); }
+  20%  { transform: rotate(-8deg); }
+  30%  { transform: rotate(14deg); }
+  40%  { transform: rotate(-4deg); }
+  50%  { transform: rotate(10deg); }
+  60%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.mireya-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ==========================================
+   FIX DEFINITIVO: pill de fecha con fondo SÓLIDO
+   propio en ambos modos, para que nunca dependa
+   del color de fondo del header y siempre tenga
+   contraste garantizado.
+========================================== */
+.gabriel-date-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: auto;
+  padding: 9px 16px;
+  border: 1px solid #1e3a5f;
+  border-radius: 10px;
+  background: #16233a;
+  color: #e0f2fe;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+
+.gabriel-date-icon {
+  color: #7dd3fc;
+  flex-shrink: 0;
+}
+
+.mireya-bell {
+  position: relative;
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #f8fafc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: none;
+  padding: 0;
+}
+
+.mireya-bell:hover {
+  background: transparent;
+  border-color: transparent;
+  color: #7dd3fc;
+  transform: translateY(-2px);
+  animation: ring 0.5s ease-in-out;
+  box-shadow: none;
+}
+
+@keyframes ring {
+  0%   { transform: translateY(-2px) rotate(0deg); }
+  20%  { transform: translateY(-2px) rotate(15deg); }
+  40%  { transform: translateY(-2px) rotate(-15deg); }
+  60%  { transform: translateY(-2px) rotate(10deg); }
+  80%  { transform: translateY(-2px) rotate(-10deg); }
+  100% { transform: translateY(-2px) rotate(0deg); }
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0f1623;
+  box-shadow: none;
+}
+
+.mireya-btn {
+  height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 4px 14px #0ea5e959,
+    0 1px 3px #0ea5e933;
+}
+
+.mireya-btn:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+  box-shadow:
+    0 8px 22px #0ea5e973,
+    0 2px 6px #0ea5e940;
+}
+
+.mireya-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 8px #0ea5e94d;
+}
+
+.mireya-btn-icon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .mireya-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .mireya-actions {
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .gabriel-date-pill {
+    flex-grow: 1;
+  }
+
+  .mireya-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================
+   MODO OSCURO GENERAL → este header queda CELESTE/BLANCO
+========================================== */
+.patricia-layout.dark-mode .mireya-header {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow:
+    0 4px 20px #0f172a0f,
+    0 1px 4px #0f172a0a;
+}
+
+.patricia-layout.dark-mode .mireya-header::before,
+.patricia-layout.dark-mode .mireya-header::after {
+  background: radial-gradient(circle, #38bdf822 0%, transparent 70%);
+}
+
+.patricia-layout.dark-mode .mireya-header-icon {
+  color: #38bdf8;
+}
+
+.patricia-layout.dark-mode .gabriel-title {
+  color: #1e3a8a;
+}
+
+.patricia-layout.dark-mode .mireya-subtitle {
+  color: #64748b;
+}
+
+/* pill sólido celeste-claro con texto azul oscuro:
+   contraste garantizado sobre el header blanco */
+.patricia-layout.dark-mode .gabriel-date-pill {
+  background: #0ea5e9;
+  border: 1px solid #0284c7;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #00090e59;
+}
+
+.patricia-layout.dark-mode .gabriel-date-icon {
+  color: #ffffff;
+}
+
+.patricia-layout.dark-mode .mireya-bell {
+  color: #334155;
+}
+
+.patricia-layout.dark-mode .mireya-bell:hover {
+  color: #0284c7;
+}
+
+.patricia-layout.dark-mode .notification-badge {
+  background: #ef4444;
+  border: 2px solid #ffffff;
+}

@@ -1,0 +1,387 @@
+.mireya-adalgiza-castro-booking-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 99999;
+
+  padding: 20px;
+}
+
+/* FIX: SweetAlert2 (Swal.fire) trae por defecto un z-index mucho más
+   bajo que el de este overlay (99999). Sin esto, cualquier popup de
+   Swal que se abra mientras el booking está abierto (ej: "¡Reserva
+   enviada!" al tocar Finalizar, o los avisos de "Falta seleccionar
+   una casa" / "Faltan fechas") queda oculto DETRÁS del modal, invisible
+   y sin poder clickearse — por eso parecía que había que tocar el botón
+   varias veces para que "funcione". */
+.swal2-container {
+  z-index: 999999 !important;
+}
+
+.mireya-adalgiza-castro-booking-modal {
+  width: 100%;
+  max-width: 470px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 20px;
+
+  max-height: 95vh;
+
+  overflow-y: auto;
+
+  animation: mireyaBooking .25s ease;
+}
+
+@keyframes mireyaBooking {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mireya-adalgiza-castro-booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+
+  margin-bottom: 20px;
+}
+
+.mireya-adalgiza-castro-booking-header h2 {
+  font-size: 22px;
+
+  margin-bottom: 10px;
+
+  color: #1f1f1f;
+}
+
+.mireya-adalgiza-castro-booking-steps {
+  display: flex;
+  gap: 15px;
+
+  font-size: 13px;
+}
+
+.mireya-adalgiza-castro-booking-steps span {
+  color: #999;
+}
+
+.mireya-adalgiza-castro-booking-steps .active {
+  color: #2e7d32;
+
+  font-weight: 700;
+}
+
+.mireya-adalgiza-castro-close-btn {
+  border: none;
+  background: transparent;
+
+  font-size: 24px;
+
+  cursor: pointer;
+
+  color: #444;
+}
+
+.mireya-adalgiza-castro-section-title {
+  margin-bottom: 15px;
+  margin-top: 10px;
+
+  font-size: 18px;
+
+  color: #1f1f1f;
+}
+
+.mireya-adalgiza-castro-house-grid {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+.mireya-adalgiza-castro-house-card {
+  border: 2px solid #eeeeee;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.mireya-adalgiza-castro-house-card:hover {
+  transform: translateY(-2px);
+}
+
+.mireya-adalgiza-castro-house-card.selected {
+  border-color: #2e7d32;
+}
+
+.mireya-adalgiza-castro-house-card img {
+  width: 100%;
+
+  height: 180px;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.mireya-adalgiza-castro-house-card h4 {
+  padding: 15px;
+
+  font-size: 16px;
+
+  color: #1f1f1f;
+}
+
+.mireya-adalgiza-castro-calendar {
+  display: grid;
+
+  grid-template-columns: repeat(7, 1fr);
+
+  gap: 8px;
+
+  margin-bottom: 20px;
+}
+
+.mireya-adalgiza-castro-calendar-day {
+  height: 45px;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.mireya-adalgiza-castro-calendar-day.available {
+  background: #e8f5e9;
+
+  color: #2e7d32;
+}
+
+.mireya-adalgiza-castro-calendar-day.available:hover {
+  background: #c8e6c9;
+}
+
+.mireya-adalgiza-castro-summary {
+  display: flex;
+
+  gap: 15px;
+
+  border: 1px solid #eeeeee;
+
+  border-radius: 14px;
+
+  padding: 12px;
+
+  margin-bottom: 20px;
+}
+
+.mireya-adalgiza-castro-summary img {
+  width: 90px;
+
+  height: 90px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+}
+
+.mireya-adalgiza-castro-summary h4 {
+  margin-bottom: 8px;
+
+  color: #1f1f1f;
+}
+
+.mireya-adalgiza-castro-summary p {
+  margin-bottom: 4px;
+
+  color: #555;
+}
+
+.mireya-adalgiza-castro-next-btn {
+  width: 100%;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: #c68a52;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.mireya-adalgiza-castro-next-btn:hover {
+  opacity: .9;
+}
+
+.mireya-adalgiza-castro-next-btn:disabled {
+  opacity: .5;
+
+  cursor: not-allowed;
+}
+
+.mireya-adalgiza-castro-form-step {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.mireya-adalgiza-castro-form-step h3 {
+  margin-bottom: 5px;
+
+  color: #1f1f1f;
+}
+
+.mireya-adalgiza-castro-form-step input,
+.mireya-adalgiza-castro-form-step select,
+.mireya-adalgiza-castro-form-step textarea {
+  width: 100%;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 12px;
+
+  padding: 14px;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+.mireya-adalgiza-castro-form-step textarea {
+  min-height: 120px;
+
+  resize: none;
+}
+
+.mireya-adalgiza-castro-buttons {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.mireya-adalgiza-castro-buttons button,
+.mireya-adalgiza-castro-final-step button {
+  flex: 1;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #c68a52;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.mireya-adalgiza-castro-buttons button:hover,
+.mireya-adalgiza-castro-final-step button:hover {
+  opacity: .9;
+}
+
+.mireya-adalgiza-castro-final-step {
+  text-align: center;
+}
+
+.mireya-adalgiza-castro-final-step h2 {
+  margin-bottom: 15px;
+
+  color: #1f1f1f;
+}
+
+.mireya-adalgiza-castro-final-step p {
+  margin-bottom: 10px;
+
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .mireya-adalgiza-castro-booking-modal {
+    max-width: 100%;
+
+    border-radius: 20px;
+
+    padding: 16px;
+  }
+
+  .mireya-adalgiza-castro-booking-header {
+    gap: 10px;
+  }
+
+  .mireya-adalgiza-castro-booking-header h2 {
+    font-size: 20px;
+  }
+
+  .mireya-adalgiza-castro-booking-steps {
+    flex-wrap: wrap;
+
+    gap: 10px;
+  }
+
+  .mireya-adalgiza-castro-house-card img {
+    height: 150px;
+  }
+
+  .mireya-adalgiza-castro-calendar-day {
+    height: 40px;
+
+    font-size: 14px;
+  }
+
+  .mireya-adalgiza-castro-summary {
+    flex-direction: column;
+  }
+
+  .mireya-adalgiza-castro-summary img {
+    width: 100%;
+
+    height: 180px;
+  }
+}

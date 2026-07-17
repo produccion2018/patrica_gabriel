@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* =========================
+   BASE BODY
+========================= */
+body {
+  font-family: "Inter", sans-serif;
+  background: #f8f4ef;
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* =========================
+   DARK MODE GLOBAL
+========================= */
+.patricia-layout.dark-mode {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+/* =========================
+   TAMAÑO DE LETRA GLOBAL (IMPORTANTE)
+   👉 AHORA AFECTA TODO: sidebar + dashboard + config
+========================= */
+body.font-chico {
+  font-size: 12px;
+}
+
+body.font-normal {
+  font-size: 14px;
+}
+
+body.font-grande {
+  font-size: 16px;
+}
+
+/* =========================
+   TEXTOS HEREDADOS
+========================= */
+body p,
+body span,
+body label,
+body li,
+body button,
+body input,
+body textarea {
+  font-size: inherit;
+}
+
+/* =========================
+   SIDEBAR HEREDA TAMBIÉN
+========================= */
+.patricia-sidebar {
+  font-size: inherit;
+}
+
+.patricia-menu li {
+  font-size: 0.9em;
+}
+
+/* =========================
+   ACENTO GLOBAL
+========================= */
+:root {
+  --accent-color: #2563eb;
+}
+
+/* =========================
+   BOTONES CON ACENTO
+========================= */
+button,
+.patricia-menu .active-menu-item,
+.btn-reserva,
+.admin-scroll-top {
+  transition: all 0.3s ease;
+}
+
+/* =========================
+   COLOR BLANCO EN ACENTOS (IMPORTANTE)
+   👉 para modo oscuro + estética
+========================= */
+.config-color-swatch {
+  border: 2px solid transparent;
+}
+
+.config-color-swatch.active {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+/* =========================
+   SCROLL BUTTON GLOBAL
+========================= */
+.admin-scroll-top {
+  background-color: var(--accent-color);
+}
+
+/* =========================
+   DARK MODE GLOBAL
+========================= */
+
+body.dark-mode {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+/* No modificar los colores de todos los componentes.
+   Cada componente (Hero, Footer, Calendario, Comentarios, etc.)
+   maneja su propio modo oscuro. */

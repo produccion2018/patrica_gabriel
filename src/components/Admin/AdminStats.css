@@ -1,0 +1,231 @@
+/* =========================================
+   HEADER: ícono + título + subtítulo
+========================================= */
+.mireya-header-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.mireya-icon-circle {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background: #eaf6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mireya-icon-circle svg {
+  width: 22px;
+  height: 22px;
+}
+
+.mireya-title h2 {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.mireya-subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+/* =========================================
+   GRID DE 4 ITEMS
+========================================= */
+.gabriel-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.gabriel-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 14px 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.gabriel-item:hover {
+  transform: translateY(-3px);
+  background: #ffffff;
+  border-color: #dceefc;
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.12);
+}
+
+.gabriel-icon-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.gabriel-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gabriel-icon-box svg {
+  width: 24px;
+  height: 24px;
+}
+
+.gabriel-icon-blue {
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+}
+
+.gabriel-icon-teal {
+  background: linear-gradient(135deg, #2dd4bf, #14b8a6);
+}
+
+.gabriel-icon-purple {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+}
+
+.gabriel-underline {
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.gabriel-underline-blue {
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+}
+
+.gabriel-underline-teal {
+  background: linear-gradient(90deg, #2dd4bf, #14b8a6);
+}
+
+.gabriel-underline-purple {
+  background: linear-gradient(90deg, #a78bfa, #8b5cf6);
+}
+
+.gabriel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.gabriel-info-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gabriel-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.gabriel-menu-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.gabriel-menu-dots svg {
+  width: 16px;
+  height: 16px;
+}
+
+.gabriel-menu-dots:hover {
+  background: #eaf6ff;
+  color: #0ea5e9;
+}
+
+.gabriel-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .gabriel-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .gabriel-cards {
+    grid-template-columns: 1fr;
+  }
+  .gabriel-item {
+    padding: 12px;
+  }
+}
+
+/* =========================================
+   MODO OSCURO
+========================================= */
+.patricia-layout.dark-mode .mireya-icon-circle {
+  background: #1e293b;
+}
+
+.patricia-layout.dark-mode .mireya-title h2 {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .mireya-subtitle {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .gabriel-item:hover {
+  background: linear-gradient(135deg, #1e293b 0%, #0f2436 100%);
+  border-color: #334155;
+  box-shadow: 0 10px 25px #38bdf82e;
+}
+
+.patricia-layout.dark-mode .gabriel-value {
+  color: #f8fafc;
+}
+
+.patricia-layout.dark-mode .gabriel-label {
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode .gabriel-menu-dots {
+  color: #64748b;
+}
+
+.patricia-layout.dark-mode .gabriel-menu-dots:hover {
+  background: #1e293b;
+  color: #38bdf8;
+}

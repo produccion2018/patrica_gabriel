@@ -1,0 +1,331 @@
+.historial-container {
+  width: 100%;
+}
+
+.historial-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.historial-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.historial-count {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.historial-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: #94a3b8;
+  font-size: 14px;
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  border-radius: 16px;
+}
+
+.historial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.historial-card {
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.historial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.historial-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.historial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.historial-nombre-wrap h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.historial-badge-casa {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.historial-fechas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.historial-fecha-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.historial-fecha-item svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.historial-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-mensaje {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s ease;
+}
+
+.btn-mensaje:hover {
+  background: #dbeafe;
+}
+
+.btn-eliminar {
+  width: 40px;
+  border: none;
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.btn-eliminar:hover {
+  background: #fee2e2;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.paginacion button {
+  border: none;
+  background: #e2e8f0;
+  color: #334155;
+  padding: 9px 14px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pagina-activa {
+  background: #0f172a !important;
+  color: white !important;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+.patricia-layout.dark-mode .historial-title {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .historial-count {
+  color: #64748b;
+}
+
+.patricia-layout.dark-mode .historial-empty {
+  background: #1e293b;
+  border-color: #334155;
+  color: #64748b;
+}
+
+.patricia-layout.dark-mode .historial-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.patricia-layout.dark-mode .historial-nombre-wrap h3 {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .historial-avatar {
+  background: #312e81;
+  color: #a5b4fc;
+}
+
+.patricia-layout.dark-mode .historial-fechas {
+  background: #111827;
+}
+
+.patricia-layout.dark-mode .historial-fecha-item {
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode .btn-mensaje {
+  background: #1e3a8a33;
+  color: #93c5fd;
+}
+
+.patricia-layout.dark-mode .btn-mensaje:hover {
+  background: #1e3a8a55;
+}
+
+.patricia-layout.dark-mode .btn-eliminar {
+  background: #7f1d1d33;
+  color: #fca5a5;
+}
+
+.patricia-layout.dark-mode .btn-eliminar:hover {
+  background: #7f1d1d55;
+}
+
+.patricia-layout.dark-mode .paginacion button {
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode .pagina-activa {
+  background: #2563eb !important;
+  color: #fff !important;
+}
+
+/* REPORTE */
+/* =========================
+   AGREGAR AL FINAL DE AdminHistorial.css
+   (barra de selección de mes/año + botón de reporte PDF)
+========================= */
+
+.historial-reporte-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+
+.historial-reporte-selects {
+  display: flex;
+  gap: 8px;
+}
+
+.historial-reporte-selects select {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 8px 10px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reporte-pdf {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.15s ease;
+}
+
+.btn-reporte-pdf:hover {
+  background: #1e293b;
+}
+
+.btn-reporte-pdf:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modo oscuro */
+.patricia-layout.dark-mode .historial-reporte-bar {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.patricia-layout.dark-mode .historial-reporte-selects select {
+  background: #111827;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .btn-reporte-pdf {
+  background: #2563eb;
+}
+
+.patricia-layout.dark-mode .btn-reporte-pdf:hover {
+  background: #1d4ed8;
+}

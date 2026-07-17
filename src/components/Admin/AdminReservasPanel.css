@@ -1,0 +1,124 @@
+.arp {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 288px;
+  margin-top: 16px;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Estadísticas */
+.arp-stats {
+  background: #ffffff;
+  border: 1px solid #e0f2fe;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px rgba(56, 189, 248, 0.08);
+  padding: 16px;
+}
+
+.arp-stats-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.arp-donut-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.arp-donut-center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arp-donut-pct {
+  font-size: 18px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.arp-donut-label {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.arp-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.arp-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.arp-legend-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+}
+
+.arp-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.arp-legend-value {
+  font-weight: 500;
+  color: #334155;
+}
+
+.arp-total {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f9ff;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+
+.patricia-layout.dark-mode .arp-stats {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 1px 6px #00000033;
+}
+
+.patricia-layout.dark-mode .arp-stats-title {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .arp-donut-label {
+  color: #94a3b8;
+}
+
+.patricia-layout.dark-mode .arp-legend-left {
+  color: #cbd5e1;
+}
+
+.patricia-layout.dark-mode .arp-legend-value {
+  color: #f1f5f9;
+}
+
+.patricia-layout.dark-mode .arp-total {
+  border-top: 1px solid #334155;
+  color: #64748b;
+}

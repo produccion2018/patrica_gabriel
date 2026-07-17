@@ -1,0 +1,108 @@
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  padding: 20px;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 430px;
+  background: #fffffffa;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px #00000040, 0 0 0 1px #ffffff1a;
+  animation: fadeIn 0.4s ease;
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d5a04e, #f4c16d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  box-shadow: 0 10px 30px rgba(213, 160, 78, 0.35);
+}
+
+.admin-login-card h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 30px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.admin-login-card p {
+  text-align: center;
+  color: #64748b;
+  margin: 10px 0 30px;
+  font-size: 15px;
+}
+
+.admin-login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.admin-login-card input {
+  height: 54px;
+  border: 1px solid #dbe2ea;
+  border-radius: 14px;
+  padding: 0 16px;
+  font-size: 15px;
+  transition: 0.25s;
+  width: 100%; /* Asegura que ocupe todo el ancho */
+  box-sizing: border-box; /* Importante para que el padding no rompa el tamaño */
+}
+
+.admin-login-card input:focus {
+  outline: none;
+  border-color: #d5a04e;
+  box-shadow: 0 0 0 4px #d5a04e26;
+}
+
+.admin-login-card button {
+  height: 54px;
+  border: none;
+  border-radius: 14px;
+  background: #d5a04e;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+  margin-top: 10px;
+}
+
+.admin-login-card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px #d5a04e59;
+}
+
+.admin-login-card button:active {
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
