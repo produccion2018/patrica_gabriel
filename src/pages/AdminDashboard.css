@@ -20,8 +20,12 @@
   margin: 24px 0;
 }
 
-/* BOTÓN HAMBURGUESA */
+/* BARRA SUPERIOR MOBILE (contiene el botón hamburguesa) */
 /* EN DESKTOP NO SE VE */
+.patricia-mobile-topbar {
+  display: none;
+}
+
 .patricia-mobile-toggle {
   display: none;
 }
@@ -166,24 +170,42 @@
     padding: 70px 14px 18px;
   }
 
-  /* ACÁ SÍ aparece el hamburguesa */
+  /* ACÁ SÍ aparece la barra con el hamburguesa */
+  .patricia-mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    padding: 0 14px;
+    background: #0f172a;
+    z-index: 1201;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+
+  .patricia-mobile-topbar-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.2px;
+  }
+
   .patricia-mobile-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: fixed;
-    top: 14px;
-    left: 14px;
-    z-index: 1201;
-    width: 46px;
-    height: 46px;
+    width: 40px;
+    height: 40px;
     border: none;
-    border-radius: 12px;
-    background: #0f172a;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
     color: #fff;
-    font-size: 24px;
+    font-size: 22px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    flex-shrink: 0;
   }
 
   .patricia-sidebar-overlay {

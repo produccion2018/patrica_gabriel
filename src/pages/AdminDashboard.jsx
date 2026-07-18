@@ -165,12 +165,15 @@ function AdminDashboard() {
       />
 
       <main className="mireya-content">
-        <button
-          className="patricia-mobile-toggle"
-          onClick={() => setSidebarOpen(true)}
-        >
-          ☰
-        </button>
+        <div className="patricia-mobile-topbar">
+          <button
+            className="patricia-mobile-toggle"
+            onClick={() => setSidebarOpen(true)}
+          >
+            ☰
+          </button>
+          <span className="patricia-mobile-topbar-title">Las Toninas</span>
+        </div>
 
         {sidebarOpen && (
           <div
@@ -178,7 +181,6 @@ function AdminDashboard() {
             onClick={() => setSidebarOpen(false)}
           />
         )}
-
         <AdminHeader reservas={reservas} alActualizar={cargarReservas} />
 
         {seccionActiva === "Dashboard" && (
