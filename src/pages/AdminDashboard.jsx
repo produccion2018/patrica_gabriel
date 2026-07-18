@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import "./AdminDashboard.css";
 
 // RUTA CORREGIDA: sube un nivel (..) y entra en context
@@ -167,10 +168,10 @@ function AdminDashboard() {
       <main className="mireya-content">
         <div className="patricia-mobile-topbar">
           <button
-            className="patricia-mobile-toggle"
-            onClick={() => setSidebarOpen(true)}
+            className={`patricia-mobile-toggle ${sidebarOpen ? "is-open" : ""}`}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            ☰
+            {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
           <span className="patricia-mobile-topbar-title">Las Toninas</span>
         </div>

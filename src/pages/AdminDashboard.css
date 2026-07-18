@@ -141,9 +141,13 @@
 }
 
 .patricia-layout.dark-mode .patricia-mobile-toggle {
-  background: #1e293b;
+  background: none;
   color: #fff;
-  border: 1px solid #334155;
+  border: none;
+}
+
+.patricia-layout.dark-mode .patricia-mobile-toggle.is-open {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* =========================
@@ -197,15 +201,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border: none;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: none;
     color: #fff;
-    font-size: 22px;
     cursor: pointer;
     flex-shrink: 0;
+    padding: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+  }
+
+  .patricia-mobile-toggle svg {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: block;
+  }
+
+  .patricia-mobile-toggle.is-open {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .patricia-mobile-toggle.is-open svg {
+    transform: rotate(90deg);
   }
 
   .patricia-sidebar-overlay {
