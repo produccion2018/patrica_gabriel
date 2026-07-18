@@ -1,12 +1,14 @@
 import "./AdminLogin.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { API_URL } from "../config/api";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -49,12 +51,24 @@ export default function AdminLogin() {
             onChange={(e) => setUsername(e.target.value)}
           />
 
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="admin-login-password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              className="admin-login-eye-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={
+                showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+              }
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
 
           <button type="submit">Entrar</button>
         </form>

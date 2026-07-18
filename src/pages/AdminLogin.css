@@ -80,6 +80,54 @@
   box-shadow: 0 0 0 4px #d5a04e26;
 }
 
+.admin-login-password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.admin-login-password-field input {
+  padding-right: 48px;
+}
+
+.admin-login-password-field .admin-login-eye-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  background: transparent !important;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.admin-login-password-field .admin-login-eye-btn:hover,
+.admin-login-password-field .admin-login-eye-btn:focus {
+  color: #d5a04e;
+  outline: none;
+  box-shadow: none;
+  transform: translateY(-50%);
+}
+
+.admin-login-password-field .admin-login-eye-btn:active {
+  transform: translateY(-50%);
+}
+
 .admin-login-card button {
   height: 54px;
   border: none;

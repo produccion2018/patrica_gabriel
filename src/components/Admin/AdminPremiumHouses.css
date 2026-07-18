@@ -10,6 +10,38 @@
   margin-bottom: 24px;
 }
 
+@media (max-width: 900px) {
+  .gabriel-premium-houses {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .gabriel-premium-card img {
+    height: 150px;
+  }
+
+  .gabriel-premium-content {
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .gabriel-premium-content h3 {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gabriel-premium-houses {
+    gap: 10px;
+  }
+
+  .gabriel-premium-card img {
+    height: 110px;
+  }
+}
+
 .gabriel-premium-card {
   background: #f8fbff;
   border: 1px solid #e7f0fb;
