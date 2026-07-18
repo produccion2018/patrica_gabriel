@@ -7,6 +7,7 @@ import "./AdminDashboard.css";
 import { useSettings } from "../context/SettingsContext";
 
 import AdminSidebar from "../components/Admin/AdminSidebar";
+import AdminBottomNav from "../components/Admin/AdminBottomNav";
 import AdminHeader from "../components/Admin/AdminHeader";
 import AdminStats from "../components/Admin/AdminStats";
 import AdminPremiumHouses from "../components/Admin/AdminPremiumHouses";
@@ -342,6 +343,12 @@ function AdminDashboard() {
       </main>
 
       <AdminScrollTop />
+      <AdminBottomNav
+        seccionActual={seccionActiva}
+        setSeccionActual={setSeccionActiva}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
     </div>
   );
 }
