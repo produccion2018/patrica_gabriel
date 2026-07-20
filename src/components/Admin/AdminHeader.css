@@ -109,12 +109,6 @@
   gap: 12px;
 }
 
-/* ==========================================
-   FIX DEFINITIVO: pill de fecha con fondo SÓLIDO
-   propio en ambos modos, para que nunca dependa
-   del color de fondo del header y siempre tenga
-   contraste garantizado.
-========================================== */
 .gabriel-date-pill {
   display: flex;
   align-items: center;
@@ -280,8 +274,6 @@
   color: #64748b;
 }
 
-/* pill sólido celeste-claro con texto azul oscuro:
-   contraste garantizado sobre el header blanco */
 .patricia-layout.dark-mode .gabriel-date-pill {
   background: #0ea5e9;
   border: 1px solid #0284c7;
@@ -305,4 +297,44 @@
 .patricia-layout.dark-mode .notification-badge {
   background: #ef4444;
   border: 2px solid #ffffff;
+}
+
+/* ==========================================
+   FIX MOBILE: blindaje para que ningún otro CSS
+   del proyecto pise el texto del header en celular.
+   Esto asegura que en mobile + modo oscuro, el header
+   se mantenga igual que en desktop (fondo blanco,
+   texto oscuro), sin importar qué reglas globales
+   de "modo oscuro en mobile" existan en otros archivos.
+========================================== */
+@media (max-width: 900px) {
+  .patricia-layout.dark-mode .mireya-header,
+  .patricia-layout.dark-mode .mireya-header * {
+    color: initial;
+  }
+
+  .patricia-layout.dark-mode .gabriel-title {
+    color: #1e3a8a !important;
+  }
+
+  .patricia-layout.dark-mode .mireya-subtitle {
+    color: #64748b !important;
+  }
+
+  .patricia-layout.dark-mode .mireya-header-icon {
+    color: #38bdf8 !important;
+  }
+
+  .patricia-layout.dark-mode .gabriel-date-pill {
+    background: #0ea5e9 !important;
+    color: #ffffff !important;
+  }
+
+  .patricia-layout.dark-mode .gabriel-date-icon {
+    color: #ffffff !important;
+  }
+
+  .patricia-layout.dark-mode .mireya-bell {
+    color: #334155 !important;
+  }
 }
