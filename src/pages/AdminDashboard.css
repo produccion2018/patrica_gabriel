@@ -20,8 +20,6 @@
   margin: 24px 0;
 }
 
-/* BARRA SUPERIOR MOBILE (contiene el botón hamburguesa) */
-/* EN DESKTOP NO SE VE */
 .patricia-mobile-topbar {
   display: none;
 }
@@ -30,7 +28,6 @@
   display: none;
 }
 
-/* OVERLAY MOBILE */
 .patricia-sidebar-overlay {
   display: none;
 }
@@ -84,7 +81,7 @@
 }
 
 /* =========================
-   MODO OSCURO
+   MODO OSCURO (desktop)
 ========================= */
 .patricia-layout.dark-mode {
   background: #0f172a;
@@ -174,7 +171,6 @@
     padding: 70px 14px 18px;
   }
 
-  /* ACÁ SÍ aparece la barra con el hamburguesa */
   .patricia-mobile-topbar {
     display: flex;
     align-items: center;
@@ -243,330 +239,79 @@
     width: 100%;
   }
 }
+
 /* adminscrol */
-/* --- CONEXIÓN DE COLOR PARA LA FLECHA (Scroll) --- */
-/* Esta regla busca tu botón de scroll donde sea que esté en la página */
 .pwb-scroll-top-btn {
   background-color: var(--accent-color) !important;
 }
 
-/* --- TAMAÑO DE LETRA DINÁMICO --- */
-/* Al cambiar la clase en el HTML raíz (que ya lo hace el Context), 
-   estos selectores ajustan el texto de toda la aplicación */
-html.font-chico { font-size: 12px; }
-html.font-normal { font-size: 14px; }
-html.font-grande { font-size: 17px; }
-
-/* responsive */
-.patricia-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f4f6f9;
-  position: relative;
-}
-
-.mireya-content {
-  flex: 1;
-  padding: 24px;
-  background: #f4f6f9;
-  overflow-y: auto;
-  position: relative;
-}
-
-.gabriel-middle-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin: 24px 0;
-}
-
-/* BARRA SUPERIOR MOBILE (contiene el botón hamburguesa) */
-/* EN DESKTOP NO SE VE */
-.patricia-mobile-topbar {
-  display: none;
-}
-
-.patricia-mobile-toggle {
-  display: none;
-}
-
-/* OVERLAY MOBILE */
-.patricia-sidebar-overlay {
-  display: none;
-}
-
-/* =========================
-   HISTORIAL CLIENTES
-========================= */
-
-.historial-card {
-  background: #ffffff;
-  padding: 16px 20px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  border-left: 5px solid #38bdf8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-}
-
-.historial-card:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.fecha-tag {
-  font-size: 0.85em;
-  background: #f0f9ff;
-  color: #0369a1;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-weight: 600;
-}
-
-.search-input {
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  width: 250px;
-  max-width: 100%;
-  font-size: 14px;
-  transition: border-color 0.2s;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 3px #38bdf81a;
-}
-
-/* =========================
-   MODO OSCURO
-========================= */
-.patricia-layout.dark-mode {
-  background: #0f172a;
-}
-
-.patricia-layout.dark-mode .mireya-content {
-  background: #111827;
-  color: #f8fafc;
-}
-
-.patricia-layout.dark-mode .gabriel-middle-grid {
-  background: transparent;
-}
-
-.patricia-layout.dark-mode h1,
-.patricia-layout.dark-mode h2,
-.patricia-layout.dark-mode h3,
-.patricia-layout.dark-mode h4,
-.patricia-layout.dark-mode h5,
-.patricia-layout.dark-mode h6 {
-  color: #f8fafc;
-}
-
-.patricia-layout.dark-mode p,
-.patricia-layout.dark-mode span,
-.patricia-layout.dark-mode label,
-.patricia-layout.dark-mode strong {
-  color: #cbd5e1;
-}
-
-.patricia-layout.dark-mode input,
-.patricia-layout.dark-mode textarea,
-.patricia-layout.dark-mode select {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: white;
-}
-
-.patricia-layout.dark-mode .historial-card {
-  background: #1e293b;
-  border-left: 5px solid #0ea5e9;
-  color: #f1f5f9;
-}
-
-.patricia-layout.dark-mode .fecha-tag {
-  background: #0f172a;
-  color: #7dd3fc;
-}
-
-.patricia-layout.dark-mode .search-input {
-  background: #0f172a;
-  border: 1px solid #334155;
-  color: white;
-}
-
-.patricia-layout.dark-mode .patricia-mobile-toggle {
-  background: none;
-  color: #fff;
-  border: none;
-}
-
-.patricia-layout.dark-mode .patricia-mobile-toggle.is-open {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 1100px) {
-  .gabriel-middle-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .mireya-content {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 900px) {
-  .patricia-layout {
-    display: block;
-  }
-
-  .mireya-content {
-    width: 100%;
-    padding: 70px 14px 18px;
-  }
-
-  /* ACÁ SÍ aparece la barra con el hamburguesa */
-  .patricia-mobile-topbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    padding: 0 14px;
-    background: #0f172a;
-    z-index: 1201;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-  }
-
-  .patricia-mobile-topbar-title {
-    color: #fff;
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: -0.2px;
-  }
-
-  .patricia-mobile-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 8px;
-    background: none;
-    color: #fff;
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 0;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
-  }
-
-  .patricia-mobile-toggle svg {
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    display: block;
-  }
-
-  .patricia-mobile-toggle.is-open {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .patricia-mobile-toggle.is-open svg {
-    transform: rotate(90deg);
-  }
-
-  .patricia-sidebar-overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.45);
-    z-index: 1198;
-  }
-
-  .historial-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .search-input {
-    width: 100%;
-  }
-}
-/* adminscrol */
-/* --- CONEXIÓN DE COLOR PARA LA FLECHA (Scroll) --- */
-/* Esta regla busca tu botón de scroll donde sea que esté en la página */
-.pwb-scroll-top-btn {
-  background-color: var(--accent-color) !important;
-}
-
-/* --- TAMAÑO DE LETRA DINÁMICO --- */
 html.font-chico { font-size: 12px; }
 html.font-normal { font-size: 14px; }
 html.font-grande { font-size: 17px; }
 
 /* =========================================================
-   MOBILE APP LOOK — SIEMPRE OSCURO EN CELULAR
-   Se aplica sin importar si .dark-mode está activo o no,
-   porque estas reglas van al final y usan !important.
-   NO afecta nada por encima de 900px (desktop intacto).
+   MODO OSCURO EN CELULAR (corregido)
+   Antes esto se aplicaba SIEMPRE en celular, sin chequear
+   si el usuario estaba en modo claro u oscuro. Por eso el
+   modo claro se veía oscuro en celular. Ahora todo depende
+   de .dark-mode, igual que en desktop.
 ========================================================= */
 @media (max-width: 900px) {
-  .patricia-layout {
+  .patricia-layout.dark-mode {
     background: #0f172a !important;
   }
 
-  .mireya-content {
+  .patricia-layout.dark-mode .mireya-content {
     background: #0f172a !important;
     color: #f1f5f9 !important;
   }
 
-  .patricia-layout h1,
-  .patricia-layout h2,
-  .patricia-layout h3,
-  .patricia-layout h4,
-  .patricia-layout h5,
-  .patricia-layout h6 {
+  .patricia-layout.dark-mode h1,
+  .patricia-layout.dark-mode h2,
+  .patricia-layout.dark-mode h3,
+  .patricia-layout.dark-mode h4,
+  .patricia-layout.dark-mode h5,
+  .patricia-layout.dark-mode h6 {
     color: #f8fafc !important;
   }
 
-  .patricia-layout p,
-  .patricia-layout span,
-  .patricia-layout label,
-  .patricia-layout strong {
+  .patricia-layout.dark-mode p,
+  .patricia-layout.dark-mode span,
+  .patricia-layout.dark-mode label,
+  .patricia-layout.dark-mode strong {
     color: #cbd5e1 !important;
   }
 
-  .patricia-layout input,
-  .patricia-layout textarea,
-  .patricia-layout select {
+  .patricia-layout.dark-mode .mireya-header h1,
+  .patricia-layout.dark-mode .mireya-header h2,
+  .patricia-layout.dark-mode .mireya-header h3,
+  .patricia-layout.dark-mode .mireya-header p,
+  .patricia-layout.dark-mode .mireya-header span,
+  .patricia-layout.dark-mode .mireya-header label,
+  .patricia-layout.dark-mode .mireya-header strong {
+    color: unset !important;
+  }
+
+  .patricia-layout.dark-mode input,
+  .patricia-layout.dark-mode textarea,
+  .patricia-layout.dark-mode select {
     background: #1e293b !important;
     border: 1px solid #334155 !important;
     color: #fff !important;
   }
 
-  .historial-card {
+  .patricia-layout.dark-mode .historial-card {
     background: #1e293b !important;
     border-left: 5px solid #0ea5e9 !important;
     color: #f1f5f9 !important;
   }
 
-  .fecha-tag {
+  .patricia-layout.dark-mode .fecha-tag {
     background: #0f172a !important;
     color: #7dd3fc !important;
   }
 
-  .search-input {
+  .patricia-layout.dark-mode .search-input {
     background: #0f172a !important;
     border: 1px solid #334155 !important;
     color: #fff !important;
