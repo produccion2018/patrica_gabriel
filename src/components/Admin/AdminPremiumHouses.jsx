@@ -28,9 +28,9 @@ function AdminPremiumHouses() {
         // Mantenemos las características fijas originales según el ID de la casa
         let caracteristicas = "Jardín • Cochera • 5 Personas";
         if (propiedad.id === 1)
-          caracteristicas = "4 Habitaciones • 2 Baños • Wifi";
+          caracteristicas = "2 Habitaciones • 2 Baños • Wifi";
         if (propiedad.id === 2)
-          caracteristicas = "3 Habitaciones • Parrilla • Wifi";
+          caracteristicas = "2 Habitaciones • Parrilla • Wifi";
 
         return (
           <div className="gabriel-premium-card" key={propiedad.id}>
