@@ -104,6 +104,10 @@
   background: linear-gradient(135deg, #a78bfa, #8b5cf6);
 }
 
+.gabriel-icon-orange {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+}
+
 .gabriel-underline {
   width: 28px;
   height: 3px;
@@ -120,6 +124,10 @@
 
 .gabriel-underline-purple {
   background: linear-gradient(90deg, #a78bfa, #8b5cf6);
+}
+
+.gabriel-underline-orange {
+  background: linear-gradient(90deg, #fb923c, #f97316);
 }
 
 .gabriel-info {
@@ -177,7 +185,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .gabriel-cards {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -221,7 +229,7 @@
   }
 }
 /* =========================================
-   MODO OSCURO
+   MODO OSCURO (desktop, toggle normal)
 ========================================= */
 .patricia-layout.dark-mode .mireya-icon-circle {
   background: #1e293b;
@@ -241,14 +249,6 @@
   box-shadow: 0 10px 25px #38bdf82e;
 }
 
-@media (max-width: 600px) {
-  .patricia-layout.dark-mode .gabriel-item {
-    background: #1e293b;
-    border: 1px solid #334155;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  }
-}
-
 .patricia-layout.dark-mode .gabriel-value {
   color: #f8fafc;
 }
@@ -264,4 +264,40 @@
 .patricia-layout.dark-mode .gabriel-menu-dots:hover {
   background: #1e293b;
   color: #38bdf8;
+}
+
+/* =========================================
+   MOBILE — SIEMPRE OSCURO (foto de referencia)
+   Anula tanto el look claro de arriba como el
+   toggle .dark-mode, solo por debajo de 900px.
+========================================= */
+@media (max-width: 900px) {
+  .mireya-title h2 {
+    color: #f8fafc !important;
+  }
+
+  .mireya-subtitle {
+    color: #94a3b8 !important;
+  }
+
+  .mireya-icon-circle {
+    background: #1e293b !important;
+  }
+
+  .patricia-layout.dark-mode .gabriel-item,
+  .gabriel-item {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 2px 8px #00000040 !important;
+  }
+
+  .patricia-layout.dark-mode .gabriel-value,
+  .gabriel-value {
+    color: #f8fafc !important;
+  }
+
+  .patricia-layout.dark-mode .gabriel-label,
+  .gabriel-label {
+    color: #cbd5e1 !important;
+  }
 }

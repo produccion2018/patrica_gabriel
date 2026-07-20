@@ -14,7 +14,7 @@ function AdminBottomNav({
   setSidebarOpen,
 }) {
   const items = [
-    { key: "Dashboard", label: "Dashboard", icon: Home },
+    { key: "Dashboard", label: "Inicio", icon: Home },
     {
       key: "Reservas",
       label: "Reservas",

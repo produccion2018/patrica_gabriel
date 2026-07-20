@@ -14,8 +14,6 @@ function AdminStats({ reservas = [] }) {
     (reserva) => reserva.estado === "pendiente",
   ).length;
 
-  // Total de clientes únicos con reserva activa (pendiente o confirmada).
-  // Si no hay reservas activas, esto da 0.
   const totalClientes = new Set(
     reservas
       .filter(
@@ -180,7 +178,7 @@ function AdminStats({ reservas = [] }) {
         {/* Total Clientes */}
         <div className="gabriel-item">
           <div className="gabriel-icon-col">
-            <div className="gabriel-icon-box gabriel-icon-blue">
+            <div className="gabriel-icon-box gabriel-icon-orange">
               <svg viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="8" r="3.5" stroke="white" strokeWidth="2" />
                 <path
@@ -191,7 +189,7 @@ function AdminStats({ reservas = [] }) {
                 />
               </svg>
             </div>
-            <span className="gabriel-underline gabriel-underline-blue"></span>
+            <span className="gabriel-underline gabriel-underline-orange"></span>
           </div>
           <div className="gabriel-info">
             <div className="gabriel-info-top">
