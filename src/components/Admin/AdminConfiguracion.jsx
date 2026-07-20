@@ -20,27 +20,63 @@ const TAMANOS_LETRA = [
   { valor: "grande", etiqueta: "Grande", preview: 17 },
 ];
 
+// Redimensiona y comprime la imagen antes de convertirla a base64.
+// Esto evita que fotos pesadas de cámara de celular (varios MB)
+// hagan fallar el guardado en localStorage.
+function comprimirImagen(archivo, maxAncho = 400, calidad = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const img = new Image();
+
+      img.onload = () => {
+        let { width, height } = img;
+
+        if (width > maxAncho) {
+          height = Math.round((height * maxAncho) / width);
+          width = maxAncho;
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        resolve(canvas.toDataURL("image/jpeg", calidad));
+      };
+
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(archivo);
+  });
+}
+
 function AdminConfiguracion() {
   const { settings, setSettings } = useSettings();
 
   const inputFotoRef = useRef(null);
   const [fotoPerfil, setFotoPerfil] = useState(null);
 
-  const cambiarFoto = (e) => {
+  const cambiarFoto = async (e) => {
     const archivo = e.target.files[0];
     if (!archivo) return;
 
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      setFotoPerfil(reader.result);
+    try {
+      const imagenComprimida = await comprimirImagen(archivo);
+      setFotoPerfil(imagenComprimida);
       setSettings({
         ...settings,
-        profilePic: reader.result,
+        profilePic: imagenComprimida,
       });
-    };
-
-    reader.readAsDataURL(archivo);
+    } catch (error) {
+      console.error("Error al procesar la foto de perfil:", error);
+    }
   };
 
   return (
