@@ -30,6 +30,11 @@ const INSTAGRAM_URL = "https://instagram.com";
 // Número real de WhatsApp (formato internacional: 54 + 9 + código de área + número, sin espacios ni signos)
 const WHATSAPP_NUMBER = "5491170822059";
 
+// Mensaje que aparece ya escrito en WhatsApp cuando alguien toca el ícono
+// (la persona solo tiene que apretar "Enviar" para que te llegue a vos)
+const WHATSAPP_MENSAJE =
+  "¡Hola! Quería consultar por disponibilidad y precios 😊";
+
 export default function Footer({ language }) {
   return (
     <footer className="footer" id="contacto">
@@ -64,7 +69,7 @@ export default function Footer({ language }) {
             </a>
 
             <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MENSAJE)}`}
               target="_blank"
               rel="noreferrer"
             >
