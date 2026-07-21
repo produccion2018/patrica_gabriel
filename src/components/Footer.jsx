@@ -7,6 +7,29 @@ import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import logo1 from "../assets/logos/logo1.jpg";
 import logo2 from "../assets/logos/logo2.jpg";
 
+// ================================
+// DATOS DE CONTACTO Y REDES
+// EDITAR SOLO ACÁ ABAJO
+// ================================
+
+// Correo principal (el que ya está funcionando)
+const EMAIL_PRINCIPAL = "info@tortuninas.com.ar";
+
+// Mauro: acá va el correo que te dé el hosting cuando te lo entreguen.
+// Reemplazá el texto de ejemplo por el correo real (sin sacar las comillas).
+const EMAIL_SECUNDARIO = "correo-del-hosting@ejemplo.com";
+
+// Mauro: acá va el link de la página de Facebook cuando la crees.
+// Ejemplo de formato: "https://facebook.com/tortuninas"
+const FACEBOOK_URL = "https://facebook.com";
+
+// Mauro: acá va el link de Instagram cuando crees la cuenta.
+// Ejemplo de formato: "https://instagram.com/tortuninas"
+const INSTAGRAM_URL = "https://instagram.com";
+
+// Número real de WhatsApp (formato internacional: 54 + 9 + código de área + número, sin espacios ni signos)
+const WHATSAPP_NUMBER = "5491170822059";
+
 export default function Footer({ language }) {
   return (
     <footer className="footer" id="contacto">
@@ -32,16 +55,16 @@ export default function Footer({ language }) {
 
           {/* ================= REDES ================= */}
           <div className="socials">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer">
+            <a href={FACEBOOK_URL} target="_blank" rel="noreferrer">
               <FaFacebookF />
             </a>
 
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">
+            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
               <FaInstagram />
             </a>
 
             <a
-              href="https://wa.me/5491170822059"
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -104,7 +127,8 @@ export default function Footer({ language }) {
           </h3>
 
           <p>📞 +54 9 11 7082-2059</p>
-          <p>✉ info@tortuninas.com.ar</p>
+          <p>✉ {EMAIL_PRINCIPAL}</p>
+          <p>✉ {EMAIL_SECUNDARIO}</p>
           <p>📍 Las Toninas, Buenos Aires</p>
         </div>
 
