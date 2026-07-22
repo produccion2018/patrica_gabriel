@@ -13,7 +13,7 @@ import logo2 from "../assets/logos/logo2.jpg";
 // ================================
 
 // Correo principal (el que ya está funcionando)
-const EMAIL_PRINCIPAL = "info@tortuninas.com.ar";
+const EMAIL_PRINCIPAL = "tortuninas@gmail.com";
 
 // Mauro: acá va el correo que te dé el hosting cuando te lo entreguen.
 // Reemplazá el texto de ejemplo por el correo real (sin sacar las comillas).
@@ -21,11 +21,11 @@ const EMAIL_SECUNDARIO = "correo-del-hosting@ejemplo.com";
 
 // Mauro: acá va el link de la página de Facebook cuando la crees.
 // Ejemplo de formato: "https://facebook.com/tortuninas"
-const FACEBOOK_URL = "https://facebook.com";
+const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61592405843335";
 
 // Mauro: acá va el link de Instagram cuando crees la cuenta.
 // Ejemplo de formato: "https://instagram.com/tortuninas"
-const INSTAGRAM_URL = "https://instagram.com";
+const INSTAGRAM_URL = "https://www.instagram.com/tortuninas/";
 
 // Número real de WhatsApp (formato internacional: 54 + 9 + código de área + número, sin espacios ni signos)
 const WHATSAPP_NUMBER = "5491170822059";
