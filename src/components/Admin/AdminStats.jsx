@@ -14,19 +14,19 @@ function AdminStats({ reservas = [] }) {
     (reserva) => reserva.estado === "pendiente",
   ).length;
 
-  const totalClientes = new Set(
-    reservas
-      .filter(
-        (reserva) =>
-          reserva.estado === "pendiente" || reserva.estado === "confirmada",
-      )
-      .map((reserva) =>
-        `${reserva.nombre || ""}-${reserva.telefono || reserva.email || ""}`
-          .trim()
-          .toLowerCase(),
-      )
-      .filter((clave) => clave.replace("-", "") !== ""),
-  ).size;
+  // Suma el campo "huespedes" de todas las reservas activas (pendientes +
+  // confirmadas) — cuánta gente hay en total alojada/por alojarse ahora
+  // mismo entre todas las casas, sin importar si es la misma persona
+  // reservando varias veces.
+  const totalHuespedes = reservas
+    .filter(
+      (reserva) =>
+        reserva.estado === "pendiente" || reserva.estado === "confirmada",
+    )
+    .reduce(
+      (suma, reserva) => suma + (parseInt(reserva.huespedes, 10) || 0),
+      0,
+    );
 
   return (
     <>
@@ -175,7 +175,7 @@ function AdminStats({ reservas = [] }) {
           </div>
         </div>
 
-        {/* Total Clientes */}
+        {/* Total Huéspedes */}
         <div className="gabriel-item">
           <div className="gabriel-icon-col">
             <div className="gabriel-icon-box gabriel-icon-orange">
@@ -193,7 +193,7 @@ function AdminStats({ reservas = [] }) {
           </div>
           <div className="gabriel-info">
             <div className="gabriel-info-top">
-              <span className="gabriel-value">{totalClientes}</span>
+              <span className="gabriel-value">{totalHuespedes}</span>
               <button className="gabriel-menu-dots" aria-label="Más opciones">
                 <svg viewBox="0 0 24 24" fill="none">
                   <circle cx="12" cy="5" r="1.6" fill="currentColor" />
@@ -202,7 +202,7 @@ function AdminStats({ reservas = [] }) {
                 </svg>
               </button>
             </div>
-            <span className="gabriel-label">Total Clientes</span>
+            <span className="gabriel-label">Total Huéspedes</span>
           </div>
         </div>
       </div>

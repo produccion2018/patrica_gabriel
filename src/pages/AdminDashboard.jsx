@@ -5,6 +5,7 @@ import "./AdminDashboard.css";
 
 // RUTA CORREGIDA: sube un nivel (..) y entra en context
 import { useSettings } from "../context/SettingsContext";
+import { apiFetch } from "../utils/apiFetch";
 
 import AdminSidebar from "../components/Admin/AdminSidebar";
 import AdminBottomNav from "../components/Admin/AdminBottomNav";
@@ -22,7 +23,6 @@ import AdminScrollTop from "../components/Admin/AdminScrollTop";
 import AdminActividadReciente from "../components/Admin/AdminActividadReciente";
 import AdminReservasPanel from "../components/Admin/AdminReservasPanel";
 import ChangePassword from "./ChangePassword";
-import { API_URL } from "../config/api";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -43,9 +43,9 @@ function AdminDashboard() {
   }, [navigate]);
 
   const cargarReservas = () => {
-    fetch(`${API_URL}/api/reservas`)
-      .then((res) => res.json())
-      .then((data) => setReservas(data))
+    apiFetch("/api/reservas")
+      .then((res) => (res ? res.json() : []))
+      .then((data) => setReservas(Array.isArray(data) ? data : []))
       .catch((error) => console.error("Error cargando reservas:", error));
   };
 
@@ -57,6 +57,7 @@ function AdminDashboard() {
 
   const logout = () => {
     localStorage.removeItem("auth");
+    localStorage.removeItem("token");
     navigate("/admin/login", { replace: true });
   };
 
