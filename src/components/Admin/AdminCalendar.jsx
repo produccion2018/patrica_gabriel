@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./AdminCalendar.css";
-import { API_URL } from "../../config/api";
+import { apiFetch } from "../../utils/apiFetch";
 import {
   ChevronLeft,
   ChevronRight,
@@ -71,11 +71,11 @@ function AdminCalendar({
       // Vencida si su último día ya pasó (antes de hoy)
       if (endDate < hoyInicio) {
         archivandoRef.current.add(id);
-        fetch(`${API_URL}/api/reservas/${id}/archivar`, {
+        apiFetch(`/api/reservas/${id}/archivar`, {
           method: "POST",
         })
           .then((res) => {
-            if (res.ok && typeof setReservas === "function") {
+            if (res && res.ok && typeof setReservas === "function") {
               setReservas((prev) => prev.filter((x) => (x.id || x._id) !== id));
             }
           })

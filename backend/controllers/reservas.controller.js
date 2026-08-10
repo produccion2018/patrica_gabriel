@@ -43,8 +43,27 @@ const crearReserva = (req, res) => {
   );
 };
 
+// Listado COMPLETO — con datos personales de cada huésped (nombre,
+// email, teléfono, dirección). Solo para el panel admin, protegido
+// con token (ver reservas.routes.js).
 const listarReservas = (req, res) => {
   db.all("SELECT * FROM reservas ORDER BY created_at DESC", [], (err, rows) => res.json(rows));
+};
+
+// Endpoint PÚBLICO, sin token — usado por el calendario del formulario
+// de reserva (BookingCalendar.jsx) para saber qué días ya están
+// ocupados. A propósito devuelve solo casa + fechas + estado, NUNCA
+// nombre/email/teléfono/dirección de los huéspedes — eso solo lo ve
+// el admin logueado a través de /api/reservas.
+const listarDisponibilidad = (req, res) => {
+  db.all(
+    "SELECT casa, fechas, estado FROM reservas ORDER BY created_at DESC",
+    [],
+    (err, rows) => {
+      if (err) return res.status(500).json([]);
+      res.json(rows);
+    }
+  );
 };
 
 // ⚠️ IMPORTANTE: asumo que el string que usa tu AdminCalendar.jsx para
@@ -145,4 +164,11 @@ const archivarReserva = (req, res) => {
   });
 };
 
-module.exports = { crearReserva, listarReservas, actualizarEstado, eliminarReserva, archivarReserva };
+module.exports = {
+  crearReserva,
+  listarReservas,
+  listarDisponibilidad,
+  actualizarEstado,
+  eliminarReserva,
+  archivarReserva,
+};

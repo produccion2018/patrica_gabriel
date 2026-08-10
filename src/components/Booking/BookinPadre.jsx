@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import casa1 from "../../assets/casa1.jpg";
 import casa2 from "../../assets/casa2.jpg";
 import casa3 from "../../assets/casa3.jpg";
+import casa4 from "../../assets/casa4.jpg";
 
 import HouseSelector from "./HouseSelector";
 import BookingCalendar from "./BookingCalendar";
@@ -50,6 +51,12 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       ubicacion: "Las Toninas",
     },
     { id: 3, nombre: "Casa familiar", imagen: casa3, ubicacion: "Las Toninas" },
+    {
+      id: 4,
+      nombre: "Departamento en Jujuy",
+      imagen: casa4,
+      ubicacion: "Perico, Jujuy",
+    },
   ];
 
   if (!openBooking) return null;

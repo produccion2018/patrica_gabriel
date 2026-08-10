@@ -1,5 +1,5 @@
 import "./HouseSelector.css";
-import { Waves, Droplets, Users, MapPin } from "lucide-react";
+import { Waves, Droplets, Users, MapPin, Mountain } from "lucide-react";
 
 // Ícono + color + descripción por casa, igual al diseño de referencia.
 // Esto es solo presentación: no toca selectedHouse, ni la lógica de clicks.
@@ -23,6 +23,13 @@ const DETALLE_CASA = {
     iconBg: "#efe9fb",
     iconColor: "#7c3aed",
     descripcion: "Espacios cómodos y seguros para que disfrutes en familia.",
+  },
+  4: {
+    Icono: Mountain,
+    iconBg: "#fbead6",
+    iconColor: "#b5651d",
+    descripcion:
+      "Alojamiento en Jujuy, a 14 minutos del aeropuerto — no está en Las Toninas.",
   },
 };
 

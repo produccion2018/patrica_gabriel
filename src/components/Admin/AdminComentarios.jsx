@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import "./AdminComentarios.css";
-import { API_URL } from "../../config/api";
+import { apiFetch } from "../../utils/apiFetch";
 
 function Comentarios() {
   const [comentarios, setComentarios] = useState([]);
@@ -15,7 +15,8 @@ function Comentarios() {
 
   const cargarComentarios = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/comentarios`);
+      const res = await apiFetch("/api/comentarios");
+      if (!res) return;
 
       const data = await res.json();
       setComentarios(Array.isArray(data) ? data : []);
@@ -27,9 +28,10 @@ function Comentarios() {
 
   const ocultarComentario = async (id) => {
     try {
-      await fetch(`${API_URL}/api/comentarios/${id}/ocultar`, {
+      const res = await apiFetch(`/api/comentarios/${id}/ocultar`, {
         method: "PUT",
       });
+      if (!res) return;
 
       await cargarComentarios();
 
@@ -46,9 +48,10 @@ function Comentarios() {
 
   const mostrarComentario = async (id) => {
     try {
-      await fetch(`${API_URL}/api/comentarios/${id}/mostrar`, {
+      const res = await apiFetch(`/api/comentarios/${id}/mostrar`, {
         method: "PUT",
       });
+      if (!res) return;
 
       await cargarComentarios();
 
@@ -78,9 +81,10 @@ function Comentarios() {
     if (!result.isConfirmed) return;
 
     try {
-      await fetch(`${API_URL}/api/comentarios/${id}`, {
+      const res = await apiFetch(`/api/comentarios/${id}`, {
         method: "DELETE",
       });
+      if (!res) return;
 
       await cargarComentarios();
 

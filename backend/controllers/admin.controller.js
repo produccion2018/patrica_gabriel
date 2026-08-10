@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const db = require("../database/db");
+const { JWT_SECRET } = require("../middleware/auth.middleware");
 
 // Login del panel admin.
 // Soporta migración automática: si la contraseña en la base todavía
@@ -43,7 +45,15 @@ const login = (req, res) => {
         }
       }
 
-      res.json({ success: coincide });
+      if (!coincide) {
+        return res.json({ success: false, message: "Usuario o contraseña incorrectos" });
+      }
+
+      // Login correcto: se emite un token que expira a las 8hs, para
+      // que la sesión no quede abierta para siempre en el navegador.
+      const token = jwt.sign({ usuario }, JWT_SECRET, { expiresIn: "8h" });
+
+      res.json({ success: true, token });
     } catch (errBcrypt) {
       console.error("❌ Error verificando password:", errBcrypt.message);
       res.status(500).json({ success: false, message: "Error del servidor" });
@@ -51,7 +61,8 @@ const login = (req, res) => {
   });
 };
 
-// Cambiar contraseña del admin (ya autenticado en el panel).
+// Cambiar contraseña del admin (ya autenticado en el panel — la ruta
+// que llama a esto ahora exige token, ver admin.routes.js).
 // Siempre guarda la nueva contraseña hasheada con bcrypt.
 const cambiarPassword = (req, res) => {
   const { passwordActual, passwordNueva } = req.body;

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { verificarToken } = require("../middleware/auth.middleware");
 const {
   listarComentarios,
   listarComentariosPublicos,
@@ -9,11 +10,18 @@ const {
   eliminarComentario,
 } = require("../controllers/comentarios.controller");
 
-router.get("/comentarios", listarComentarios);
+// Protegido: el admin ve TODOS los comentarios (incluso los ocultos).
+router.get("/comentarios", verificarToken, listarComentarios);
+
+// Público: la web solo muestra los visibles.
 router.get("/comentarios-publicos", listarComentariosPublicos);
+
+// Público: cualquier huésped puede dejar su opinión.
 router.post("/comentarios", crearComentario);
-router.put("/comentarios/:id/ocultar", ocultarComentario);
-router.put("/comentarios/:id/mostrar", mostrarComentario);
-router.delete("/comentarios/:id", eliminarComentario);
+
+// Protegidas: moderación, solo el admin.
+router.put("/comentarios/:id/ocultar", verificarToken, ocultarComentario);
+router.put("/comentarios/:id/mostrar", verificarToken, mostrarComentario);
+router.delete("/comentarios/:id", verificarToken, eliminarComentario);
 
 module.exports = router;

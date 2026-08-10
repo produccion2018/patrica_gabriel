@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Lock, Eye, EyeOff, CheckCircle2, XCircle } from "lucide-react";
 import "./ChangePassword.css";
-import { API_URL } from "../config/api";
+import { apiFetch } from "../utils/apiFetch";
 
 function ChangePassword() {
   const [passwordActual, setPasswordActual] = useState("");
@@ -21,7 +21,7 @@ function ChangePassword() {
     setMensajeTipo("");
 
     try {
-      const res = await fetch(`${API_URL}/api/admin/password`, {
+      const res = await apiFetch("/api/admin/password", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -29,6 +29,11 @@ function ChangePassword() {
           passwordNueva,
         }),
       });
+
+      if (!res) {
+        setLoading(false);
+        return;
+      }
 
       const data = await res.json();
 

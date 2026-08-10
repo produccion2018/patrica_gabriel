@@ -6,6 +6,7 @@ const HOUSE_COLORS = {
   "Casa frente al mar": { bg: "#22c55e", border: "#16a34a", icon: "🌊" },
   "Casa con pileta": { bg: "#ec4899", border: "#db2777", icon: "🏊" },
   "Casa familiar": { bg: "#f97316", border: "#ea580c", icon: "🏠" },
+  "Departamento en Jujuy": { bg: "#b5651d", border: "#8a4d16", icon: "🏔️" },
 };
 
 const PENDING_BG = "#fbbf24";
@@ -59,8 +60,27 @@ export default function BookingCalendar({
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const monthName = currentDate.toLocaleString("es-AR", { month: "long" });
 
+  // Hoy, sin la hora (solo para comparar días completos, no horarios)
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const esDiaPasado = (day) => {
+    const fecha = new Date(year, month, day);
+    fecha.setHours(0, 0, 0, 0);
+    return fecha < hoy;
+  };
+
+  // No se puede retroceder a un mes anterior al actual — no tiene
+  // sentido mostrar disponibilidad de meses que ya terminaron.
+  const puedeIrAMesAnterior =
+    year > hoy.getFullYear() ||
+    (year === hoy.getFullYear() && month > hoy.getMonth());
+
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const prevMonth = () => {
+    if (!puedeIrAMesAnterior) return;
+    setCurrentDate(new Date(year, month - 1, 1));
+  };
 
   const buildDate = (day) =>
     `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -71,6 +91,7 @@ export default function BookingCalendar({
     );
 
   const toggleDate = (day) => {
+    if (esDiaPasado(day)) return; // no tocar días que ya pasaron
     const fullDate = buildDate(day);
     if (getReserva(fullDate)) return; // no tocar días ya reservados
     if (selectedDates.includes(fullDate)) {
@@ -85,6 +106,7 @@ export default function BookingCalendar({
     const to = Math.max(startDay, endDay);
     const rango = [];
     for (let d = from; d <= to; d++) {
+      if (esDiaPasado(d)) continue; // saltea días que ya pasaron
       const fullDate = buildDate(d);
       if (!getReserva(fullDate)) rango.push(fullDate); // saltea días ocupados
     }
@@ -93,6 +115,7 @@ export default function BookingCalendar({
 
   // --- Handlers de mouse ---
   const handleMouseDown = (day) => {
+    if (esDiaPasado(day)) return;
     if (getReserva(buildDate(day))) return;
     setIsDragging(true);
     dragStartRef.current = day;
@@ -125,7 +148,17 @@ export default function BookingCalendar({
   return (
     <div className="simple-calendar">
       <div className="calendar-top">
-        <button type="button" className="calendar-arrow" onClick={prevMonth}>
+        <button
+          type="button"
+          className="calendar-arrow"
+          onClick={prevMonth}
+          disabled={!puedeIrAMesAnterior}
+          style={
+            !puedeIrAMesAnterior
+              ? { opacity: 0.35, cursor: "not-allowed" }
+              : undefined
+          }
+        >
           ←
         </button>
         <div>
@@ -151,12 +184,21 @@ export default function BookingCalendar({
           const fullDate = buildDate(day);
           const reservaDelDia = getReserva(fullDate);
           const isSelected = selectedDates.includes(fullDate);
+          const esPasado = esDiaPasado(day);
           const houseInfo = HOUSE_COLORS[selectedHouse?.nombre] || {};
 
           let style = {};
           let showTag = false;
 
-          if (isSelected) {
+          if (esPasado) {
+            style = {
+              background: "#f1f5f9",
+              borderColor: "#e2e8f0",
+              color: "#cbd5e1",
+              cursor: "not-allowed",
+              pointerEvents: "none",
+            };
+          } else if (isSelected) {
             style = {
               background: PENDING_BG,
               borderColor: PENDING_BORDER,
@@ -226,6 +268,13 @@ export default function BookingCalendar({
             style={{ background: HOUSE_COLORS["Casa familiar"].bg }}
           />
           Familiar
+        </div>
+        <div className="calendar-legend-item">
+          <span
+            className="calendar-legend-dot"
+            style={{ background: HOUSE_COLORS["Departamento en Jujuy"].bg }}
+          />
+          Jujuy
         </div>
       </div>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Home, Calendar, LogOut, Trash2, Send, FileDown } from "lucide-react";
 import "./AdminHistorial.css";
-import { API_URL } from "../../config/api";
+import { apiFetch } from "../../utils/apiFetch";
 
 const HOUSE_COLORS = {
   "casa frente al mar": "#22c55e",
@@ -42,8 +42,8 @@ function AdminHistorial() {
   const [generandoPDF, setGenerandoPDF] = useState(false);
 
   const cargar = () => {
-    fetch(`${API_URL}/api/historial`)
-      .then((res) => res.json())
+    apiFetch("/api/historial")
+      .then((res) => (res ? res.json() : []))
       .then((data) => setHistorial(Array.isArray(data) ? data : []))
       .catch((err) => console.error(err));
   };
@@ -65,9 +65,10 @@ function AdminHistorial() {
     if (!resultado.isConfirmed) return;
 
     try {
-      const res = await fetch(`${API_URL}/api/historial/${id}`, {
+      const res = await apiFetch(`/api/historial/${id}`, {
         method: "DELETE",
       });
+      if (!res) return;
       const data = await res.json();
       if (data.success) {
         Swal.fire(
@@ -108,14 +109,12 @@ function AdminHistorial() {
     if (!mensaje) return;
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/historial/${r.id}/email`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mensaje }),
-        },
-      );
+      const res = await apiFetch(`/api/historial/${r.id}/email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensaje }),
+      });
+      if (!res) return;
       const data = await res.json();
       if (data.success) {
         Swal.fire("Enviado", "El correo se envió correctamente.", "success");
@@ -135,10 +134,10 @@ function AdminHistorial() {
   const descargarReporte = async () => {
     setGenerandoPDF(true);
     try {
-      const res = await fetch(
-        `${API_URL}/api/historial/reporte?mes=${mesReporte}&anio=${anioReporte}`,
+      const res = await apiFetch(
+        `/api/historial/reporte?mes=${mesReporte}&anio=${anioReporte}`,
       );
-      if (!res.ok) throw new Error("Error generando el reporte");
+      if (!res || !res.ok) throw new Error("Error generando el reporte");
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./AdminGalleryPage.css";
 import { API_URL } from "../../config/api";
+import { apiFetch } from "../../utils/apiFetch";
 
 const dotColors = ["#3b82f6", "#14b8a6", "#a855f7", "#f97316", "#ec4899"];
 
@@ -11,6 +12,7 @@ function AdminGalleryPage() {
   const [promocion, setPromocion] = useState("");
   const [imagen, setImagen] = useState(null);
 
+  // Público: la web también lo necesita, no requiere token.
   const cargarPropiedades = () => {
     fetch(`${API_URL}/api/propiedades`)
       .then((res) => res.json())
@@ -36,27 +38,31 @@ function AdminGalleryPage() {
     setImagen(null);
   };
 
+  // Protegido: solo el admin logueado puede subir imágenes al servidor.
   const subirImagen = async () => {
     const formData = new FormData();
     formData.append("imagen", imagen);
-    const respuesta = await fetch(`${API_URL}/api/upload`, {
+    const respuesta = await apiFetch("/api/upload", {
       method: "POST",
       body: formData,
     });
+    if (!respuesta) return null;
     const data = await respuesta.json();
     return data.imagen;
   };
 
+  // Protegido: solo el admin puede cambiar precio/promoción/imagen.
   const guardarCambios = async (id) => {
     try {
       const propiedadActual = propiedades.find((p) => p.id === id);
       let rutaImagen = propiedadActual?.imagen || null;
       if (imagen) rutaImagen = await subirImagen();
-      await fetch(`${API_URL}/api/propiedades/${id}`, {
+      const res = await apiFetch(`/api/propiedades/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ precio, promocion, imagen: rutaImagen }),
       });
+      if (!res) return;
       setEditando(null);
       setImagen(null);
       cargarPropiedades();

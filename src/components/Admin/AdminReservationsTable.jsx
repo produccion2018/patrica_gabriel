@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AdminReservationsTable.css";
 import Swal from "sweetalert2";
-import { API_URL } from "../../config/api";
+import { apiFetch } from "../../utils/apiFetch";
 import {
   Trash2,
   Check,
@@ -64,7 +64,7 @@ function AdminReservationsTable({
     if (!result.isConfirmed) return;
 
     try {
-      const response = await fetch(`${API_URL}/api/reservas/${id}/estado`, {
+      const response = await apiFetch(`/api/reservas/${id}/estado`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ function AdminReservationsTable({
         }),
       });
 
-      if (response.ok) {
+      if (response && response.ok) {
         setReservas((prev) =>
           prev.map((r) =>
             r.id === id || r._id === id ? { ...r, estado: "confirmada" } : r,
@@ -102,11 +102,11 @@ function AdminReservationsTable({
     if (!result.isConfirmed) return;
 
     try {
-      const response = await fetch(`${API_URL}/api/reservas/${id}/archivar`, {
+      const response = await apiFetch(`/api/reservas/${id}/archivar`, {
         method: "POST",
       });
 
-      if (response.ok) {
+      if (response && response.ok) {
         setReservas((prev) => prev.filter((r) => r.id !== id && r._id !== id));
 
         Swal.fire("Finalizada", "Enviada al historial con éxito.", "success");
@@ -130,11 +130,11 @@ function AdminReservationsTable({
     if (!result.isConfirmed) return;
 
     try {
-      const response = await fetch(`${API_URL}/api/reservas/${id}`, {
+      const response = await apiFetch(`/api/reservas/${id}`, {
         method: "DELETE",
       });
 
-      if (response.ok) {
+      if (response && response.ok) {
         setReservas((prev) =>
           prev.map((r) =>
             r.id === id || r._id === id ? { ...r, estado: "eliminada" } : r,
