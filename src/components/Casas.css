@@ -71,7 +71,7 @@
 
 .house-card{
   background:white;
-  border-radius:32px;
+  border-radius:26px;
   overflow:hidden;
   transition:.45s;
   box-shadow:0 12px 40px rgba(0,0,0,0.08);
@@ -92,7 +92,7 @@
 
 .house-image{
   width:100%;
-  height:280px;
+  height:210px;
   object-fit:cover;
   display:block;
   opacity:0.92;
@@ -108,12 +108,12 @@
 
 .badge{
   position:absolute;
-  top:20px;
-  left:20px;
+  top:16px;
+  left:16px;
   background:#1d4d40;
   color:white;
-  font-size:11px;
-  padding:10px 16px;
+  font-size:10.5px;
+  padding:8px 14px;
   border-radius:50px;
   font-weight:700;
   letter-spacing:.7px;
@@ -124,10 +124,10 @@
 
 .fav-btn{
   position:absolute;
-  top:20px;
-  right:20px;
-  width:48px;
-  height:48px;
+  top:16px;
+  right:16px;
+  width:40px;
+  height:40px;
   border:none;
   border-radius:50%;
   background:white;
@@ -135,7 +135,7 @@
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  font-size:17px;
+  font-size:15px;
   box-shadow:0 10px 25px rgba(0,0,0,0.18);
   z-index:3;
   transition:.3s;
@@ -148,14 +148,14 @@
 /* CONTENT */
 
 .house-content{
-  padding:28px;
+  padding:20px;
 }
 
 .house-content h3{
-  font-size:34px;
+  font-size:24px;
   font-family:'Playfair Display', serif;
   color:#0f172a;
-  margin-bottom:16px;
+  margin-bottom:10px;
   line-height:1.1;
   opacity:0.65;
 }
@@ -165,10 +165,10 @@
 .location{
   display:flex;
   align-items:center;
-  gap:10px;
-  font-size:14px;
+  gap:8px;
+  font-size:12.5px;
   color:#6b7280;
-  margin-bottom:26px;
+  margin-bottom:16px;
 }
 
 /* DETAILS */
@@ -177,23 +177,23 @@
 .extras{
   display:flex;
   flex-wrap:wrap;
-  gap:18px;
+  gap:12px;
 }
 
 .details{
-  margin-bottom:18px;
+  margin-bottom:12px;
 }
 
 .extras{
-  margin-bottom:34px;
+  margin-bottom:20px;
 }
 
 .details div,
 .extras div{
   display:flex;
   align-items:center;
-  gap:8px;
-  font-size:14px;
+  gap:6px;
+  font-size:12.5px;
   color:#111827;
   font-weight:500;
 }
@@ -204,40 +204,40 @@
   display:flex;
   align-items:end;
   justify-content:space-between;
-  gap:20px;
+  gap:16px;
 }
 
 .price span{
-  font-size:13px;
+  font-size:12px;
   color:#6b7280;
 }
 
 .price h4{
-  font-size:34px;
+  font-size:24px;
   color:#0f172a;
-  margin:5px 0;
+  margin:3px 0;
   line-height:1;
   opacity:0.82;
 }
 
 .price p{
-  font-size:14px;
+  font-size:12.5px;
   color:#6b7280;
 }
 
 /* BOTON */
 
 .more-btn{
-  height:52px;
-  padding:0 22px;
+  height:44px;
+  padding:0 18px;
   border:none;
-  border-radius:18px;
+  border-radius:14px;
   background:#062f3d;
   color:white;
   display:flex;
   align-items:center;
-  gap:10px;
-  font-size:15px;
+  gap:8px;
+  font-size:13.5px;
   font-weight:600;
   cursor:pointer;
   transition:.3s;
@@ -288,6 +288,240 @@
   text-align:center;
 }
 
+/* ===================================================
+   OTRAS ZONAS (fuera de Las Toninas — ej. Jujuy)
+   Formato editorial "destacado": imagen grande + panel de
+   info, con identidad propia inspirada en los colores de
+   los cerros (terracota / ocre / lila) para que se note de
+   un vistazo que es una zona distinta a Las Toninas.
+=================================================== */
+
+.otras-zonas-section{
+  position:relative;
+  overflow:hidden;
+  margin-top:70px;
+  padding:48px 44px 44px;
+  border-radius:32px;
+  background:linear-gradient(160deg,#fbf0e4 0%,#f3ddc4 55%,#eecfae 100%);
+  border:1px solid #e8cba0;
+  box-shadow:0 20px 50px rgba(120,72,25,0.10);
+}
+
+/* silueta de cerros decorativa, de fondo, muy sutil */
+.otras-zonas-bg{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:90px;
+  color:#e0b073;
+  opacity:.35;
+  pointer-events:none;
+}
+
+.otras-zonas-bg svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.otras-zonas-eyebrow{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:9px 18px;
+  border-radius:999px;
+  background:#7c3f14;
+  color:#fdf0e0;
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  margin-bottom:22px;
+}
+
+.otras-zonas-eyebrow svg{
+  width:13px;
+  height:13px;
+}
+
+.otras-zonas-titles{
+  position:relative;
+  margin-bottom:34px;
+  max-width:640px;
+}
+
+.otras-zonas-titles h3{
+  font-size:34px;
+  font-family:'Playfair Display', serif;
+  color:#4a2c12;
+  line-height:1.12;
+  margin-bottom:12px;
+}
+
+.otras-zonas-titles p{
+  font-size:14px;
+  color:#8a6238;
+  line-height:1.6;
+}
+
+/* CARD DESTACADA (imagen grande + info) */
+
+.otra-zona-feature{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  background:#ffffff;
+  border-radius:26px;
+  overflow:hidden;
+  box-shadow:0 18px 45px rgba(0,0,0,0.10);
+}
+
+.otra-zona-feature-img{
+  position:relative;
+  min-height:100%;
+}
+
+.otra-zona-feature-img img{
+  width:100%;
+  height:100%;
+  min-height:340px;
+  object-fit:cover;
+  display:block;
+}
+
+.otra-zona-badge{
+  position:absolute;
+  top:20px;
+  left:20px;
+  background:#b5651d;
+  color:white;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.7px;
+  padding:9px 16px;
+  border-radius:50px;
+}
+
+.otra-zona-feature-info{
+  padding:36px 38px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.otra-zona-feature-info h4{
+  font-size:28px;
+  font-family:'Playfair Display', serif;
+  color:#0f172a;
+  margin-bottom:12px;
+  line-height:1.15;
+}
+
+.otra-zona-location{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:#6b7280;
+  margin-bottom:14px;
+}
+
+.otra-zona-highlight{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:fit-content;
+  font-size:12.5px;
+  font-weight:600;
+  color:#7c3f14;
+  background:#fbead6;
+  padding:7px 14px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+.otra-zona-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-bottom:26px;
+}
+
+.otra-zona-chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:12.5px;
+  font-weight:500;
+  color:#42332a;
+  background:#f7efe4;
+  border:1px solid #ecdcc4;
+  padding:8px 13px;
+  border-radius:12px;
+}
+
+.otra-zona-chip svg{
+  color:#b5651d;
+  width:12px;
+  height:12px;
+}
+
+.otra-zona-bottom{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:16px;
+  padding-top:18px;
+  border-top:1px dashed #e6d5bd;
+}
+
+.otra-zona-btn{
+  background:#7c3f14;
+}
+
+.otra-zona-btn:hover{
+  background:#5c2e0d;
+}
+
+@media(max-width:1100px){
+  .otra-zona-feature{
+    grid-template-columns:1fr;
+  }
+
+  .otra-zona-feature-img img{
+    min-height:280px;
+  }
+}
+
+@media(max-width:768px){
+  .otras-zonas-section{
+    padding:30px 22px 26px;
+    border-radius:24px;
+  }
+
+  .otras-zonas-titles h3{
+    font-size:26px;
+  }
+
+  .otra-zona-feature-info{
+    padding:26px 22px;
+  }
+
+  .otra-zona-bottom{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+  }
+
+  .otra-zona-bottom .more-btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+
 /* RESPONSIVE */
 
 @media(max-width:1100px){
@@ -323,11 +557,11 @@
   }
 
   .house-image{
-    height:240px;
+    height:190px;
   }
 
   .house-content h3{
-    font-size:30px;
+    font-size:22px;
   }
 
   .bottom{

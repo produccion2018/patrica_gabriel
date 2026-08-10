@@ -10,6 +10,9 @@ import collage2_2 from "../assets/Carrusel/collage2/collage3.jpg";
 import collage3_1 from "../assets/Carrusel/collage3/collage1.jpg";
 import collage3_2 from "../assets/Carrusel/collage3/collage2.jpg";
 
+import collage4_portada from "../assets/casa4.jpg";
+import collage4_1 from "../assets/Carrusel/collage4/collage1.jpeg";
+
 import "./Casas.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -28,12 +31,74 @@ import {
   FaHeart,
   FaUmbrellaBeach,
   FaUsers,
+  FaMountain,
 } from "react-icons/fa";
 
 // Cada cuántos milisegundos se vuelve a pedir la lista de propiedades
 // en segundo plano, para que la página pública se actualice sola sin
 // que el usuario tenga que apretar F5.
 const INTERVALO_ACTUALIZACION_MS = 8000;
+
+// ================================
+// DETALLES FIJOS POR PROPIEDAD
+// (lo que no viene de la base de datos: ubicación, badge, ambientes, etc.)
+// Para sumar una casa nueva a futuro, solo hay que agregar una entrada
+// acá con el mismo id que tenga la fila en la tabla "propiedades".
+// ================================
+const detallesPorId = {
+  1: {
+    badge: "CON PILETA",
+    location: "Calle 46 Nº 445 entre 7 y 9",
+    guests: "5/6 personas",
+    rooms: "2 dormitorios",
+    bath: "2 baños",
+    extras: ["Cochera", "WiFi", "Apta mascotas"],
+  },
+  2: {
+    badge: "FRENTE AL MAR",
+    location: "Costanera 2169 entre 46 y 48",
+    guests: "5/6 personas",
+    rooms: "2 dormitorios",
+    bath: "1 baño",
+    extras: ["Cochera", "WiFi", "Apta mascotas"],
+  },
+  3: {
+    badge: "CASA FAMILIAR",
+    location: "Calle 13 Nº 1836 entre 40 y 42",
+    guests: "5/6 personas",
+    rooms: "2 dormitorios",
+    bath: "1 baño",
+    extras: ["Cochera", "WiFi", "Apta mascotas"],
+  },
+  4: {
+    badge: "PERICO, JUJUY",
+    location: "Av. Canadá 160 entre Santiago del Estero y Buenos Aires",
+    guests: "Por habitación (doble o simple)",
+    rooms: "3 dormitorios · 4 ambientes",
+    bath: "1 baño",
+    extras: ["Cochera (2 autos)", "WiFi", "Apta mascotas"],
+    highlight: "A 14 minutos del aeropuerto",
+    // Foto propia mientras el backend no tenga una cargada todavía
+    // (se usa como respaldo más abajo, en "image").
+    fallbackImage: collage4_portada,
+    // Marca esta propiedad como fuera de Las Toninas, para que se
+    // muestre en su propia sección aparte y no se confunda con las
+    // demás (ver "otraZona" más abajo).
+    otraZona: true,
+  },
+};
+
+// Detalles genéricos por si en el futuro se agrega una propiedad
+// nueva en la base de datos antes de cargar su entrada acá arriba —
+// así la card no se rompe, solo se ve más simple hasta completarla.
+const detallesPorDefecto = {
+  badge: "ALOJAMIENTO",
+  location: "",
+  guests: "",
+  rooms: "",
+  bath: "",
+  extras: ["Cochera", "WiFi", "Apta mascotas"],
+};
 
 export default function Casas({ language }) {
   const navigate = useNavigate();
@@ -83,10 +148,11 @@ export default function Casas({ language }) {
     1: [collage1_1],
     2: [collage2_1, collage2_2],
     3: [collage3_1, collage3_2],
+    4: [collage4_portada, collage4_1],
   };
 
   const handleOpenGallery = (id) => {
-    setGallery(galleries[id]);
+    setGallery(galleries[id] || []);
     setOpenModal(true);
   };
 
@@ -95,29 +161,124 @@ export default function Casas({ language }) {
   // AQUÍ SE CONECTA CON MYSQL/SQLITE
   // ================================
 
-  const houses = propiedades.map((propiedad) => ({
-    id: propiedad.id,
-    title: propiedad.nombre,
-    price: propiedad.precio,
-    promocion: propiedad.promocion,
-    image: propiedad.imagen ? `${API_URL}${propiedad.imagen}` : "",
-    badge:
-      propiedad.id === 1
-        ? "CON PILETA"
-        : propiedad.id === 2
-          ? "FRENTE AL MAR"
-          : "CASA FAMILIAR",
-    location:
-      propiedad.id === 1
-        ? "Calle 46 Nº 445 entre 7 y 9"
-        : propiedad.id === 2
-          ? "Costanera 2169 entre 46 y 48"
-          : "Calle 13 Nº 1836 entre 40 y 42",
-    guests: "5/6 personas",
-    rooms: "2 dormitorios",
-    bath: propiedad.id === 1 ? "2 baños" : "1 baño",
-    extras: ["Cochera", "WiFi", "Apta mascotas"],
-  }));
+  const houses = propiedades.map((propiedad) => {
+    const detalles = detallesPorId[propiedad.id] || detallesPorDefecto;
+
+    return {
+      id: propiedad.id,
+      title: propiedad.nombre,
+      price: propiedad.precio,
+      promocion: propiedad.promocion,
+      image: propiedad.imagen
+        ? `${API_URL}${propiedad.imagen}`
+        : detalles.fallbackImage || "",
+      badge: detalles.badge,
+      location: detalles.location,
+      guests: detalles.guests,
+      rooms: detalles.rooms,
+      bath: detalles.bath,
+      extras: detalles.extras,
+      highlight: detalles.highlight || "",
+      otraZona: detalles.otraZona || false,
+    };
+  });
+
+  // Separamos: las casas de Las Toninas van en la grilla principal,
+  // y las de otras provincias (por ahora, Jujuy) van en su propia
+  // sección aparte más abajo, para que no se mezclen ni confundan.
+  const housesLasToninas = houses.filter((h) => !h.otraZona);
+  const housesOtrasZonas = houses.filter((h) => h.otraZona);
+
+  // Tarjeta de una casa — reutilizada tanto en la grilla principal
+  // como en la sección de otras zonas, para no duplicar el JSX.
+  const renderHouseCard = (house) => (
+    <div className="house-card" key={house.id}>
+      <div className="image-wrapper">
+        <img
+          src={
+            house.image
+              ? house.image
+              : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200"
+          }
+          alt={house.title}
+          className="house-image"
+        />
+
+        <span className="badge">{house.badge}</span>
+
+        <button
+          className="fav-btn"
+          onClick={() =>
+            setFavorites((prev) =>
+              prev.includes(house.id)
+                ? prev.filter((id) => id !== house.id)
+                : [...prev, house.id],
+            )
+          }
+        >
+          <FaHeart
+            color={favorites.includes(house.id) ? "#ef4444" : "#9ca3af"}
+          />
+        </button>
+      </div>
+
+      <div className="house-content">
+        <h3>{house.title}</h3>
+
+        <div className="location">
+          <FaMapMarkerAlt />
+          <span>{house.location}</span>
+        </div>
+
+        <div className="details">
+          <div>
+            <FaUsers />
+            <span>{house.guests}</span>
+          </div>
+          <div>
+            <FaBed />
+            <span>{house.rooms}</span>
+          </div>
+          <div>
+            <FaBath />
+            <span>{house.bath}</span>
+          </div>
+        </div>
+
+        <div className="extras">
+          <div>
+            <FaCar />
+            <span>{house.extras[0]}</span>
+          </div>
+          <div>
+            <FaWifi />
+            <span>{house.extras[1]}</span>
+          </div>
+          <div>
+            <FaPaw />
+            <span>{house.extras[2]}</span>
+          </div>
+        </div>
+
+        <div className="bottom">
+          <div className="price">
+            <span>{language === "es" ? "Desde" : "From"}</span>
+            <h4>{house.price}</h4>
+            <p>{language === "es" ? "por noche" : "per night"}</p>
+            <small>{house.promocion}</small>
+          </div>
+
+          <button
+            className="more-btn"
+            onClick={() => handleOpenGallery(house.id)}
+          >
+            {language === "es" ? "Ver más" : "View more"}
+            <FaArrowRight />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   // ================================
   // SEGUNDA PARTE
@@ -157,95 +318,116 @@ export default function Casas({ language }) {
         </div>
 
         <div className="houses-grid">
-          {houses.map((house) => (
-            <div className="house-card" key={house.id}>
-              <div className="image-wrapper">
-                <img
-                  src={
-                    house.image
-                      ? house.image
-                      : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200"
-                  }
-                  alt={house.title}
-                  className="house-image"
-                />
-
-                <span className="badge">{house.badge}</span>
-
-                <button
-                  className="fav-btn"
-                  onClick={() =>
-                    setFavorites((prev) =>
-                      prev.includes(house.id)
-                        ? prev.filter((id) => id !== house.id)
-                        : [...prev, house.id],
-                    )
-                  }
-                >
-                  <FaHeart
-                    color={favorites.includes(house.id) ? "#ef4444" : "#9ca3af"}
-                  />
-                </button>
-              </div>
-
-              <div className="house-content">
-                <h3>{house.title}</h3>
-
-                <div className="location">
-                  <FaMapMarkerAlt />
-                  <span>{house.location}</span>
-                </div>
-
-                <div className="details">
-                  <div>
-                    <FaUsers />
-                    <span>{house.guests}</span>
-                  </div>
-                  <div>
-                    <FaBed />
-                    <span>{house.rooms}</span>
-                  </div>
-                  <div>
-                    <FaBath />
-                    <span>{house.bath}</span>
-                  </div>
-                </div>
-
-                <div className="extras">
-                  <div>
-                    <FaCar />
-                    <span>{house.extras[0]}</span>
-                  </div>
-                  <div>
-                    <FaWifi />
-                    <span>{house.extras[1]}</span>
-                  </div>
-                  <div>
-                    <FaPaw />
-                    <span>{house.extras[2]}</span>
-                  </div>
-                </div>
-
-                <div className="bottom">
-                  <div className="price">
-                    <span>{language === "es" ? "Desde" : "From"}</span>
-                    <h4>{house.price}</h4>
-                    <p>{language === "es" ? "por noche" : "per night"}</p>
-                    <small>{house.promocion}</small>
-                  </div>
-
-                  <button
-                    className="more-btn"
-                    onClick={() => handleOpenGallery(house.id)}
-                  >
-                    {language === "es" ? "Ver más" : "View more"}
-                    <FaArrowRight />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+          {housesLasToninas.map((house) => renderHouseCard(house))}
         </div>
+
+        {housesOtrasZonas.length > 0 && (
+          <div className="otras-zonas-section">
+            <div className="otras-zonas-bg" aria-hidden="true">
+              <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path
+                  d="M0,90 L120,55 L230,80 L340,30 L460,70 L580,20 L700,65 L820,35 L940,75 L1060,40 L1200,85 L1200,120 L0,120 Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+
+            <div className="otras-zonas-eyebrow">
+              <FaMountain />
+              <span>
+                {language === "es"
+                  ? "Otra provincia"
+                  : language === "pt"
+                    ? "Outra província"
+                    : "Different province"}
+              </span>
+            </div>
+
+            <div className="otras-zonas-titles">
+              <h3>
+                {language === "es"
+                  ? "También tenemos alojamiento en Jujuy"
+                  : language === "pt"
+                    ? "Também temos hospedagem em Jujuy"
+                    : "We also have a place to stay in Jujuy"}
+              </h3>
+              <p>
+                {language === "es"
+                  ? "Ojo: esta propiedad no está en Las Toninas — se encuentra en Jujuy, al norte de Argentina."
+                  : language === "pt"
+                    ? "Atenção: esta propriedade não fica em Las Toninas — está em Jujuy, no norte da Argentina."
+                    : "Note: this property is not in Las Toninas — it's located in Jujuy, northern Argentina."}
+              </p>
+            </div>
+
+            {housesOtrasZonas.map((house) => (
+              <div className="otra-zona-feature" key={house.id}>
+                <div className="otra-zona-feature-img">
+                  <img
+                    src={
+                      house.image ||
+                      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200"
+                    }
+                    alt={house.title}
+                  />
+                  <span className="otra-zona-badge">{house.badge}</span>
+                </div>
+
+                <div className="otra-zona-feature-info">
+                  <h4>{house.title}</h4>
+
+                  <div className="otra-zona-location">
+                    <FaMapMarkerAlt />
+                    <span>{house.location}</span>
+                  </div>
+
+                  {house.highlight && (
+                    <div className="otra-zona-highlight">
+                      ✈️ {house.highlight}
+                    </div>
+                  )}
+
+                  <div className="otra-zona-chips">
+                    <span className="otra-zona-chip">
+                      <FaUsers /> {house.guests}
+                    </span>
+                    <span className="otra-zona-chip">
+                      <FaBed /> {house.rooms}
+                    </span>
+                    <span className="otra-zona-chip">
+                      <FaBath /> {house.bath}
+                    </span>
+                    <span className="otra-zona-chip">
+                      <FaCar /> {house.extras[0]}
+                    </span>
+                    <span className="otra-zona-chip">
+                      <FaWifi /> {house.extras[1]}
+                    </span>
+                    <span className="otra-zona-chip">
+                      <FaPaw /> {house.extras[2]}
+                    </span>
+                  </div>
+
+                  <div className="otra-zona-bottom">
+                    <div className="price">
+                      <span>{language === "es" ? "Desde" : "From"}</span>
+                      <h4>{house.price}</h4>
+                      <p>{language === "es" ? "por noche" : "per night"}</p>
+                    </div>
+
+                    <button
+                      className="more-btn otra-zona-btn"
+                      onClick={() => handleOpenGallery(house.id)}
+                    >
+                      {language === "es" ? "Ver más" : "View more"}
+                      <FaArrowRight />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="benefits-section">
           <div className="benefit-card">

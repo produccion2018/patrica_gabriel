@@ -1,4 +1,3 @@
-// Este archivo NO abre su propia conexión a la base — reutiliza la
 // única conexión que ya crea db.js. Antes, initDatabase.js y db.js
 // abrían cada uno su propia conexión al mismo archivo .db, lo cual
 // era redundante (y podía duplicar el log "Base de datos SQLite
@@ -76,6 +75,15 @@ db.run(`CREATE TABLE IF NOT EXISTS historial_reservas (
 db.run(
   "CREATE TABLE IF NOT EXISTS propiedades (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, precio TEXT, promocion TEXT, imagen TEXT)"
 );
+
+// Cuarta propiedad: departamento en Perico, Jujuy (fuera de Las Toninas).
+// INSERT OR IGNORE para que no se duplique si el server se reinicia
+// y la fila ya existe. El precio y la imagen quedan vacíos: se cargan
+// después desde el panel de administración, igual que las otras 3.
+db.run(
+  "INSERT OR IGNORE INTO propiedades (id, nombre, precio, promocion, imagen) VALUES (4, 'Departamento en Jujuy', '', '', '')"
+);
+
 db.run(
   "CREATE TABLE IF NOT EXISTS comentarios_clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, comentario TEXT NOT NULL, estrellas INTEGER DEFAULT 5, visible INTEGER DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)"
 );
