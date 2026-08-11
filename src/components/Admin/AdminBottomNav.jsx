@@ -35,8 +35,18 @@ function AdminBottomNav({ seccionActual, setSeccionActual, navigate }) {
         const el = document.getElementById(item.scrollTo);
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
-    } else {
-      setSeccionActual(item.key);
+      return;
+    }
+
+    setSeccionActual(item.key);
+
+    // "Inicio": si ya estás abajo en la página (scrolleado), subir
+    // de una al principio — no solo cambiar de sección. Cubre tanto
+    // el caso de scroll en la ventana como en el panel interno.
+    if (item.key === "Dashboard") {
+      const panel = document.querySelector(".mireya-content");
+      if (panel) panel.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
