@@ -74,6 +74,9 @@ export default function AdminLogin() {
               placeholder="Usuario"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck="false"
             />
           </div>
 
