@@ -26,3 +26,11 @@
   width: 24px;
   height: 24px;
 }
+
+/* Mobile: subirlo para que no quede tapado por la barra fija
+   de "Reservar ahora" agregada en Navbar.css */
+@media (max-width: 768px) {
+  .pwb-scroll-top-btn {
+    bottom: 76px;
+  }
+}

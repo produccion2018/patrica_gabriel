@@ -253,7 +253,7 @@
   }
 }
 
-/* RESERVA MOBILE */
+/* RESERVA MOBILE (dentro del menú hamburguesa abierto) */
 
 .mobile-reserve-btn{
   display:none;
@@ -278,4 +278,50 @@
   .reserve-btn{
     display:none;
   }
+}
+
+/* =========================================================
+   BARRA FIJA "RESERVAR AHORA" — solo celular, SIEMPRE visible
+   (no depende de abrir el menú), estilo app con acción persistente.
+========================================================= */
+
+.mobile-sticky-reserve-bar{
+  display:none;
+}
+
+@media(max-width:768px){
+
+  .mobile-sticky-reserve-bar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:58px;
+
+    border:none;
+    background:linear-gradient(135deg, #d5a04e, #c68a3c);
+    color:#ffffff;
+
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    z-index:1300;
+
+    box-shadow: 0 -6px 20px rgba(0,0,0,0.18);
+
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .mobile-sticky-reserve-bar:active{
+    filter:brightness(0.95);
+  }
+
 }

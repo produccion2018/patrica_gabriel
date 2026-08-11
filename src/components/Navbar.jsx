@@ -64,173 +64,198 @@ export default function Navbar({ language, setLanguage, setOpenBooking }) {
   };
 
   return (
-    <header className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}>
-      {/* LOGO */}
+    <>
+      <header className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}>
+        {/* LOGO */}
 
-      <div
-        className="logo"
-        onClick={() => scrollToSection("inicio")}
-        style={{ cursor: "pointer" }}
-      >
-        Tortuninas
-      </div>
-
-      {/* LINKS */}
-
-      <nav className={`nav-links ${mobileOpen ? "nav-active" : ""}`}>
-        {/* INICIO */}
-
-        <button onClick={() => scrollToSection("inicio")}>
-          {language === "es" ? "Inicio" : language === "pt" ? "Início" : "Home"}
-        </button>
-
-        {/* CASAS */}
-
-        <button onClick={() => scrollToSection("casas")}>
-          {language === "es" ? "Casas" : language === "pt" ? "Casas" : "Houses"}
-        </button>
-
-        {/* Comentarios */}
-        <button onClick={() => scrollToSection("comentarios")}>
-          {language === "es"
-            ? "Opiniones"
-            : language === "pt"
-              ? "Avaliações"
-              : "Reviews"}
-        </button>
-
-        {/* ABOUT */}
-
-        <a href="/about">
-          {language === "es"
-            ? "Quiénes Somos"
-            : language === "pt"
-              ? "Quem Somos"
-              : "About Us"}
-        </a>
-
-        {/* CONTACTO */}
-
-        <button onClick={() => scrollToSection("contacto")}>
-          {language === "es"
-            ? "Contacto"
-            : language === "pt"
-              ? "Contato"
-              : "Contact"}
-        </button>
-
-        {/* MOBILE BUTTON */}
-
-        <button
-          className="mobile-reserve-btn"
-          onClick={() => setOpenBooking(true)}
+        <div
+          className="logo"
+          onClick={() => scrollToSection("inicio")}
+          style={{ cursor: "pointer" }}
         >
-          <CalendarDays size={18} />
-
-          {language === "es"
-            ? "Reservar ahora"
-            : language === "pt"
-              ? "Reservar agora"
-              : "Book now"}
-        </button>
-      </nav>
-
-      {/* RIGHT */}
-
-      <div className="right-navbar">
-        {/* LANGUAGES */}
-
-        <div className="language-selector">
-          <button
-            className="language-btn"
-            onClick={() => setLanguageOpen(!languageOpen)}
-          >
-            <ReactCountryFlag
-              countryCode={languages[language].flag}
-              svg
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: "50%",
-              }}
-            />
-
-            <span>{languages[language].label}</span>
-
-            <ChevronDown size={18} />
-          </button>
-
-          {languageOpen && (
-            <div className="language-dropdown">
-              <div
-                className="language-item"
-                onClick={() => changeLanguage("es")}
-              >
-                <ReactCountryFlag
-                  countryCode="AR"
-                  svg
-                  style={{
-                    width: 22,
-                    height: 22,
-                  }}
-                />
-                Español
-              </div>
-
-              <div
-                className="language-item"
-                onClick={() => changeLanguage("pt")}
-              >
-                <ReactCountryFlag
-                  countryCode="BR"
-                  svg
-                  style={{
-                    width: 22,
-                    height: 22,
-                  }}
-                />
-                Português
-              </div>
-
-              <div
-                className="language-item"
-                onClick={() => changeLanguage("en")}
-              >
-                <ReactCountryFlag
-                  countryCode="US"
-                  svg
-                  style={{
-                    width: 22,
-                    height: 22,
-                  }}
-                />
-                English
-              </div>
-            </div>
-          )}
+          Tortuninas
         </div>
 
-        {/* DESKTOP RESERVE */}
+        {/* LINKS */}
 
-        <button className="reserve-btn" onClick={() => setOpenBooking(true)}>
-          <CalendarDays size={18} />
+        <nav className={`nav-links ${mobileOpen ? "nav-active" : ""}`}>
+          {/* INICIO */}
 
-          {language === "es"
-            ? "Reservar ahora"
-            : language === "pt"
-              ? "Reservar agora"
-              : "Book now"}
-        </button>
+          <button onClick={() => scrollToSection("inicio")}>
+            {language === "es"
+              ? "Inicio"
+              : language === "pt"
+                ? "Início"
+                : "Home"}
+          </button>
 
-        {/* MOBILE MENU */}
+          {/* CASAS */}
 
-        <button
-          className={`mobile-menu-btn ${mobileOpen ? "is-open" : ""}`}
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-    </header>
+          <button onClick={() => scrollToSection("casas")}>
+            {language === "es"
+              ? "Casas"
+              : language === "pt"
+                ? "Casas"
+                : "Houses"}
+          </button>
+
+          {/* Comentarios */}
+          <button onClick={() => scrollToSection("comentarios")}>
+            {language === "es"
+              ? "Opiniones"
+              : language === "pt"
+                ? "Avaliações"
+                : "Reviews"}
+          </button>
+
+          {/* ABOUT */}
+
+          <a href="/about">
+            {language === "es"
+              ? "Quiénes Somos"
+              : language === "pt"
+                ? "Quem Somos"
+                : "About Us"}
+          </a>
+
+          {/* CONTACTO */}
+
+          <button onClick={() => scrollToSection("contacto")}>
+            {language === "es"
+              ? "Contacto"
+              : language === "pt"
+                ? "Contato"
+                : "Contact"}
+          </button>
+
+          {/* MOBILE BUTTON */}
+
+          <button
+            className="mobile-reserve-btn"
+            onClick={() => setOpenBooking(true)}
+          >
+            <CalendarDays size={18} />
+
+            {language === "es"
+              ? "Reservar ahora"
+              : language === "pt"
+                ? "Reservar agora"
+                : "Book now"}
+          </button>
+        </nav>
+
+        {/* RIGHT */}
+
+        <div className="right-navbar">
+          {/* LANGUAGES */}
+
+          <div className="language-selector">
+            <button
+              className="language-btn"
+              onClick={() => setLanguageOpen(!languageOpen)}
+            >
+              <ReactCountryFlag
+                countryCode={languages[language].flag}
+                svg
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: "50%",
+                }}
+              />
+
+              <span>{languages[language].label}</span>
+
+              <ChevronDown size={18} />
+            </button>
+
+            {languageOpen && (
+              <div className="language-dropdown">
+                <div
+                  className="language-item"
+                  onClick={() => changeLanguage("es")}
+                >
+                  <ReactCountryFlag
+                    countryCode="AR"
+                    svg
+                    style={{
+                      width: 22,
+                      height: 22,
+                    }}
+                  />
+                  Español
+                </div>
+
+                <div
+                  className="language-item"
+                  onClick={() => changeLanguage("pt")}
+                >
+                  <ReactCountryFlag
+                    countryCode="BR"
+                    svg
+                    style={{
+                      width: 22,
+                      height: 22,
+                    }}
+                  />
+                  Português
+                </div>
+
+                <div
+                  className="language-item"
+                  onClick={() => changeLanguage("en")}
+                >
+                  <ReactCountryFlag
+                    countryCode="US"
+                    svg
+                    style={{
+                      width: 22,
+                      height: 22,
+                    }}
+                  />
+                  English
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* DESKTOP RESERVE */}
+
+          <button className="reserve-btn" onClick={() => setOpenBooking(true)}>
+            <CalendarDays size={18} />
+
+            {language === "es"
+              ? "Reservar ahora"
+              : language === "pt"
+                ? "Reservar agora"
+                : "Book now"}
+          </button>
+
+          {/* MOBILE MENU */}
+
+          <button
+            className={`mobile-menu-btn ${mobileOpen ? "is-open" : ""}`}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </header>
+
+      {/* BARRA FIJA "RESERVAR AHORA" — solo celular, siempre visible
+          (no depende de abrir el menú hamburguesa), estilo app con
+          botón de acción persistente abajo de la pantalla. */}
+      <button
+        className="mobile-sticky-reserve-bar"
+        onClick={() => setOpenBooking(true)}
+      >
+        <CalendarDays size={18} />
+        {language === "es"
+          ? "Reservar ahora"
+          : language === "pt"
+            ? "Reservar agora"
+            : "Book now"}
+      </button>
+    </>
   );
 }

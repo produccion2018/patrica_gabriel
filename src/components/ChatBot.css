@@ -11,6 +11,14 @@
   box-sizing: border-box;
 }
 
+/* Mobile: subirlo para que no quede tapado por la barra fija
+   de "Reservar ahora" agregada en Navbar.css */
+@media (max-width: 768px) {
+  .pwb-master-container {
+    bottom: 76px;
+  }
+}
+
 /* BOTÓN FLOTANTE (FAB) */
 .pwb-fab-trigger {
   position: relative;
