@@ -15,6 +15,7 @@ import {
 import collage1 from "../assets/Carrusel/collage1/collage1.jpg";
 import collage2 from "../assets/Carrusel/collage2/collage2.jpg";
 import collage3 from "../assets/Carrusel/collage3/collage1.jpg";
+import casa4 from "../assets/casa4.jpg";
 
 export default function Propiedades() {
   const navigate = useNavigate();
@@ -34,17 +35,21 @@ export default function Propiedades() {
       pool: "CON PILETA",
       sea: "FRENTE AL MAR",
       park: "GRAN PARQUE",
+      jujuy: "PERICO, JUJUY",
 
       housePool: "Casa con pileta",
       houseSea: "Casa frente al mar",
       housePark: "Casa con gran parque",
+      houseJujuy: "Departamento en Jujuy",
 
       rooms: "2 dormitorios",
+      roomsJujuy: "3 dormitorios · 4 ambientes",
       bath1: "1 baño",
       bath2: "2 baños",
 
       wifi: "WiFi Gratis",
       garage: "Cochera",
+      garageJujuy: "Cochera (2 autos)",
       pet: "Pet Friendly",
 
       desc1:
@@ -55,6 +60,9 @@ export default function Propiedades() {
 
       desc3:
         "Un entorno tranquilo rodeado de naturaleza para relajarse y disfrutar en familia.",
+
+      desc4:
+        "Ojo: esta propiedad no está en Las Toninas — se encuentra en Jujuy, al norte de Argentina, a 14 minutos del aeropuerto.",
     },
 
     en: {
@@ -67,17 +75,21 @@ export default function Propiedades() {
       pool: "WITH POOL",
       sea: "SEA FRONT",
       park: "BIG PARK",
+      jujuy: "PERICO, JUJUY",
 
       housePool: "House with pool",
       houseSea: "Sea front house",
       housePark: "House with big park",
+      houseJujuy: "Apartment in Jujuy",
 
       rooms: "2 bedrooms",
+      roomsJujuy: "3 bedrooms · 4 rooms",
       bath1: "1 bathroom",
       bath2: "2 bathrooms",
 
       wifi: "Free WiFi",
       garage: "Garage",
+      garageJujuy: "Garage (2 cars)",
       pet: "Pet Friendly",
 
       desc1:
@@ -87,6 +99,9 @@ export default function Propiedades() {
         "Privileged sea front location to relax and enjoy unique sunrises in Las Toninas.",
 
       desc3: "A peaceful natural environment to relax and enjoy with family.",
+
+      desc4:
+        "Note: this property is not in Las Toninas — it's located in Jujuy, northern Argentina, 14 minutes from the airport.",
     },
 
     pt: {
@@ -99,17 +114,21 @@ export default function Propiedades() {
       pool: "COM PISCINA",
       sea: "FRENTE AO MAR",
       park: "GRANDE PARQUE",
+      jujuy: "PERICO, JUJUY",
 
       housePool: "Casa com piscina",
       houseSea: "Casa frente ao mar",
       housePark: "Casa com grande parque",
+      houseJujuy: "Apartamento em Jujuy",
 
       rooms: "2 quartos",
+      roomsJujuy: "3 quartos · 4 ambientes",
       bath1: "1 banheiro",
       bath2: "2 banheiros",
 
       wifi: "WiFi Grátis",
       garage: "Garagem",
+      garageJujuy: "Garagem (2 carros)",
       pet: "Pet Friendly",
 
       desc1:
@@ -120,6 +139,9 @@ export default function Propiedades() {
 
       desc3:
         "Um ambiente tranquilo cercado pela natureza para relaxar em família.",
+
+      desc4:
+        "Atenção: esta propriedade não fica em Las Toninas — está em Jujuy, no norte da Argentina, a 14 minutos do aeroporto.",
     },
   };
 
@@ -334,6 +356,62 @@ export default function Propiedades() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Mapa Casa con gran parque"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* CASA 4 — JUJUY (fuera de Las Toninas) */}
+      <div className="property-card reverse">
+        <div className="property-gallery">
+          <img src={casa4} alt={t.houseJujuy} />
+        </div>
+
+        <div className="property-info">
+          <span className="property-badge">{t.jujuy}</span>
+
+          <h2>{t.houseJujuy}</h2>
+
+          <div className="property-location">
+            <FaMapMarkerAlt />
+            Av. Canadá 160 entre Santiago del Estero y Buenos Aires
+          </div>
+
+          <div className="property-features">
+            <div>
+              <FaBed />
+              <span>{t.roomsJujuy}</span>
+            </div>
+
+            <div>
+              <FaBath />
+              <span>{t.bath1}</span>
+            </div>
+
+            <div>
+              <FaWifi />
+              <span>{t.wifi}</span>
+            </div>
+
+            <div>
+              <FaCar />
+              <span>{t.garageJujuy}</span>
+            </div>
+
+            <div>
+              <FaPaw />
+              <span>{t.pet}</span>
+            </div>
+          </div>
+
+          <p className="property-description">{t.desc4}</p>
+
+          <div className="property-map">
+            <iframe
+              src="https://www.google.com/maps?q=Perico+Jujuy&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Mapa Departamento en Jujuy"
             />
           </div>
         </div>

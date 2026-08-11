@@ -3,6 +3,11 @@ const jwt = require("jsonwebtoken");
 const db = require("../database/db");
 const { JWT_SECRET } = require("../middleware/auth.middleware");
 
+// Misma regla que en el frontend (ChangePassword.jsx), pero acá se
+// exige de verdad: si alguien llama a esta ruta directo (sin pasar
+// por el formulario), igual se la rechaza si es débil.
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
 // Login del panel admin.
 // Soporta migración automática: si la contraseña en la base todavía
 // está en texto plano (instalaciones viejas, ej "123456"), la valida
@@ -69,6 +74,14 @@ const cambiarPassword = (req, res) => {
 
   if (!passwordActual || !passwordNueva) {
     return res.json({ success: false, message: "Faltan datos" });
+  }
+
+  if (!PASSWORD_REGEX.test(passwordNueva)) {
+    return res.json({
+      success: false,
+      message:
+        "La nueva contraseña debe tener al menos 8 caracteres, con una mayúscula, una minúscula y un número.",
+    });
   }
 
   db.get("SELECT * FROM usuarios WHERE usuario = ?", ["admin"], async (err, usuario) => {

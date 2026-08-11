@@ -3,6 +3,9 @@ import { Lock, Eye, EyeOff, CheckCircle2, XCircle } from "lucide-react";
 import "./ChangePassword.css";
 import { apiFetch } from "../utils/apiFetch";
 
+// Al menos 8 caracteres, una mayúscula, una minúscula y un número.
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
 function ChangePassword() {
   const [passwordActual, setPasswordActual] = useState("");
   const [passwordNueva, setPasswordNueva] = useState("");
@@ -16,9 +19,20 @@ function ChangePassword() {
 
   const cambiarPassword = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMensaje("");
     setMensajeTipo("");
+
+    // Validación del lado del cliente, para avisar al toque sin
+    // esperar la vuelta del servidor.
+    if (!PASSWORD_REGEX.test(passwordNueva)) {
+      setMensaje(
+        "La nueva contraseña debe tener al menos 8 caracteres, con una mayúscula, una minúscula y un número.",
+      );
+      setMensajeTipo("error");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await apiFetch("/api/admin/password", {
@@ -119,6 +133,9 @@ function ChangePassword() {
               {showNueva ? <EyeOff size={17} /> : <Eye size={17} />}
             </button>
           </div>
+          <small className="cp-hint">
+            Mínimo 8 caracteres, con una mayúscula, una minúscula y un número.
+          </small>
         </div>
 
         <button type="submit" className="cp-submit-btn" disabled={loading}>

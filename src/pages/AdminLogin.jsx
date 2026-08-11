@@ -1,6 +1,7 @@
 import "./AdminLogin.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { Eye, EyeOff, User, Lock, ArrowRight } from "lucide-react";
 import { API_URL } from "../config/api";
 
@@ -32,10 +33,24 @@ export default function AdminLogin() {
         localStorage.setItem("token", data.token);
         navigate("/admin");
       } else {
-        alert(data.message || "Credenciales incorrectas");
+        Swal.fire({
+          icon: "error",
+          title: "No se pudo iniciar sesión",
+          text: data.message || "Usuario o contraseña incorrectos.",
+          confirmButtonText: "Reintentar",
+          confirmButtonColor: "#d5a04e",
+          background: "#ffffff",
+        });
       }
     } catch (error) {
-      alert("Error de conexión con el servidor");
+      Swal.fire({
+        icon: "warning",
+        title: "Sin conexión",
+        text: "No se pudo conectar con el servidor. Probá de nuevo en unos segundos.",
+        confirmButtonText: "Entendido",
+        confirmButtonColor: "#d5a04e",
+        background: "#ffffff",
+      });
     }
   }
 
