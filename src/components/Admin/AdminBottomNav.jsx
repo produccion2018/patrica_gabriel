@@ -4,16 +4,11 @@ import {
   ClipboardList,
   CalendarDays,
   Building2,
-  Menu,
+  Plus,
 } from "lucide-react";
 
-function AdminBottomNav({
-  seccionActual,
-  setSeccionActual,
-  sidebarOpen,
-  setSidebarOpen,
-}) {
-  const items = [
+function AdminBottomNav({ seccionActual, setSeccionActual, navigate }) {
+  const itemsIzquierda = [
     { key: "Dashboard", label: "Inicio", icon: Home },
     {
       key: "Reservas",
@@ -21,6 +16,9 @@ function AdminBottomNav({
       icon: ClipboardList,
       scrollTo: "tabla-reservas-section",
     },
+  ];
+
+  const itemsDerecha = [
     { key: "Calendario", label: "Calendario", icon: CalendarDays },
     {
       key: "Propiedades",
@@ -42,30 +40,38 @@ function AdminBottomNav({
     }
   };
 
+  const renderItem = (item) => {
+    const Icon = item.icon;
+    const active = seccionActual === item.key;
+    return (
+      <button
+        key={item.key}
+        className={`patricia-bottom-nav-btn ${active ? "active" : ""}`}
+        onClick={() => handleClick(item)}
+      >
+        <Icon size={20} />
+        <span>{item.label}</span>
+      </button>
+    );
+  };
+
   return (
     <nav className="patricia-bottom-nav">
-      {items.map((item) => {
-        const Icon = item.icon;
-        const active = seccionActual === item.key;
-        return (
-          <button
-            key={item.key}
-            className={`patricia-bottom-nav-btn ${active ? "active" : ""}`}
-            onClick={() => handleClick(item)}
-          >
-            <Icon size={20} />
-            <span>{item.label}</span>
-          </button>
-        );
-      })}
+      <div className="patricia-bottom-nav-side">
+        {itemsIzquierda.map(renderItem)}
+      </div>
 
       <button
-        className={`patricia-bottom-nav-btn ${sidebarOpen ? "active" : ""}`}
-        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="patricia-bottom-nav-fab"
+        onClick={() => navigate("/admin/nueva-reserva")}
+        aria-label="Nueva reserva"
       >
-        <Menu size={20} />
-        <span>Más</span>
+        <Plus size={24} />
       </button>
+
+      <div className="patricia-bottom-nav-side">
+        {itemsDerecha.map(renderItem)}
+      </div>
     </nav>
   );
 }

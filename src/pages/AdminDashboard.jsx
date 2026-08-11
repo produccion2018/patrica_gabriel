@@ -347,8 +347,7 @@ function AdminDashboard() {
       <AdminBottomNav
         seccionActual={seccionActiva}
         setSeccionActual={setSeccionActiva}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
+        navigate={navigate}
       />
     </div>
   );

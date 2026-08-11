@@ -413,6 +413,7 @@ export default function Casas({ language }) {
                       <span>{language === "es" ? "Desde" : "From"}</span>
                       <h4>{house.price}</h4>
                       <p>{language === "es" ? "por noche" : "per night"}</p>
+                      <small>{house.promocion}</small>
                     </div>
 
                     <button
