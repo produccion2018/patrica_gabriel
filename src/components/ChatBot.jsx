@@ -96,7 +96,7 @@ export default function ChatBot() {
         const msg =
           "Hola! Quiero información y disponibilidad de las casas en Las Toninas";
         window.open(
-          `https://wa.me/5491125687707?text=${encodeURIComponent(msg)}`,
+          `https://wa.me/5491170822059?text=${encodeURIComponent(msg)}`,
           "_blank",
         );
       }, 200);
