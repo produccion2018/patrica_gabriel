@@ -15,25 +15,18 @@
   position:relative;
 }
 
-.main-image{
-  width:100%;
-  height:70vh;
-  object-fit:cover;
-  border-radius:25px;
-}
-
 .close-btn{
   position:absolute;
-  top:16px;      /* antes: -60px */
-  right:16px;    /* antes: 0 */
-  width:52px;
-  height:52px;
+  top:16px;
+  right:16px;
+  width:36px;
+  height:36px;
   border:none;
   border-radius:50%;
   background:white;
   cursor:pointer;
-  font-size:18px;
-  z-index:10;    /* nuevo: para que quede arriba de la imagen */
+  font-size:14px;
+  z-index:10;
 }
 
 .thumbs{
@@ -66,17 +59,9 @@
 
 @media(max-width:768px){
 
-  .main-image{
-    height:50vh;
-  }
-
   .thumb{
     width:90px;
     height:70px;
-  }
-
-  .close-btn{
-    top:-50px;
   }
 }
 
@@ -94,7 +79,6 @@
   height: 100%;
   object-fit: contain;
   background: black;
-  pointer-events: none;
   user-select: none;
 }
 
@@ -102,7 +86,7 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
-  color: #ffffff59;
+  color: rgba(255,255,255,0.35);
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 2px;
