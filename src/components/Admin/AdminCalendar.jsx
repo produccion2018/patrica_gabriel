@@ -12,16 +12,17 @@ const HOUSE_CONFIRM_COLORS = {
   "casa frente al mar": "#22c55e",
   "casa con pileta": "#ec4899",
   "casa familiar": "#f97316",
+  "departamento en jujuy": "#b5651d",
 };
 const HOUSE_ICONS = {
   "casa frente al mar": "🌊",
   "casa con pileta": "🏊",
   "casa familiar": "🏠",
+  "departamento en jujuy": "🏔️",
 };
 const PENDING_COLOR = "#f59e0b";
 const DEFAULT_COLOR = "#94a3b8";
 
-// Parsea "YYYY-MM-DD" como fecha LOCAL (evita el corrimiento de un día por UTC)
 const parseLocalDate = (str) => {
   if (!str) return null;
   const [y, m, d] = str.split("-").map(Number);
@@ -35,16 +36,8 @@ function AdminCalendar({
   setCasaSeleccionada,
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  // Guarda los ids que ya se mandaron a archivar, para no repetir el POST
-  // en cada re-render o en cada ciclo del polling del padre (cada 8s)
-  // mientras el backend todavía no confirmó el cambio.
   const archivandoRef = useRef(new Set());
 
-  // Recorre las reservas activas y archiva (finaliza) automáticamente
-  // las que ya vencieron, usando el mismo endpoint que el botón manual
-  // "Finalizar" de AdminReservationsTable. Como 'reservas' y 'setReservas'
-  // ahora vienen del mismo padre que se las pasa a la tabla, el cambio
-  // se refleja al instante en calendario + tabla + stats, todo junto.
   useEffect(() => {
     if (!Array.isArray(reservas) || reservas.length === 0) return;
 
@@ -68,7 +61,6 @@ function AdminCalendar({
       const endDate = parseLocalDate(fechas[fechas.length - 1]);
       if (!endDate) return;
 
-      // Vencida si su último día ya pasó (antes de hoy)
       if (endDate < hoyInicio) {
         archivandoRef.current.add(id);
         apiFetch(`/api/reservas/${id}/archivar`, {
@@ -287,6 +279,15 @@ function AdminCalendar({
               style={{ background: HOUSE_CONFIRM_COLORS["casa familiar"] }}
             />
             Familiar
+          </span>
+          <span className="cal-legend-item">
+            <i
+              className="cal-legend-dot"
+              style={{
+                background: HOUSE_CONFIRM_COLORS["departamento en jujuy"],
+              }}
+            />
+            Jujuy
           </span>
         </div>
 

@@ -20,10 +20,9 @@ export default function BookingCalendar({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [reservas, setReservas] = useState([]);
 
-  // --- Estado para selección con arrastre de mouse ---
   const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef(null); // día donde empezó el drag
-  const movedRef = useRef(false); // si el mouse pasó por más de un día
+  const dragStartRef = useRef(null);
+  const movedRef = useRef(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/reservas`)
@@ -44,7 +43,6 @@ export default function BookingCalendar({
       .catch((err) => console.error("Error al cargar reservas:", err));
   }, []);
 
-  // Soltar el drag aunque el mouseup ocurra fuera del calendario
   useEffect(() => {
     const handleGlobalMouseUp = () => {
       setIsDragging(false);
@@ -60,7 +58,13 @@ export default function BookingCalendar({
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const monthName = currentDate.toLocaleString("es-AR", { month: "long" });
 
-  // Hoy, sin la hora (solo para comparar días completos, no horarios)
+  // Día de la semana del día 1 del mes (0=Domingo ... 6=Sábado),
+  // coincide con el orden del header ["D","L","M","M","J","V","S"].
+  // Sin esto, el día 1 siempre caía en la primera celda (Domingo)
+  // sin importar qué día de la semana le correspondía en realidad,
+  // corriendo todo el mes hacia columnas incorrectas.
+  const primerDiaSemana = new Date(year, month, 1).getDay();
+
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
 
@@ -70,8 +74,6 @@ export default function BookingCalendar({
     return fecha < hoy;
   };
 
-  // No se puede retroceder a un mes anterior al actual — no tiene
-  // sentido mostrar disponibilidad de meses que ya terminaron.
   const puedeIrAMesAnterior =
     year > hoy.getFullYear() ||
     (year === hoy.getFullYear() && month > hoy.getMonth());
@@ -91,9 +93,9 @@ export default function BookingCalendar({
     );
 
   const toggleDate = (day) => {
-    if (esDiaPasado(day)) return; // no tocar días que ya pasaron
+    if (esDiaPasado(day)) return;
     const fullDate = buildDate(day);
-    if (getReserva(fullDate)) return; // no tocar días ya reservados
+    if (getReserva(fullDate)) return;
     if (selectedDates.includes(fullDate)) {
       setSelectedDates(selectedDates.filter((d) => d !== fullDate));
     } else {
@@ -106,14 +108,13 @@ export default function BookingCalendar({
     const to = Math.max(startDay, endDay);
     const rango = [];
     for (let d = from; d <= to; d++) {
-      if (esDiaPasado(d)) continue; // saltea días que ya pasaron
+      if (esDiaPasado(d)) continue;
       const fullDate = buildDate(d);
-      if (!getReserva(fullDate)) rango.push(fullDate); // saltea días ocupados
+      if (!getReserva(fullDate)) rango.push(fullDate);
     }
     setSelectedDates(rango);
   };
 
-  // --- Handlers de mouse ---
   const handleMouseDown = (day) => {
     if (esDiaPasado(day)) return;
     if (getReserva(buildDate(day))) return;
@@ -131,7 +132,6 @@ export default function BookingCalendar({
   const handleMouseUp = (day) => {
     if (!isDragging) return;
     if (!movedRef.current) {
-      // Fue un clic simple, no un arrastre: togglear ese día solo
       toggleDate(day);
     }
     setIsDragging(false);
@@ -174,9 +174,23 @@ export default function BookingCalendar({
 
       <div className="calendar-grid" onMouseLeave={() => {}}>
         {["D", "L", "M", "M", "J", "V", "S"].map((item, index) => (
-          <div key={index} className="calendar-week">
+          <div key={`h-${index}`} className="calendar-week">
             {item}
           </div>
+        ))}
+
+        {Array.from({ length: primerDiaSemana }).map((_, index) => (
+          <div
+            key={`empty-${index}`}
+            className="calendar-day"
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "default",
+              pointerEvents: "none",
+              boxShadow: "none",
+            }}
+          />
         ))}
 
         {[...Array(daysInMonth)].map((_, index) => {
