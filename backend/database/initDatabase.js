@@ -42,18 +42,6 @@ db.run(`CREATE TABLE IF NOT EXISTS reservas (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`);
 
-// Tabla "candado": una fila por cada día que una casa tiene ocupado
-// (por una reserva pendiente o confirmada). UNIQUE(casa, fecha) es lo
-// que impide, a nivel base de datos, que dos reservas se pisen — sin
-// importar qué tan rápido o al mismo tiempo lleguen los pedidos.
-db.run(`CREATE TABLE IF NOT EXISTS dias_ocupados (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    casa TEXT NOT NULL,
-    fecha TEXT NOT NULL,
-    reserva_id INTEGER NOT NULL,
-    UNIQUE(casa, fecha)
-)`);
-
 db.run(`CREATE TABLE IF NOT EXISTS historial_reservas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_original INTEGER,

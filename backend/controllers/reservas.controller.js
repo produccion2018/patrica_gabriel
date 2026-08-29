@@ -8,84 +8,36 @@ const {
 const crearReserva = (req, res) => {
   const { casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, fechas } = req.body;
 
-  const fechasNuevas = Array.isArray(fechas) ? fechas : [];
+  db.run(
+    `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechas || [])],
+    async function (err) {
+      if (err) {
+        console.error("❌ Error:", err);
+        return res.status(500).json({ success: false });
+      }
 
-  if (fechasNuevas.length === 0) {
-    return res.status(400).json({ success: false, message: "Faltan las fechas de la reserva." });
-  }
+      const fechasArray = Array.isArray(fechas) ? fechas : [];
 
-  db.run("BEGIN IMMEDIATE TRANSACTION", (errBegin) => {
-    if (errBegin) {
-      console.error("❌ Error iniciando transacción:", errBegin.message);
-      return res.status(500).json({ success: false });
-    }
-
-    db.run(
-      `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechasNuevas)],
-      function (errInsert) {
-        if (errInsert) {
-          console.error("❌ Error insertando reserva:", errInsert.message);
-          return db.run("ROLLBACK", () =>
-            res.status(500).json({ success: false }),
-          );
-        }
-
-        const reservaId = this.lastID;
-        let huboError = false;
-        let pendientes = fechasNuevas.length;
-
-        fechasNuevas.forEach((fecha) => {
-          if (huboError) return;
-          db.run(
-            "INSERT INTO dias_ocupados (casa, fecha, reserva_id) VALUES (?,?,?)",
-            [casa, fecha, reservaId],
-            (errDia) => {
-              if (huboError) return;
-
-              if (errDia) {
-                huboError = true;
-                return db.run("ROLLBACK", () => {
-                  res.status(409).json({
-                    success: false,
-                    message: "Uno o más días seleccionados ya no están disponibles para esta propiedad. Por favor, elegí otras fechas.",
-                  });
-                });
-              }
-
-              pendientes -= 1;
-              if (pendientes === 0) {
-                db.run("COMMIT", async (errCommit) => {
-                  if (errCommit) {
-                    console.error("❌ Error confirmando transacción:", errCommit.message);
-                    return res.status(500).json({ success: false });
-                  }
-
-                  if (email) {
-                    const html = armarHtmlSolicitudRecibida({
-                      nombre: `${nombre} ${apellido}`,
-                      casa,
-                      telefono,
-                      huespedes,
-                      fechaEntrada: fechasNuevas[0] || "-",
-                      fechaSalida: fechasNuevas[fechasNuevas.length - 1] || "-",
-                    });
-                    try {
-                      await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
-                    } catch (errMail) {
-                      console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
-                    }
-                  }
-
-                  res.json({ success: true, id: reservaId });
-                });
-              }
-            },
-          );
+      if (email) {
+        const html = armarHtmlSolicitudRecibida({
+          nombre: `${nombre} ${apellido}`,
+          casa,
+          telefono,
+          huespedes,
+          fechaEntrada: fechasArray[0] || "-",
+          fechaSalida: fechasArray[fechasArray.length - 1] || "-",
         });
-      },
-    );
-  });
+        try {
+          await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
+        } catch (errMail) {
+          console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
+        }
+      }
+
+      res.json({ success: true, id: this.lastID });
+    }
+  );
 };
 
 const listarReservas = (req, res) => {
@@ -151,14 +103,7 @@ const actualizarEstado = (req, res) => {
 };
 
 const eliminarReserva = (req, res) => {
-  const { id } = req.params;
-  db.run("DELETE FROM dias_ocupados WHERE reserva_id = ?", [id], (errDias) => {
-    if (errDias) {
-      console.error("❌ Error liberando días ocupados:", errDias.message);
-      return res.status(500).json({ success: false });
-    }
-    db.run("DELETE FROM reservas WHERE id = ?", [id], () => res.json({ success: true }));
-  });
+  db.run("DELETE FROM reservas WHERE id = ?", [req.params.id], () => res.json({ success: true }));
 };
 
 const archivarReserva = (req, res) => {
@@ -180,18 +125,12 @@ const archivarReserva = (req, res) => {
 
         console.log(`📦 Reserva id=${resv.id} archivada en historial_reservas → id nuevo=${this.lastID}`);
 
-        db.run("DELETE FROM dias_ocupados WHERE reserva_id = ?", [resv.id], (errDias) => {
-          if (errDias) {
-            console.error("❌ Error liberando días ocupados al archivar:", errDias.message);
+        db.run("DELETE FROM reservas WHERE id = ?", [req.params.id], (errDelete) => {
+          if (errDelete) {
+            console.error("❌ Error borrando reserva original tras archivar:", errDelete.message);
+            return res.status(500).json({ success: false, error: errDelete.message });
           }
-
-          db.run("DELETE FROM reservas WHERE id = ?", [req.params.id], (errDelete) => {
-            if (errDelete) {
-              console.error("❌ Error borrando reserva original tras archivar:", errDelete.message);
-              return res.status(500).json({ success: false, error: errDelete.message });
-            }
-            res.json({ success: true });
-          });
+          res.json({ success: true });
         });
       }
     );

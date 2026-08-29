@@ -55,6 +55,8 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       .catch((err) => console.error("Error al cargar reservas:", err));
   };
 
+  // Carga la lista de reservas cada vez que se abre el modal, así
+  // arranca siempre con los datos más al día.
   useEffect(() => {
     if (openBooking) cargarReservas();
   }, [openBooking]);
@@ -141,48 +143,30 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       estado: "pendiente",
     };
 
-    try {
-      const res = await fetch(`${API_URL}/api/reservas`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+    // Bloqueamos esos días ACÁ MISMO, al instante, antes de mandar
+    // nada al servidor. Así el calendario ya los muestra ocupados
+    // sin ningún tipo de espera.
+    setReservas((prev) => [...prev, { ...payload, fechas: fechasOrdenadas }]);
+
+    // Avanzamos a la pantalla final de una vez, sin esperar al servidor
+    setStep(3);
+    setIsSubmitting(false);
+
+    // El envío real se hace en paralelo, en segundo plano
+    fetch(`${API_URL}/api/reservas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success === false) {
+          console.error("⚠️ El servidor respondió con error:", data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("❌ ERROR EN RESERVA (segundo plano):", error);
       });
-      const data = await res.json();
-
-      if (data.success === false) {
-        setIsSubmitting(false);
-        Swal.fire({
-          icon: "error",
-          title: "Esas fechas ya no están disponibles",
-          text:
-            data.message ||
-            "Otra persona reservó esos días para esta casa justo antes que vos. Elegí otras fechas.",
-        });
-        // Refrescamos la lista para que el calendario muestre el
-        // bloqueo real y no deje intentar de nuevo con esos días.
-        cargarReservas();
-        return;
-      }
-
-      // Reserva confirmada por el servidor: la sumamos a la lista en
-      // memoria al instante, así el calendario la pinta ya mismo sin
-      // esperar un refetch.
-      setReservas((prev) => [
-        ...prev,
-        { ...payload, id: data.id, fechas: fechasOrdenadas },
-      ]);
-
-      setIsSubmitting(false);
-      setStep(3);
-    } catch (error) {
-      console.error("❌ ERROR EN RESERVA:", error);
-      setIsSubmitting(false);
-      Swal.fire({
-        icon: "error",
-        title: "Error de conexión",
-        text: "No pudimos enviar tu reserva. Probá de nuevo en unos segundos.",
-      });
-    }
   };
 
   return (
