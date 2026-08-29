@@ -5,6 +5,8 @@ const cors = require("cors");
 
 require("./database/initDatabase");
 
+const { iniciarCronExpiracion } = require("./services/expiracion.service");
+
 const reservasRoutes = require("./routes/reservas.routes");
 const historialRoutes = require("./routes/historial.routes");
 const comentariosRoutes = require("./routes/comentarios.routes");
@@ -29,4 +31,5 @@ app.use("/api/actividad", actividadRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🖐️ Servidor iniciado en puerto ${PORT}`);
+  iniciarCronExpiracion();
 });

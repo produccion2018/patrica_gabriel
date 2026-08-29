@@ -143,30 +143,53 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       estado: "pendiente",
     };
 
-    // Bloqueamos esos días ACÁ MISMO, al instante, antes de mandar
-    // nada al servidor. Así el calendario ya los muestra ocupados
-    // sin ningún tipo de espera.
-    setReservas((prev) => [...prev, { ...payload, fechas: fechasOrdenadas }]);
-
-    // Avanzamos a la pantalla final de una vez, sin esperar al servidor
-    setStep(3);
-    setIsSubmitting(false);
-
-    // El envío real se hace en paralelo, en segundo plano
-    fetch(`${API_URL}/api/reservas`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success === false) {
-          console.error("⚠️ El servidor respondió con error:", data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("❌ ERROR EN RESERVA (segundo plano):", error);
+    // IMPORTANTE: ahora esperamos la respuesta REAL del servidor antes
+    // de avanzar a la pantalla de confirmación. Si esas fechas ya están
+    // ocupadas (error 409), no avanzamos: mostramos el aviso y dejamos
+    // que el cliente elija otras fechas.
+    try {
+      const res = await fetch(`${API_URL}/api/reservas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
+
+      const data = await res.json();
+
+      if (res.status === 409 || data.success === false) {
+        setIsSubmitting(false);
+
+        await Swal.fire({
+          icon: "error",
+          title: "Esas fechas ya no están disponibles",
+          text:
+            data.error ||
+            "Alguien más reservó esa casa para esas fechas. Elegí otras fechas para continuar.",
+        });
+
+        // Volvemos al paso 1 y refrescamos el calendario para que
+        // se vean las fechas recién ocupadas.
+        setSelectedDates([]);
+        setStep(1);
+        cargarReservas();
+        return;
+      }
+
+      // Reserva aceptada por el servidor: recién ahora la marcamos
+      // como ocupada en pantalla y avanzamos a la confirmación.
+      setReservas((prev) => [...prev, { ...payload, fechas: fechasOrdenadas }]);
+      setStep(3);
+      setIsSubmitting(false);
+    } catch (error) {
+      console.error("❌ ERROR EN RESERVA:", error);
+      setIsSubmitting(false);
+
+      Swal.fire({
+        icon: "error",
+        title: "No pudimos enviar tu reserva",
+        text: "Hubo un problema de conexión. Probá de nuevo en un momento.",
+      });
+    }
   };
 
   return (

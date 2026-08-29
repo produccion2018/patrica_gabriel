@@ -4,38 +4,84 @@ const {
   armarHtmlBienvenida,
   armarHtmlSolicitudRecibida,
 } = require("../services/email.service");
+const { expirarReservasVencidas } = require("../services/expiracion.service");
+
+// Estados que "ocupan" la casa y bloquean nuevas reservas en esas fechas.
+// Si tenés otros nombres de estado (ej: "cancelada", "expirada", "rechazada"),
+// esos NO van en esta lista porque no deben bloquear.
+const ESTADOS_QUE_BLOQUEAN = ["pendiente", "confirmada"];
 
 const crearReserva = (req, res) => {
+  // Aprovechamos este momento (alguien está reservando) para liberar
+  // de paso cualquier reserva vieja que ya venció (48hs sin pago).
+  expirarReservasVencidas();
+
   const { casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, fechas } = req.body;
 
-  db.run(
-    `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechas || [])],
-    async function (err) {
-      if (err) {
-        console.error("❌ Error:", err);
-        return res.status(500).json({ success: false });
+  const fechasNuevas = Array.isArray(fechas) ? fechas : [];
+
+  if (!casa || fechasNuevas.length === 0) {
+    return res.status(400).json({ success: false, error: "Faltan datos: casa o fechas." });
+  }
+
+  // 1) Traemos todas las reservas de esa misma casa que estén en un estado que bloquea.
+  const placeholders = ESTADOS_QUE_BLOQUEAN.map(() => "?").join(",");
+  db.all(
+    `SELECT id, fechas, estado FROM reservas WHERE casa = ? AND estado IN (${placeholders})`,
+    [casa, ...ESTADOS_QUE_BLOQUEAN],
+    (errSelect, rows) => {
+      if (errSelect) {
+        console.error("❌ Error chequeando disponibilidad:", errSelect.message);
+        return res.status(500).json({ success: false, error: errSelect.message });
       }
 
-      const fechasArray = Array.isArray(fechas) ? fechas : [];
-
-      if (email) {
-        const html = armarHtmlSolicitudRecibida({
-          nombre: `${nombre} ${apellido}`,
-          casa,
-          telefono,
-          huespedes,
-          fechaEntrada: fechasArray[0] || "-",
-          fechaSalida: fechasArray[fechasArray.length - 1] || "-",
-        });
+      // 2) Revisamos si alguna fecha nueva ya está ocupada en alguna de esas reservas.
+      const hayCruce = rows.some((r) => {
+        let fechasExistentes = [];
         try {
-          await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
-        } catch (errMail) {
-          console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
+          fechasExistentes = JSON.parse(r.fechas || "[]");
+        } catch {
+          fechasExistentes = [];
         }
+        return fechasExistentes.some((f) => fechasNuevas.includes(f));
+      });
+
+      if (hayCruce) {
+        return res.status(409).json({
+          success: false,
+          error: "Esa casa ya tiene una reserva pendiente o confirmada en alguna de esas fechas.",
+        });
       }
 
-      res.json({ success: true, id: this.lastID });
+      // 3) No hay cruce, insertamos la reserva normalmente.
+      db.run(
+        `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechasNuevas)],
+        async function (err) {
+          if (err) {
+            console.error("❌ Error:", err);
+            return res.status(500).json({ success: false });
+          }
+
+          if (email) {
+            const html = armarHtmlSolicitudRecibida({
+              nombre: `${nombre} ${apellido}`,
+              casa,
+              telefono,
+              huespedes,
+              fechaEntrada: fechasNuevas[0] || "-",
+              fechaSalida: fechasNuevas[fechasNuevas.length - 1] || "-",
+            });
+            try {
+              await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
+            } catch (errMail) {
+              console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
+            }
+          }
+
+          res.json({ success: true, id: this.lastID });
+        }
+      );
     }
   );
 };
@@ -45,6 +91,10 @@ const listarReservas = (req, res) => {
 };
 
 const listarDisponibilidad = (req, res) => {
+  // Cada vez que alguien mira el calendario, de paso liberamos
+  // las reservas vencidas (más de 48hs sin pago).
+  expirarReservasVencidas();
+
   db.all(
     "SELECT casa, fechas, estado FROM reservas ORDER BY created_at DESC",
     [],
