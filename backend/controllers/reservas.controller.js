@@ -5,40 +5,86 @@ const {
   armarHtmlSolicitudRecibida,
 } = require("../services/email.service");
 
+// Chequea si dos rangos de fechas se pisan, comparando contra las
+// fechas ya guardadas de reservas activas (pendiente o confirmada)
+// de la MISMA casa. Esta es la validación real y definitiva: no
+// importa qué pase en la pantalla del cliente (caché, timing, doble
+// clic, pestañas abiertas) — acá se corta.
+const hayFechasSuperpuestas = (fechasNuevas, fechasExistentes) => {
+  const setExistentes = new Set(fechasExistentes);
+  return fechasNuevas.some((f) => setExistentes.has(f));
+};
+
 // Al crear la reserva todavía NO se confirmó nada (queda "pendiente"),
 // así que se manda el mail de "recibimos tu solicitud, en breve nos
 // comunicamos con vos" — NO el mail de bienvenida con wifi/alarma.
 const crearReserva = (req, res) => {
   const { casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, fechas } = req.body;
 
-  db.run(
-    `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechas || [])],
-    async function (err) {
-      if (err) {
-        console.error("❌ Error:", err);
-        return res.status(500).json({ success: false });
+  const fechasNuevas = Array.isArray(fechas) ? fechas : [];
+
+  if (fechasNuevas.length === 0) {
+    return res.status(400).json({ success: false, message: "Faltan las fechas de la reserva." });
+  }
+
+  // Antes de insertar, buscamos todas las reservas activas (pendiente
+  // o confirmada) de esa misma casa, y chequeamos si alguna de sus
+  // fechas se pisa con lo que están pidiendo ahora. Si hay pisada,
+  // se rechaza acá — es la única fuente de verdad confiable, porque
+  // vive en el servidor y no depende de lo que tenga cada pantalla
+  // en memoria en ese momento.
+  db.all(
+    `SELECT fechas FROM reservas WHERE casa = ? AND estado IN ('pendiente', 'confirmada')`,
+    [casa],
+    (errCheck, filas) => {
+      if (errCheck) {
+        console.error("❌ Error chequeando disponibilidad:", errCheck.message);
+        return res.status(500).json({ success: false, message: "Error verificando disponibilidad." });
       }
 
-      const fechasArray = Array.isArray(fechas) ? fechas : [];
-
-      if (email) {
-        const html = armarHtmlSolicitudRecibida({
-          nombre: `${nombre} ${apellido}`,
-          casa,
-          telefono,
-          huespedes,
-          fechaEntrada: fechasArray[0] || "-",
-          fechaSalida: fechasArray[fechasArray.length - 1] || "-",
-        });
+      const fechasOcupadas = filas.flatMap((f) => {
         try {
-          await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
-        } catch (errMail) {
-          console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
+          return JSON.parse(f.fechas || "[]");
+        } catch {
+          return [];
         }
+      });
+
+      if (hayFechasSuperpuestas(fechasNuevas, fechasOcupadas)) {
+        return res.status(409).json({
+          success: false,
+          message: "Uno o más días seleccionados ya no están disponibles para esta propiedad. Por favor, elegí otras fechas.",
+        });
       }
 
-      res.json({ success: true, id: this.lastID });
+      db.run(
+        `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechasNuevas)],
+        async function (err) {
+          if (err) {
+            console.error("❌ Error:", err);
+            return res.status(500).json({ success: false });
+          }
+
+          if (email) {
+            const html = armarHtmlSolicitudRecibida({
+              nombre: `${nombre} ${apellido}`,
+              casa,
+              telefono,
+              huespedes,
+              fechaEntrada: fechasNuevas[0] || "-",
+              fechaSalida: fechasNuevas[fechasNuevas.length - 1] || "-",
+            });
+            try {
+              await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
+            } catch (errMail) {
+              console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
+            }
+          }
+
+          res.json({ success: true, id: this.lastID });
+        }
+      );
     }
   );
 };
@@ -76,9 +122,6 @@ const actualizarEstado = (req, res) => {
   const { estado } = req.body;
   const { id } = req.params;
 
-  // Primero busco la reserva completa (para tener nombre/casa/fechas/email
-  // a mano si hay que mandar el mail de bienvenida) y de paso guardo cuál
-  // era el estado anterior, para no reenviar el mail si ya estaba confirmada.
   db.get("SELECT * FROM reservas WHERE id = ?", [id], (err, resv) => {
     if (err) {
       console.error("❌ Error buscando reserva:", err.message);
@@ -96,8 +139,6 @@ const actualizarEstado = (req, res) => {
         return res.status(500).json({ success: false, error: errUpdate.message });
       }
 
-      // Solo mando el mail de bienvenida si JUSTO AHORA pasó a confirmada
-      // (si ya estaba confirmada antes, no lo vuelvo a mandar).
       const pasaAConfirmadaAhora =
         estado === ESTADO_CONFIRMADA && estadoAnterior !== ESTADO_CONFIRMADA;
 
@@ -147,10 +188,6 @@ const archivarReserva = (req, res) => {
         }
 
         console.log(`📦 Reserva id=${resv.id} archivada en historial_reservas → id nuevo=${this.lastID}`);
-
-        // Nota: acá ya NO se manda mail de despedida automático.
-        // Ese envío ahora es manual, desde el botón "Enviar mensaje"
-        // en AdminHistorial (Patricia/Gabriel escriben el texto).
 
         db.run("DELETE FROM reservas WHERE id = ?", [req.params.id], (errDelete) => {
           if (errDelete) {
