@@ -1,6 +1,5 @@
 import "./BookingCalendar.css";
 import { useState, useEffect, useRef } from "react";
-import { API_URL } from "../../config/api";
 
 const HOUSE_COLORS = {
   "Casa frente al mar": { bg: "#22c55e", border: "#16a34a", icon: "🌊" },
@@ -16,32 +15,13 @@ export default function BookingCalendar({
   selectedHouse,
   selectedDates,
   setSelectedDates,
+  reservas, // ahora llega del padre (BookinPadre.jsx), ya no se busca acá
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [reservas, setReservas] = useState([]);
 
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef(null);
   const movedRef = useRef(false);
-
-  useEffect(() => {
-    fetch(`${API_URL}/api/reservas`)
-      .then((res) => res.json())
-      .then((data) => {
-        const activas = Array.isArray(data)
-          ? data.filter((r) => r.estado !== "finalizada")
-          : [];
-        const unicas = Array.from(
-          new Map(activas.map((r) => [r.id, r])).values(),
-        );
-        const reservasProcesadas = unicas.map((r) => ({
-          ...r,
-          fechas: JSON.parse(r.fechas || "[]"),
-        }));
-        setReservas(reservasProcesadas);
-      })
-      .catch((err) => console.error("Error al cargar reservas:", err));
-  }, []);
 
   useEffect(() => {
     const handleGlobalMouseUp = () => {
@@ -58,11 +38,6 @@ export default function BookingCalendar({
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const monthName = currentDate.toLocaleString("es-AR", { month: "long" });
 
-  // Día de la semana del día 1 del mes (0=Domingo ... 6=Sábado),
-  // coincide con el orden del header ["D","L","M","M","J","V","S"].
-  // Sin esto, el día 1 siempre caía en la primera celda (Domingo)
-  // sin importar qué día de la semana le correspondía en realidad,
-  // corriendo todo el mes hacia columnas incorrectas.
   const primerDiaSemana = new Date(year, month, 1).getDay();
 
   const hoy = new Date();
@@ -88,7 +63,7 @@ export default function BookingCalendar({
     `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
   const getReserva = (fullDate) =>
-    reservas.find(
+    (reservas || []).find(
       (r) => r.casa === selectedHouse?.nombre && r.fechas.includes(fullDate),
     );
 
