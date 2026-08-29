@@ -15,7 +15,7 @@ export default function BookingCalendar({
   selectedHouse,
   selectedDates,
   setSelectedDates,
-  reservas, // ahora llega del padre (BookinPadre.jsx), ya no se busca acá
+  reservas,
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 

@@ -5,9 +5,6 @@ const {
   armarHtmlSolicitudRecibida,
 } = require("../services/email.service");
 
-// Al crear la reserva todavía NO se confirmó nada (queda "pendiente"),
-// así que se manda el mail de "recibimos tu solicitud, en breve nos
-// comunicamos con vos" — NO el mail de bienvenida con wifi/alarma.
 const crearReserva = (req, res) => {
   const { casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, fechas } = req.body;
 
@@ -35,11 +32,6 @@ const crearReserva = (req, res) => {
         }
 
         const reservaId = this.lastID;
-
-        // Acá está el candado real: intentamos ocupar cada día. Si
-        // alguno ya está tomado (UNIQUE constraint), la base tira
-        // error automáticamente y cancelamos todo con ROLLBACK — la
-        // reserva recién insertada tampoco queda guardada.
         let huboError = false;
         let pendientes = fechasNuevas.length;
 
@@ -96,18 +88,10 @@ const crearReserva = (req, res) => {
   });
 };
 
-// Listado COMPLETO — con datos personales de cada huésped (nombre,
-// email, teléfono, dirección). Solo para el panel admin, protegido
-// con token (ver reservas.routes.js).
 const listarReservas = (req, res) => {
   db.all("SELECT * FROM reservas ORDER BY created_at DESC", [], (err, rows) => res.json(rows));
 };
 
-// Endpoint PÚBLICO, sin token — usado por el calendario del formulario
-// de reserva (BookingCalendar.jsx) para saber qué días ya están
-// ocupados. A propósito devuelve solo casa + fechas + estado, NUNCA
-// nombre/email/teléfono/dirección de los huéspedes — eso solo lo ve
-// el admin logueado a través de /api/reservas.
 const listarDisponibilidad = (req, res) => {
   db.all(
     "SELECT casa, fechas, estado FROM reservas ORDER BY created_at DESC",
@@ -119,10 +103,6 @@ const listarDisponibilidad = (req, res) => {
   );
 };
 
-// ⚠️ IMPORTANTE: asumo que el string que usa tu AdminCalendar.jsx para
-// marcar una reserva como confirmada es exactamente "confirmada" (minúscula).
-// Si en tu frontend usás otro texto (ej "Confirmada", "aprobada", etc.),
-// avisame y ajusto la comparación de abajo (ESTADO_CONFIRMADA).
 const ESTADO_CONFIRMADA = "confirmada";
 
 const actualizarEstado = (req, res) => {
@@ -172,9 +152,6 @@ const actualizarEstado = (req, res) => {
 
 const eliminarReserva = (req, res) => {
   const { id } = req.params;
-  // Liberamos primero los días ocupados por esta reserva, y recién
-  // después borramos la reserva en sí — así no quedan días "fantasma"
-  // bloqueados para siempre.
   db.run("DELETE FROM dias_ocupados WHERE reserva_id = ?", [id], (errDias) => {
     if (errDias) {
       console.error("❌ Error liberando días ocupados:", errDias.message);
@@ -184,11 +161,6 @@ const eliminarReserva = (req, res) => {
   });
 };
 
-// Archiva una reserva: la copia a historial_reservas y recién si eso
-// sale bien, la borra de "reservas". Si el INSERT falla, NO se toca
-// el original, para no perder la reserva. También libera sus días
-// ocupados, porque una reserva archivada (finalizada) ya no debe
-// bloquear el calendario.
 const archivarReserva = (req, res) => {
   db.get("SELECT * FROM reservas WHERE id = ?", [req.params.id], (err, resv) => {
     if (err) {

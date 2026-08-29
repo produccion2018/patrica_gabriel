@@ -43,12 +43,9 @@ db.run(`CREATE TABLE IF NOT EXISTS reservas (
 )`);
 
 // Tabla "candado": una fila por cada día que una casa tiene ocupado
-// (por una reserva pendiente o confirmada). La restricción UNIQUE de
-// abajo es la que realmente impide que dos reservas se pisen — es la
-// base de datos misma la que rechaza el segundo INSERT si ese día
-// para esa casa ya existe, sin importar qué tan rápido o al mismo
-// tiempo lleguen los pedidos al servidor. reserva_id sirve para poder
-// borrar estas filas cuando la reserva se cancela/archiva/elimina.
+// (por una reserva pendiente o confirmada). UNIQUE(casa, fecha) es lo
+// que impide, a nivel base de datos, que dos reservas se pisen — sin
+// importar qué tan rápido o al mismo tiempo lleguen los pedidos.
 db.run(`CREATE TABLE IF NOT EXISTS dias_ocupados (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     casa TEXT NOT NULL,
