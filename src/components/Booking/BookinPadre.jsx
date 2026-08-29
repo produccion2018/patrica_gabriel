@@ -143,53 +143,56 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       estado: "pendiente",
     };
 
-    // IMPORTANTE: ahora esperamos la respuesta REAL del servidor antes
-    // de avanzar a la pantalla de confirmación. Si esas fechas ya están
-    // ocupadas (error 409), no avanzamos: mostramos el aviso y dejamos
-    // que el cliente elija otras fechas.
-    try {
-      const res = await fetch(`${API_URL}/api/reservas`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+    // Pintamos el calendario y avanzamos a la confirmación AL TOQUE,
+    // igual que antes. La protección real contra duplicados ya está
+    // del lado del servidor (con transacción atómica), así que esto
+    // es seguro: lo que corre acá abajo en segundo plano es solo por
+    // si justo dos personas chocan en el mismo milisegundo exacto.
+    setReservas((prev) => [...prev, { ...payload, fechas: fechasOrdenadas }]);
+    setStep(3);
+    setIsSubmitting(false);
+
+    fetch(`${API_URL}/api/reservas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (res.status === 409 || data.success === false) {
+          console.warn(
+            "⚠️ Reserva rechazada por el servidor (choque real):",
+            data.error,
+          );
+
+          // Sacamos la reserva fantasma que habíamos pintado y avisamos.
+          setReservas((prev) =>
+            prev.filter(
+              (r) =>
+                !(
+                  r.casa === payload.casa &&
+                  r.fechas.join(",") === fechasOrdenadas.join(",")
+                ),
+            ),
+          );
+
+          Swal.fire({
+            icon: "error",
+            title: "Esas fechas se acaban de ocupar",
+            text:
+              data.error ||
+              "Otra persona reservó esa casa para esas fechas justo antes que vos. Por favor, elegí otras fechas.",
+          });
+
+          setSelectedDates([]);
+          setStep(1);
+          cargarReservas();
+        }
+      })
+      .catch((error) => {
+        console.error("❌ ERROR EN RESERVA (segundo plano):", error);
       });
-
-      const data = await res.json();
-
-      if (res.status === 409 || data.success === false) {
-        setIsSubmitting(false);
-
-        await Swal.fire({
-          icon: "error",
-          title: "Esas fechas ya no están disponibles",
-          text:
-            data.error ||
-            "Alguien más reservó esa casa para esas fechas. Elegí otras fechas para continuar.",
-        });
-
-        // Volvemos al paso 1 y refrescamos el calendario para que
-        // se vean las fechas recién ocupadas.
-        setSelectedDates([]);
-        setStep(1);
-        cargarReservas();
-        return;
-      }
-
-      // Reserva aceptada por el servidor: recién ahora la marcamos
-      // como ocupada en pantalla y avanzamos a la confirmación.
-      setReservas((prev) => [...prev, { ...payload, fechas: fechasOrdenadas }]);
-      setStep(3);
-      setIsSubmitting(false);
-    } catch (error) {
-      console.error("❌ ERROR EN RESERVA:", error);
-      setIsSubmitting(false);
-
-      Swal.fire({
-        icon: "error",
-        title: "No pudimos enviar tu reserva",
-        text: "Hubo un problema de conexión. Probá de nuevo en un momento.",
-      });
-    }
   };
 
   return (

@@ -8,4 +8,9 @@ const db = new sqlite3.Database("./database/reservas.db", (err) => {
   }
 });
 
+// Si dos pedidos chocan (ej: dos reservas para la misma casa casi al mismo
+// tiempo), en vez de fallar al toque con "database is locked", la base
+// espera hasta 5 segundos a que se libere el turno anterior.
+db.configure("busyTimeout", 5000);
+
 module.exports = db;
