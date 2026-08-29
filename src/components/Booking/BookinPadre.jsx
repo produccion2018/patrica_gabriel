@@ -34,7 +34,11 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
   });
 
   const cargarReservas = () => {
-    fetch(`${API_URL}/api/reservas`)
+    // IMPORTANTE: usamos "/disponibilidad", que es la ruta PÚBLICA
+    // (no pide login). "/api/reservas" a secas está protegida y
+    // requiere estar logueado como admin, así que un visitante común
+    // nunca podía traer la lista de días ocupados con esa ruta.
+    fetch(`${API_URL}/api/reservas/disponibilidad`)
       .then((res) => res.json())
       .then((data) => {
         const activas = Array.isArray(data)

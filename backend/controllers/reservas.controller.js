@@ -124,8 +124,10 @@ const listarDisponibilidad = (req, res) => {
   // las reservas vencidas (más de 48hs sin pago).
   expirarReservasVencidas();
 
+  // Incluimos "id": el frontend lo necesita para no confundir reservas
+  // distintas entre sí (sin esto, todas se pisaban entre ellas).
   db.all(
-    "SELECT casa, fechas, estado FROM reservas ORDER BY created_at DESC",
+    "SELECT id, casa, fechas, estado FROM reservas ORDER BY created_at DESC",
     [],
     (err, rows) => {
       if (err) return res.status(500).json([]);
