@@ -19,6 +19,13 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
   const [selectedDates, setSelectedDates] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Lista de reservas activas, compartida con BookingCalendar. Vive acá
+  // (en el padre) en vez de adentro del calendario, para poder agregarle
+  // la reserva recién hecha al instante, sin depender de esperar a que
+  // el próximo fetch la traiga del servidor (eso era lo que permitía
+  // reservar el mismo día dos veces si no se recargaba la página).
+  const [reservas, setReservas] = useState([]);
+
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
@@ -31,6 +38,34 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
     cantidadMascotas: "",
     comentarios: "",
   });
+
+  const cargarReservas = () => {
+    fetch(`${API_URL}/api/reservas`)
+      .then((res) => res.json())
+      .then((data) => {
+        const activas = Array.isArray(data)
+          ? data.filter((r) => r.estado !== "finalizada")
+          : [];
+        const unicas = Array.from(
+          new Map(activas.map((r) => [r.id, r])).values(),
+        );
+        const reservasProcesadas = unicas.map((r) => ({
+          ...r,
+          fechas:
+            typeof r.fechas === "string"
+              ? JSON.parse(r.fechas || "[]")
+              : r.fechas || [],
+        }));
+        setReservas(reservasProcesadas);
+      })
+      .catch((err) => console.error("Error al cargar reservas:", err));
+  };
+
+  // Carga la lista apenas se abre el modal de reserva, así siempre
+  // arranca con los datos más al día.
+  useEffect(() => {
+    if (openBooking) cargarReservas();
+  }, [openBooking]);
 
   // Al cambiar de casa, el calendario de la nueva casa arranca limpio
   useEffect(() => {
@@ -115,6 +150,17 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       estado: "pendiente",
     };
 
+    // Bloqueamos esos días ACÁ MISMO, antes de mandar el pedido al
+    // servidor, con un id temporal. Así, si el usuario abre el
+    // calendario de nuevo mientras el pedido todavía viaja, esos días
+    // ya aparecen ocupados — no hay que esperar la respuesta del
+    // servidor ni un refetch para que se bloqueen.
+    const idTemporal = `temp-${Date.now()}`;
+    setReservas((prev) => [
+      ...prev,
+      { ...payload, id: idTemporal, fechas: fechasOrdenadas },
+    ]);
+
     // Avanzamos a la pantalla final de una vez, sin esperar al servidor
     setStep(3);
     setIsSubmitting(false);
@@ -129,10 +175,22 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       .then((data) => {
         if (data.success === false) {
           console.error("⚠️ El servidor respondió con error:", data.message);
+          // No se pudo guardar de verdad: sacamos el bloqueo temporal
+          // para no dejar esos días trabados por error.
+          setReservas((prev) => prev.filter((r) => r.id !== idTemporal));
+          return;
+        }
+        // Reemplazamos el id temporal por el id real que asignó el
+        // servidor, para que quede consistente con el resto de la app.
+        if (data.id) {
+          setReservas((prev) =>
+            prev.map((r) => (r.id === idTemporal ? { ...r, id: data.id } : r)),
+          );
         }
       })
       .catch((error) => {
         console.error("❌ ERROR EN RESERVA (segundo plano):", error);
+        setReservas((prev) => prev.filter((r) => r.id !== idTemporal));
       });
   };
 
@@ -174,6 +232,7 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
                   selectedHouse={selectedHouse}
                   selectedDates={selectedDates}
                   setSelectedDates={setSelectedDates}
+                  reservas={reservas}
                 />
                 <button
                   className="mireya-adalgiza-castro-next-btn"
