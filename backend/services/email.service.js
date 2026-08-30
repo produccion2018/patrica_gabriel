@@ -6,6 +6,7 @@ const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
+  family: 4, // Fuerza IPv4: en Render, la conexión por IPv6 a Gmail falla con ENETUNREACH.
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
