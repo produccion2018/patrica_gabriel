@@ -15,7 +15,11 @@ function AdminNewReservation() {
   }, [openBooking, navigate]);
 
   return (
-    <BookingPadre openBooking={openBooking} setOpenBooking={setOpenBooking} />
+    <BookingPadre
+      openBooking={openBooking}
+      setOpenBooking={setOpenBooking}
+      isAdmin
+    />
   );
 }
 

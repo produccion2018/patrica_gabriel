@@ -502,10 +502,11 @@ const armarHtmlSolicitudRecibida = ({
         <p style="margin:0 0 8px; color:#7c2d12; font-size:14px;"><strong>⏳ Próximo paso: la seña</strong></p>
         <p style="color:#78716c; font-size:13px; line-height:1.6; margin:0;">
           Para dejar la fecha confirmada, tenés <strong>48 horas</strong> para coordinar el pago de la seña
-          con nosotros. Podés escribirnos por WhatsApp cuando quieras para coordinarlo. Si pasado ese
-          tiempo no llegamos a confirmar el pago, la fecha vuelve a quedar disponible para otras personas
-          interesadas — así que si ya tenés decidido venir, te recomendamos escribirnos cuanto antes para
-          no perder el lugar. ¡Cualquier duda, estamos para ayudarte!
+          con nosotros. Podés escribirnos por WhatsApp cuando quieras para coordinarlo, o directamente
+          te vamos a estar contactando también por teléfono para agilizar y no hacerte esperar. Si pasado
+          ese tiempo no llegamos a confirmar el pago, la fecha vuelve a quedar disponible para otras
+          personas interesadas — así que si ya tenés decidido venir, te recomendamos escribirnos o
+          atender el teléfono cuanto antes para no perder el lugar. ¡Cualquier duda, estamos para ayudarte!
         </p>
       </div>
 

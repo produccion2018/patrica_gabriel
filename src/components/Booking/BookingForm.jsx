@@ -14,7 +14,8 @@ export default function BookingForm({
   formData,
   setFormData,
   onSubmit,
-  isSubmitting, // <--- Propiedad nueva para bloquear el botón
+  isSubmitting,
+  isAdmin = false,
 }) {
   const text = {
     es: {
@@ -29,7 +30,7 @@ export default function BookingForm({
       cantidadMascotas: "Cantidad de mascotas",
       comentarios: "Comentarios",
       reservar: "Reservar ahora",
-      enviando: "Enviando...", // <--- Texto mientras carga
+      enviando: "Enviando...",
     },
     pt: {
       nombre: "Nome",
@@ -83,7 +84,7 @@ export default function BookingForm({
             value={formData.nombre}
             onChange={handleChange}
             required
-            disabled={isSubmitting} // Deshabilitar si está enviando
+            disabled={isSubmitting}
           />
         </div>
         <div className="booking-input">
@@ -100,16 +101,22 @@ export default function BookingForm({
         </div>
       </div>
 
-      {/* EMAIL */}
+      {/* EMAIL — opcional solo cuando lo carga el admin, porque a
+          veces el cliente le avisa por teléfono y no tienen el mail
+          a mano. En el formulario público sigue siendo obligatorio. */}
       <div className="booking-input">
         <Mail size={18} />
         <input
           type="email"
           name="email"
-          placeholder="patricia.toninas@gmail.com"
+          placeholder={
+            isAdmin
+              ? "patricia.toninas@gmail.com (opcional)"
+              : "patricia.toninas@gmail.com"
+          }
           value={formData.email}
           onChange={handleChange}
-          required
+          required={!isAdmin}
           disabled={isSubmitting}
         />
       </div>

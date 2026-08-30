@@ -13,7 +13,11 @@ import BookingForm from "./BookingForm";
 import BookingFinal from "./BookingFinal";
 import { API_URL } from "../../config/api";
 
-export default function BookingPadre({ openBooking, setOpenBooking }) {
+export default function BookingPadre({
+  openBooking,
+  setOpenBooking,
+  isAdmin = false,
+}) {
   const [step, setStep] = useState(1);
   const [selectedHouse, setSelectedHouse] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
@@ -34,11 +38,7 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
   });
 
   const cargarReservas = () => {
-    // IMPORTANTE: usamos "/disponibilidad", que es la ruta PÚBLICA
-    // (no pide login). "/api/reservas" a secas está protegida y
-    // requiere estar logueado como admin, así que un visitante común
-    // nunca podía traer la lista de días ocupados con esa ruta.
-    fetch(`${API_URL}/api/reservas/disponibilidad`)
+    fetch(`${API_URL}/api/reservas`)
       .then((res) => res.json())
       .then((data) => {
         const activas = Array.isArray(data)
@@ -59,8 +59,6 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       .catch((err) => console.error("Error al cargar reservas:", err));
   };
 
-  // Carga la lista de reservas cada vez que se abre el modal, así
-  // arranca siempre con los datos más al día.
   useEffect(() => {
     if (openBooking) cargarReservas();
   }, [openBooking]);
@@ -147,12 +145,8 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       estado: "pendiente",
     };
 
-    // Pintamos el calendario y avanzamos a la confirmación AL TOQUE,
-    // igual que antes. La protección real contra duplicados ya está
-    // del lado del servidor (con transacción atómica), así que esto
-    // es seguro: lo que corre acá abajo en segundo plano es solo por
-    // si justo dos personas chocan en el mismo milisegundo exacto.
     setReservas((prev) => [...prev, { ...payload, fechas: fechasOrdenadas }]);
+
     setStep(3);
     setIsSubmitting(false);
 
@@ -161,37 +155,10 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
-      .then(async (res) => {
-        const data = await res.json();
-
-        if (res.status === 409 || data.success === false) {
-          console.warn(
-            "⚠️ Reserva rechazada por el servidor (choque real):",
-            data.error,
-          );
-
-          // Sacamos la reserva fantasma que habíamos pintado y avisamos.
-          setReservas((prev) =>
-            prev.filter(
-              (r) =>
-                !(
-                  r.casa === payload.casa &&
-                  r.fechas.join(",") === fechasOrdenadas.join(",")
-                ),
-            ),
-          );
-
-          Swal.fire({
-            icon: "error",
-            title: "Esas fechas se acaban de ocupar",
-            text:
-              data.error ||
-              "Otra persona reservó esa casa para esas fechas justo antes que vos. Por favor, elegí otras fechas.",
-          });
-
-          setSelectedDates([]);
-          setStep(1);
-          cargarReservas();
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success === false) {
+          console.error("⚠️ El servidor respondió con error:", data.message);
         }
       })
       .catch((error) => {
@@ -258,6 +225,7 @@ export default function BookingPadre({ openBooking, setOpenBooking }) {
             setFormData={setFormData}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
+            isAdmin={isAdmin}
           />
         )}
 
