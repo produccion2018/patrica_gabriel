@@ -1,20 +1,55 @@
 require("dotenv").config();
 
+const dns = require("dns").promises;
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  family: 4, // Fuerza IPv4: en Render, la conexión por IPv6 a Gmail falla con ENETUNREACH.
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// En Render, las conexiones salientes por IPv6 hacia Gmail fallan con
+// "ENETUNREACH" (la red no tiene salida IPv6 habilitada). En vez de pedirle
+// "por favor preferí IPv4" (que no fue suficiente), acá resolvemos nosotros
+// mismos la dirección IPv4 real de Gmail y nos conectamos directo a ese
+// número, sin darle a Node la chance de elegir la IPv6 rota.
+// "tls.servername" es necesario para que, aunque nos conectemos por una IP,
+// el certificado de seguridad se siga validando contra "smtp.gmail.com".
+let transporterCache = null;
+let transporterCacheTimestamp = 0;
+const CACHE_MS = 10 * 60 * 1000; // recalculamos la IP cada 10 minutos, por si cambia
+
+const obtenerTransporter = async () => {
+  const ahora = Date.now();
+  if (transporterCache && ahora - transporterCacheTimestamp < CACHE_MS) {
+    return transporterCache;
+  }
+
+  let host = "smtp.gmail.com";
+  try {
+    const direcciones = await dns.resolve4("smtp.gmail.com");
+    if (direcciones && direcciones.length > 0) {
+      host = direcciones[0];
+    }
+  } catch (errDns) {
+    console.error("⚠️ No se pudo resolver IPv4 de Gmail, uso el nombre normal:", errDns.message);
+  }
+
+  transporterCache = nodemailer.createTransport({
+    host,
+    port: 465,
+    secure: true,
+    tls: {
+      servername: "smtp.gmail.com",
+    },
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+  transporterCacheTimestamp = ahora;
+
+  return transporterCache;
+};
 
 const enviarCorreo = async (destinatario, asunto, html) => {
   try {
+    const transporter = await obtenerTransporter();
     const info = await transporter.sendMail({
       from: `"Reservas Las Toninas" <${process.env.EMAIL_USER}>`,
       to: destinatario,
