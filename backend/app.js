@@ -1,3 +1,11 @@
+// IMPORTANTE: esto tiene que ir ANTES que cualquier otro require.
+// Fuerza a que todo el servidor prefiera direcciones IPv4 al conectarse
+// a otros servicios (como Gmail). En Render, las conexiones salientes
+// por IPv6 fallan con "ENETUNREACH", así que esto evita ese problema
+// de raíz para cualquier conexión saliente del backend, no solo el mail.
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
+
 console.log("🖐️ 1 - INICIO APP");
 
 const express = require("express");
