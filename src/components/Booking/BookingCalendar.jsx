@@ -1,4 +1,4 @@
-iimport "./BookingCalendar.css";
+import "./BookingCalendar.css";
 import { useState, useEffect, useRef } from "react";
 
 const HOUSE_COLORS = {
