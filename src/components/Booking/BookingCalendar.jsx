@@ -1,11 +1,11 @@
-import "./BookingCalendar.css";
+iimport "./BookingCalendar.css";
 import { useState, useEffect, useRef } from "react";
 
 const HOUSE_COLORS = {
   "Casa frente al mar": { bg: "#22c55e", border: "#16a34a", icon: "🌊" },
   "Casa con pileta": { bg: "#ec4899", border: "#db2777", icon: "🏊" },
   "Casa familiar": { bg: "#f97316", border: "#ea580c", icon: "🏠" },
-  "Departamento en Jujuy": { bg: "#b5651d", border: "#8a4d16", icon: "🏔️" },
+  "Departamento en Jujuy": { bg: "#8b5cf6", border: "#7c3aed", icon: "🏔️" },
 };
 
 const PENDING_BG = "#fbbf24";

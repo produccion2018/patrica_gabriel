@@ -12,7 +12,7 @@ const HOUSE_CONFIRM_COLORS = {
   "casa frente al mar": "#22c55e",
   "casa con pileta": "#ec4899",
   "casa familiar": "#f97316",
-  "departamento en jujuy": "#b5651d",
+  "departamento en jujuy": "#8b5cf6",
 };
 const HOUSE_ICONS = {
   "casa frente al mar": "🌊",
