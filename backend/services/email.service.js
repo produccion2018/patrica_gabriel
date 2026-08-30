@@ -26,96 +26,344 @@ const enviarCorreo = async (destinatario, asunto, html) => {
   }
 };
 
-const bloqueGarrafa = `
-  <hr/>
-  <h3>Información sobre el gas (garrafa)</h3>
-  <p>Para fines de semana cortos (hasta 4 días), el consumo está incluido en el alquiler. 
-  Si se termina la garrafa, comunicate con YPF Gas para que te la repongan a domicilio 
-  (se reintegra el valor).</p>
-  <p><strong>YPF Gas / Gladys:</strong><br/>
-  +54 9 2246 44-5830 (casa)<br/>
-  +54 9 800 222-4113 (móvil)<br/>
-  +54 9 2257 54-5805 (Gladys - casa)</p>
+// ==========================================================
+// DISEÑO BASE COMPARTIDO
+// Todas las plantillas usan este mismo "marco": encabezado con
+// degradé + ícono de sol/playa a modo de logo, tarjeta blanca
+// con el contenido adentro, y firma al final. Así, aunque cada
+// casa tenga contenido distinto, todos los mails se ven parte
+// de la misma familia visual (no un mail más, uno de "Las Toninas").
+// ==========================================================
+const envolverEmail = (tituloHeader, subtituloHeader, contenidoHtml) => `
+  <div style="font-family: Arial, sans-serif; max-width:600px; margin:0 auto; border-radius:14px; overflow:hidden; border:1px solid #e2e8f0;">
+    <div style="background: linear-gradient(135deg, #0ea5e9 0%, #1e3a8a 100%); padding:34px 30px; text-align:center;">
+      <div style="font-size:34px; line-height:1; margin-bottom:6px;">☀️🌊</div>
+      <h1 style="color:#ffffff; margin:0 0 6px; font-size:24px; letter-spacing:0.5px;">LAS TONINAS</h1>
+      <p style="color:#dbeafe; margin:0; font-size:14px;">${tituloHeader}</p>
+      ${subtituloHeader ? `<p style="color:#bfdbfe; margin:6px 0 0; font-size:13px;">${subtituloHeader}</p>` : ""}
+    </div>
+    <div style="padding:30px; background:#ffffff;">
+      ${contenidoHtml}
+    </div>
+    <div style="padding:18px 30px; background:#f8fafc; border-top:1px solid #f1f5f9; text-align:center;">
+      <p style="color:#94a3b8; font-size:12px; margin:0;">Reservas Las Toninas · Patricia &amp; Gabriel</p>
+    </div>
+  </div>
 `;
 
+const seccion = (titulo, contenidoHtml) => `
+  <div style="margin-bottom:24px;">
+    <h3 style="margin:0 0 10px; font-size:15px; color:#0f172a; border-bottom:2px solid #e0f2fe; padding-bottom:6px;">${titulo}</h3>
+    ${contenidoHtml}
+  </div>
+`;
+
+const listaConIconos = (items) => `
+  <ul style="margin:0; padding:0; list-style:none; color:#334155; font-size:14px; line-height:1.9;">
+    ${items.map((i) => `<li>⭐ ${i}</li>`).join("")}
+  </ul>
+`;
+
+const cajaDestacada = (colorFondo, colorBorde, contenidoHtml) => `
+  <div style="background:${colorFondo}; border:1px solid ${colorBorde}; border-radius:10px; padding:16px 18px; margin-top:6px;">
+    ${contenidoHtml}
+  </div>
+`;
+
+const bloqueDatosImportantes = ({ direccion, wifi, contrasena, alarma }) =>
+  seccion(
+    "📍 Datos importantes",
+    cajaDestacada(
+      "#f0f9ff",
+      "#bae6fd",
+      `
+        <p style="margin:0 0 6px; color:#0f172a; font-size:14px;"><strong>Dirección:</strong> ${direccion}</p>
+        <p style="margin:0 0 6px; color:#0f172a; font-size:14px;"><strong>Wifi:</strong> ${wifi} &nbsp;|&nbsp; <strong>Contraseña:</strong> ${contrasena}</p>
+        <p style="margin:0; color:#0f172a; font-size:14px;"><strong>Alarma:</strong> ${alarma}</p>
+      `,
+    ),
+  );
+
+const bloqueQueTraer = () =>
+  seccion(
+    "🧳 Recordá traer",
+    `
+      ${listaConIconos([
+        "1 juego de sábanas de 2 plazas",
+        "3 o 4 juegos de sábanas de 1 plaza",
+        "Toallas, toallones y repasadores",
+      ])}
+      <p style="margin:10px 0 0; color:#475569; font-size:13px; font-style:italic;">
+        ✳️ En la casa dejamos cubrecamas y frazadas para todas las camas.
+      </p>
+    `,
+  );
+
+const bloqueDeposito = () =>
+  seccion(
+    "💰 Depósito",
+    cajaDestacada(
+      "#fffbeb",
+      "#fde68a",
+      `
+        <p style="margin:0 0 10px; color:#7c2d12; font-size:14px;"><strong>$ 100.000 en efectivo</strong></p>
+        <p style="margin:0 0 10px; color:#78716c; font-size:13px; line-height:1.6;">
+          Se entrega al ingresar a la casa y se devuelve el día que se retiran.
+        </p>
+        <p style="margin:0 0 10px; color:#78716c; font-size:13px; line-height:1.6;">
+          No se reintegra en estos casos: rotura de vasos, tazas, platos, etc. que no sean
+          reemplazados por uno similar; o si el microondas, la cocina, el horno, la plancha,
+          el sartén o el baño quedan sin la higiene adecuada.
+        </p>
+        <p style="margin:0; color:#78716c; font-size:13px; line-height:1.6;">
+          Les pedimos que revisen y verifiquen el estado de las cosas e instalaciones al
+          ingresar, ya que deben entregarse en las mismas condiciones al retirarse. Así
+          evitamos inconvenientes y reclamos después. ¡Muchas gracias!
+        </p>
+      `,
+    ),
+  );
+
+const bloqueGarrafaFamiliar = () =>
+  seccion(
+    "🔥 Gas (garrafa)",
+    cajaDestacada(
+      "#fef2f2",
+      "#fecaca",
+      `
+        <p style="margin:0 0 10px; color:#7f1d1d; font-size:13px; line-height:1.6;">
+          La casa funciona con gas a garrafa.
+        </p>
+        <p style="margin:0 0 10px; color:#7f1d1d; font-size:13px; line-height:1.6;">
+          <strong>Estadías cortas (hasta 4 días):</strong> el consumo está incluido en el
+          alquiler. Como no podemos saber cuándo se termina la garrafa, si se acaba deben
+          llamar a YPF Gas (dura más) para que la vengan a conectar a domicilio — se
+          reintegra el valor.
+        </p>
+        <p style="margin:0 0 10px; color:#7f1d1d; font-size:13px; line-height:1.6;">
+          <strong>Alquileres por semana o quincena:</strong> solo se cubre la primera
+          garrafa (dura entre 10 y 15 días aprox. según el uso). No dejar el
+          termotanque/calefón prendido todo el día.
+        </p>
+        <p style="margin:0 0 10px; color:#7f1d1d; font-size:13px; line-height:1.6;">
+          La garrafa queda conectada y cerrada afuera. Al llegar, deben abrirla.
+        </p>
+        <p style="margin:0; color:#7f1d1d; font-size:13px; line-height:1.6;">
+          <strong>YPF Gas Toninas/Sta Teresita:</strong><br/>
+          Casa: +54 9 2246 44-5830<br/>
+          Celular: +54 9 800 222-4113<br/><br/>
+          <strong>Gas Gladys Toninas:</strong><br/>
+          Casa: +54 9 2257 54-5805
+        </p>
+      `,
+    ),
+  );
+
+// ==========================================================
+// CASA FRENTE AL MAR
+// ==========================================================
+const plantillaFrenteAlMar = (nombre) => {
+  const contenido = `
+    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida a <strong>Casa Frente al Mar</strong> 🌊</p>
+
+    ${seccion(
+      "🏠 Sobre la casa",
+      listaConIconos([
+        "Capacidad: 6 personas",
+        "3 ambientes, 2 dormitorios, 1 baño",
+        "1 cochera",
+        "Cocina comedor con microondas",
+        "TV por cable",
+        "Internet / wifi",
+        "Patio y parrilla atrás, jardín adelante",
+        "Apta para mascotas",
+      ]),
+    )}
+
+    ${bloqueDatosImportantes({
+      direccion: "Costanera 2169 e/46 y 48",
+      wifi: "Gabi",
+      contrasena: "otto2023",
+      alarma: "4648",
+    })}
+
+    ${seccion(
+      "📺 Guía de TV",
+      `<p style="margin:0; color:#334155; font-size:14px; line-height:1.7;">
+        Es un Smart TV: podés ver YouTube, Netflix, etc. (si tenés cuenta). También cuenta con servicio de video cable.
+      </p>`,
+    )}
+
+    ${seccion(
+      "🚿 Cómo encender el termotanque",
+      `<ol style="margin:0; padding-left:20px; color:#334155; font-size:14px; line-height:1.9;">
+        <li>Sacar la tapa.</li>
+        <li>Girar la perilla hasta donde está la llamita.</li>
+        <li>Introducir el Magic click abajo y hacia la izquierda.</li>
+        <li>Bajar el botón de arriba y se enciende el piloto.</li>
+        <li>Girar la perilla al máximo y dejar 20 minutos para tener agua caliente.</li>
+      </ol>`,
+    )}
+
+    ${seccion(
+      "🔥 Gas",
+      `<p style="margin:0; color:#334155; font-size:14px; line-height:1.7;">
+        La casa tiene <strong>gas natural</strong>, así que no hay que ocuparse de garrafas.
+      </p>`,
+    )}
+
+    ${bloqueQueTraer()}
+    ${bloqueDeposito()}
+  `;
+
+  return envolverEmail("¡Tu estadía ya está confirmada!", "Casa Frente al Mar", contenido);
+};
+
+// ==========================================================
+// CASA CON PILETA
+// ==========================================================
+const plantillaConPileta = (nombre) => {
+  const contenido = `
+    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida a <strong>Casa con Pileta</strong> 🏊 (a 4 cuadras del mar)</p>
+
+    ${seccion(
+      "🏠 Sobre la casa",
+      listaConIconos([
+        "Capacidad: 5/6 personas",
+        "3 ambientes, 2 dormitorios, 2 baños",
+        "1 cochera",
+        "Cocina comedor con microondas",
+        "Internet / wifi",
+        "Patio y parrilla atrás, jardín adelante",
+        "Apta para mascotas",
+        "Galería cubierta",
+        "Lavadero",
+      ]),
+    )}
+
+    ${bloqueDatosImportantes({
+      direccion: "Calle 46 N° 445 e/7 y 9",
+      wifi: "Mega_red_21",
+      contrasena: "87008567",
+      alarma: "4646",
+    })}
+
+    ${seccion(
+      "📺 Guía de TV",
+      `<p style="margin:0; color:#334155; font-size:14px; line-height:1.7;">
+        La TV no es Smart, pero tiene un dispositivo Roku para ver YouTube, Netflix, etc. (si tenés cuenta).
+        Seleccioná la entrada HDMI 1 en la TV y usá el control chico del Roku para elegir lo que quieras ver.
+        Por el momento no dispone de servicio de video cable.
+      </p>`,
+    )}
+
+    ${seccion(
+      "🚿 Encendido del calefón",
+      `<p style="margin:0 0 10px; color:#334155; font-size:14px; line-height:1.7;">
+        Para tener agua caliente en el baño interno y la cocina, hay que prender el calefón del lavadero.
+      </p>
+      <p style="margin:0 0 10px; color:#334155; font-size:14px; line-height:1.7;">
+        Primero girar y apretar la perilla al símbolo de la llamita (piloto) y apretar el botón (tipo chispero).
+        Si no prende, volver a pulsarlo. Una vez prendido el piloto, seguir girando la perilla hasta la tercera marca:
+        entre la segunda y la tercera marca el agua sale perfecta para ducharse. Más que eso, el agua sale muy caliente.
+      </p>
+      <p style="margin:0; color:#334155; font-size:14px; line-height:1.7;">
+        El baño exterior tiene ducha con agua fría.
+      </p>`,
+    )}
+
+    ${bloqueQueTraer()}
+    ${bloqueDeposito()}
+  `;
+
+  return envolverEmail("¡Tu estadía ya está confirmada!", "Casa con Pileta", contenido);
+};
+
+// ==========================================================
+// CASA FAMILIAR (con gran parque)
+// ==========================================================
+const plantillaFamiliar = (nombre) => {
+  const contenido = `
+    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida a la <strong>Casa Familiar</strong> 🏡 (con gran parque, a 7 cuadras del mar)</p>
+
+    ${seccion(
+      "🏠 Sobre la casa",
+      listaConIconos([
+        "Capacidad: 5/6 personas",
+        "3 ambientes, 2 dormitorios, 1 baño",
+        "1 cochera",
+        "Cocina comedor con microondas",
+        "Internet / wifi",
+        "Parrilla atrás",
+        "Jardín arbolado adelante y atrás",
+        "Apta para mascotas",
+        "Galería cubierta",
+      ]),
+    )}
+
+    ${bloqueDatosImportantes({
+      direccion: "Calle 13 N° 1836 e/40 y 42",
+      wifi: "Megared 1836",
+      contrasena: "KUIKMA990",
+      alarma: "4042",
+    })}
+
+    ${seccion(
+      "📺 Guía de TV",
+      `<p style="margin:0; color:#334155; font-size:14px; line-height:1.7;">
+        Es un Smart TV: podés ver YouTube, Netflix, etc. (si tenés cuenta). Por el momento no dispone de servicio de video cable.
+      </p>`,
+    )}
+
+    ${seccion(
+      "🚿 Encendido del calefón",
+      `<p style="margin:0; color:#334155; font-size:14px; line-height:1.7;">
+        Las instrucciones están en una etiqueta pegada en el calefón. Se enciende con fósforo o Magic click.
+      </p>`,
+    )}
+
+    ${bloqueGarrafaFamiliar()}
+    ${bloqueQueTraer()}
+    ${bloqueDeposito()}
+  `;
+
+  return envolverEmail("¡Tu estadía ya está confirmada!", "Casa Familiar", contenido);
+};
+
+// ==========================================================
+// DEPARTAMENTO EN JUJUY
+// Todavía no tenemos los datos completos (wifi, dirección, etc.)
+// Se deja un mensaje simple hasta que se agreguen.
+// ==========================================================
+const plantillaJujuy = (nombre) => {
+  const contenido = `
+    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida al <strong>Departamento en Jujuy</strong> 🏔️</p>
+    <p style="color:#475569; font-size:14px; line-height:1.7;">
+      En breve nos comunicamos por WhatsApp o teléfono para pasarte todos los datos de acceso
+      (wifi, indicaciones, etc.).
+    </p>
+  `;
+  return envolverEmail("¡Tu estadía ya está confirmada!", "Departamento en Jujuy", contenido);
+};
+
 const plantillasCasa = {
-  "casa frente al mar": (nombre) => `
-    <div style="font-family: Arial; padding:30px;">
-      <h1>¡Hola ${nombre}! Bienvenido a Casa Frente al Mar</h1>
-      <p><strong>Dirección:</strong> Costanera 2169 e/46 y 48</p>
-      <p><strong>Wifi:</strong> Gabi — <strong>Contraseña:</strong> otto2023</p>
-      <p><strong>Alarma:</strong> 4648</p>
-      <h3>Traer:</h3>
-      <ul>
-        <li>1 juego de sábanas de 2 plazas</li>
-        <li>3 o 4 juegos de sábanas de 1 plaza</li>
-        <li>Toalla, toallones y repasadores</li>
-      </ul>
-      <p>En la casa dejamos cubrecamas y frazadas para todas las camas.</p>
-      <h3>Termotanque:</h3>
-      <ol>
-        <li>Sacar la tapa</li>
-        <li>Girar la perilla hasta la llamita</li>
-        <li>Introducir el Magic click abajo y hacia la izquierda</li>
-        <li>Bajar el botón de arriba, se enciende el piloto</li>
-        <li>Girar la perilla al máximo y esperar 20 minutos</li>
-      </ol>
-      <p><strong>Depósito:</strong> $60.000 efectivo (se entrega al ingresar, se devuelve al retirarse).</p>
-    </div>`,
-
-  "casa con pileta": (nombre) => `
-    <div style="font-family: Arial; padding:30px;">
-      <h1>¡Hola ${nombre}! Bienvenido a Casa con Pileta</h1>
-      <p><strong>Dirección:</strong> Calle 46 entre 7 y 9</p>
-      <p><strong>Wifi:</strong> Mega_red_21 — <strong>Contraseña:</strong> 87008567</p>
-      <p><strong>Alarma:</strong> 4646</p>
-      <h3>Traer:</h3>
-      <ul>
-        <li>1 juego de sábanas de 2 plazas</li>
-        <li>3 o 4 juegos de sábanas de 1 plaza</li>
-        <li>Toalla, toallones y repasadores</li>
-      </ul>
-      <h3>Calefón:</h3>
-      <p>Girar y apretar la perilla al símbolo de llamita (piloto) y apretar el botón tipo chispero. 
-      Una vez prendido el piloto, girar hasta la tercera marca (entre la 2da y 3ra el agua sale perfecta). 
-      El baño exterior es con agua fría.</p>
-      <p><strong>Depósito:</strong> $60.000 efectivo (se entrega al ingresar, se devuelve al retirarse).</p>
-    </div>`,
-
-  "casa familiar": (nombre) => `
-    <div style="font-family: Arial; padding:30px;">
-      <h1>¡Hola ${nombre}! Bienvenido a Casa Familiar</h1>
-      <p><strong>Dirección:</strong> Calle 13 N° 1836 e/40 y 42</p>
-      <p><strong>Wifi:</strong> Megared 1836 — <strong>Contraseña:</strong> KUIKMA990</p>
-      <p><strong>Alarma:</strong> 4042</p>
-      <h3>Traer:</h3>
-      <ul>
-        <li>1 juego de sábanas de 2 plazas</li>
-        <li>3 o 4 juegos de sábanas de 1 plaza</li>
-        <li>Toalla, toallones y repasadores</li>
-      </ul>
-      <h3>Calefón:</h3>
-      <p>Las instrucciones están en una etiqueta pegada en el calefón. Se enciende con fósforo o Magic click.</p>
-      <p><strong>Depósito:</strong> $60.000 efectivo (se entrega al ingresar, se devuelve al retirarse).</p>
-    </div>`,
+  "casa frente al mar": plantillaFrenteAlMar,
+  "casa con pileta": plantillaConPileta,
+  "casa familiar": plantillaFamiliar,
+  "departamento en jujuy": plantillaJujuy,
 };
 
-const calcularDias = (fechasArray) => {
-  if (!Array.isArray(fechasArray) || fechasArray.length < 2) return 99;
-  const inicio = new Date(fechasArray[0]);
-  const fin = new Date(fechasArray[fechasArray.length - 1]);
-  return (fin - inicio) / (1000 * 60 * 60 * 24);
-};
-
-const armarHtmlBienvenida = (casa, nombre, fechasArray) => {
+const armarHtmlBienvenida = (casa, nombre, _fechasArray) => {
   const casaNorm = (casa || "").toLowerCase().trim();
   const plantilla = plantillasCasa[casaNorm];
-  let html = plantilla
-    ? plantilla(nombre)
-    : `<div style="font-family: Arial; padding:30px;"><h1>¡Hola ${nombre}!</h1><p>Recibimos tu solicitud para <strong>${casa}</strong>.</p></div>`;
+  if (plantilla) return plantilla(nombre);
 
-  if (calcularDias(fechasArray) <= 4) html += bloqueGarrafa;
-  return html;
+  // Fallback por si el nombre de la casa no matchea ninguna plantilla conocida.
+  return envolverEmail(
+    "¡Tu estadía ya está confirmada!",
+    casa,
+    `<p style="color:#0f172a; font-size:15px;">¡Hola ${nombre}! Recibimos tu solicitud para <strong>${casa}</strong>. En breve te contactamos con los datos de acceso.</p>`,
+  );
 };
 
 // Se mantiene por si en algún lado del código todavía se usa,
@@ -132,7 +380,7 @@ const armarHtmlDespedida = (nombre) => `
 `;
 
 // ==========================================================
-// NUEVO — Mail "libre" desde el Historial.
+// Mail "libre" desde el Historial.
 // El texto (mensaje) lo escribe Patricia/Gabriel en el panel,
 // esta función solo le pone el mismo estilo visual de siempre
 // (encabezado + firma) alrededor de ese texto.
@@ -164,9 +412,10 @@ const armarHtmlMensajePersonalizado = (nombre, mensaje) => {
 };
 
 // ==========================================================
-// Mail de "solicitud recibida" (se manda apenas se
-// crea la reserva, ANTES de que esté confirmado el pago).
-// Formato simple: encabezado azul + resumen básico.
+// Mail de "solicitud recibida" (se manda automático apenas
+// se crea la reserva, ANTES de que esté confirmado el pago).
+// Redactado para avisar de las 48hs de forma clara pero cordial,
+// sin sonar a amenaza.
 // ==========================================================
 const armarHtmlSolicitudRecibida = ({
   nombre,
@@ -216,6 +465,17 @@ const armarHtmlSolicitudRecibida = ({
           <td style="padding:8px 0; text-align:right;">${fechaSalida || "-"}</td>
         </tr>
       </table>
+
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:16px 18px; margin-top:24px;">
+        <p style="margin:0 0 8px; color:#7c2d12; font-size:14px;"><strong>⏳ Próximo paso: la seña</strong></p>
+        <p style="color:#78716c; font-size:13px; line-height:1.6; margin:0;">
+          Para dejar la fecha confirmada, tenés <strong>48 horas</strong> para coordinar el pago de la seña
+          con nosotros. Podés escribirnos por WhatsApp cuando quieras para coordinarlo. Si pasado ese
+          tiempo no llegamos a confirmar el pago, la fecha vuelve a quedar disponible para otras personas
+          interesadas — así que si ya tenés decidido venir, te recomendamos escribirnos cuanto antes para
+          no perder el lugar. ¡Cualquier duda, estamos para ayudarte!
+        </p>
+      </div>
 
       <p style="color:#94a3b8; font-size:13px; margin:24px 0 0;">
         En cuanto se confirme el pago te vamos a enviar otro correo con toda la información
