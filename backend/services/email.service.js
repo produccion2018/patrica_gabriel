@@ -1,65 +1,61 @@
 require("dotenv").config();
 
-const dns = require("dns").promises;
-const nodemailer = require("nodemailer");
+const https = require("https");
 
-// En Render, las conexiones salientes por IPv6 hacia Gmail fallan con
-// "ENETUNREACH" (la red no tiene salida IPv6 habilitada). En vez de pedirle
-// "por favor preferí IPv4" (que no fue suficiente), acá resolvemos nosotros
-// mismos la dirección IPv4 real de Gmail y nos conectamos directo a ese
-// número, sin darle a Node la chance de elegir la IPv6 rota.
-// "tls.servername" es necesario para que, aunque nos conectemos por una IP,
-// el certificado de seguridad se siga validando contra "smtp.gmail.com".
-let transporterCache = null;
-let transporterCacheTimestamp = 0;
-const CACHE_MS = 10 * 60 * 1000; // recalculamos la IP cada 10 minutos, por si cambia
+// Cambiamos de Gmail/SMTP a Resend: Render (plan gratis) bloquea las
+// conexiones salientes por los puertos que usa el envío tradicional de
+// mail (SMTP), por eso nunca llegaba a conectar. Resend manda el mail
+// por HTTPS (el mismo tipo de conexión que usa cualquier página web),
+// que sí está permitida.
+//
+// OJO: hasta que no se verifique un dominio propio en Resend (se hace
+// cuando el sitio ya esté en su hosting definitivo), esta cuenta gratis
+// SOLO puede mandar mails a la casilla con la que se registró la cuenta
+// de Resend. Para mandarle a cualquier cliente hace falta ese paso.
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const REMITENTE = "Reservas Las Toninas <onboarding@resend.dev>";
 
-const obtenerTransporter = async () => {
-  const ahora = Date.now();
-  if (transporterCache && ahora - transporterCacheTimestamp < CACHE_MS) {
-    return transporterCache;
-  }
-
-  let host = "smtp.gmail.com";
-  try {
-    const direcciones = await dns.resolve4("smtp.gmail.com");
-    if (direcciones && direcciones.length > 0) {
-      host = direcciones[0];
-    }
-  } catch (errDns) {
-    console.error("⚠️ No se pudo resolver IPv4 de Gmail, uso el nombre normal:", errDns.message);
-  }
-
-  transporterCache = nodemailer.createTransport({
-    host,
-    port: 465,
-    secure: true,
-    tls: {
-      servername: "smtp.gmail.com",
-    },
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-  transporterCacheTimestamp = ahora;
-
-  return transporterCache;
-};
-
-const enviarCorreo = async (destinatario, asunto, html) => {
-  try {
-    const transporter = await obtenerTransporter();
-    const info = await transporter.sendMail({
-      from: `"Reservas Las Toninas" <${process.env.EMAIL_USER}>`,
-      to: destinatario,
+const enviarCorreo = (destinatario, asunto, html) => {
+  return new Promise((resolve) => {
+    const payload = JSON.stringify({
+      from: REMITENTE,
+      to: [destinatario],
       subject: asunto,
       html,
     });
-    console.log("📧 EMAIL ENVIADO OK:", info.messageId);
-  } catch (error) {
-    console.error("❌ ERROR EMAIL:", error);
-  }
+
+    const options = {
+      hostname: "api.resend.com",
+      path: "/emails",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Length": Buffer.byteLength(payload),
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => (data += chunk));
+      res.on("end", () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log("📧 EMAIL ENVIADO OK (Resend):", data);
+        } else {
+          console.error("❌ ERROR EMAIL (Resend):", res.statusCode, data);
+        }
+        resolve();
+      });
+    });
+
+    req.on("error", (error) => {
+      console.error("❌ ERROR EMAIL (conexión):", error.message);
+      resolve();
+    });
+
+    req.write(payload);
+    req.end();
+  });
 };
 
 // ==========================================================
