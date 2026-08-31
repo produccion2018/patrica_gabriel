@@ -11,6 +11,17 @@ const { expirarReservasVencidas } = require("../services/expiracion.service");
 // esos NO van en esta lista porque no deben bloquear.
 const ESTADOS_QUE_BLOQUEAN = ["pendiente", "confirmada"];
 
+// Turso/libSQL solo acepta como parámetro: string, number, bigint, null,
+// ArrayBuffer. Si le mandamos "undefined" o un booleano (true/false) tal
+// cual, tira el error genérico "Unsupported type of value" y no guarda
+// nada. Esta función convierte cualquier valor "raro" a algo que sí
+// entiende, sin tocar el resto de la lógica del controller.
+const limpiarValor = (valor) => {
+  if (valor === undefined) return null;
+  if (typeof valor === "boolean") return valor ? "si" : "no";
+  return valor;
+};
+
 const crearReserva = async (req, res) => {
   // Aprovechamos este momento (alguien está reservando) para liberar
   // de paso cualquier reserva vieja que ya venció (48hs sin pago).
@@ -69,9 +80,25 @@ const crearReserva = async (req, res) => {
     }
 
     // 3) No hay cruce, insertamos la reserva.
+    // Sanitizamos cada valor (undefined -> null, boolean -> "si"/"no")
+    // antes de mandarlo a Turso, para evitar "Unsupported type of value".
     const resultInsert = await tx.execute({
       sql: `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      args: [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechasNuevas)],
+      args: [
+        limpiarValor(casa),
+        limpiarValor(nombre),
+        limpiarValor(apellido),
+        limpiarValor(email),
+        limpiarValor(telefono),
+        limpiarValor(pais),
+        limpiarValor(direccion),
+        limpiarValor(huespedes),
+        limpiarValor(mascota),
+        limpiarValor(cantidadMascotas),
+        limpiarValor(comentarios),
+        limpiarValor(mensaje),
+        JSON.stringify(fechasNuevas),
+      ],
     });
 
     const nuevoId = Number(resultInsert.lastInsertRowid);
