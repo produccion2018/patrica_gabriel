@@ -1,14 +1,8 @@
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) =>
-    cb(null, Date.now() + path.extname(file.originalname)),
-});
-
-// Solo se permite subir imágenes — antes no había ningún filtro,
-// así que se podía subir cualquier tipo de archivo al servidor.
+// Mismo filtro de antes — solo imágenes.
 const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 function filtroArchivo(req, file, cb) {
@@ -18,6 +12,17 @@ function filtroArchivo(req, file, cb) {
     cb(new Error("Solo se permiten imágenes (jpg, png, webp, gif)"));
   }
 }
+
+// En vez de guardar en el disco local (que se borraba al dormirse
+// el servicio en Render), ahora las imágenes se suben directo a
+// Cloudinary y quedan ahí para siempre, con una URL fija.
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "las-toninas",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "gif"],
+  },
+});
 
 const upload = multer({
   storage,
