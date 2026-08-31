@@ -1,8 +1,7 @@
 // IMPORTANTE: esto tiene que ir ANTES que cualquier otro require.
 // Fuerza a que todo el servidor prefiera direcciones IPv4 al conectarse
-// a otros servicios (como Gmail). En Render, las conexiones salientes
-// por IPv6 fallan con "ENETUNREACH", así que esto evita ese problema
-// de raíz para cualquier conexión saliente del backend, no solo el mail.
+// a otros servicios. En Render, algunas conexiones salientes por IPv6
+// fallan, así que esto evita ese problema de raíz.
 const dns = require("dns");
 dns.setDefaultResultOrder("ipv4first");
 
@@ -11,7 +10,7 @@ console.log("🖐️ 1 - INICIO APP");
 const express = require("express");
 const cors = require("cors");
 
-require("./database/initDatabase");
+const inicializarBaseDeDatos = require("./database/initDatabase");
 
 const { iniciarCronExpiracion } = require("./services/expiracion.service");
 
@@ -37,7 +36,20 @@ app.use("/api", uploadRoutes);
 app.use("/api/actividad", actividadRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🖐️ Servidor iniciado en puerto ${PORT}`);
-  iniciarCronExpiracion();
-});
+
+// IMPORTANTE: esperamos a que la base de datos (Turso) termine de crear
+// todas las tablas ANTES de empezar a aceptar pedidos y antes de prender
+// el cron de expiración. Si no esperáramos esto, el servidor podía
+// arrancar más rápido de lo que tarda la base en estar lista (por eso
+// aparecía el error "no such table: reservas").
+inicializarBaseDeDatos()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🖐️ Servidor iniciado en puerto ${PORT}`);
+      iniciarCronExpiracion();
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Error inicializando la base de datos:", err.message);
+    process.exit(1);
+  });
