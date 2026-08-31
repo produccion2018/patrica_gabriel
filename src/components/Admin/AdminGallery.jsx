@@ -3,8 +3,16 @@ import "./AdminGallery.css";
 import { API_URL } from "../../config/api";
 import { apiFetch } from "../../utils/apiFetch";
 
-// Colores de los puntitos por propiedad (mismo criterio que tu dashboard original)
-const dotColors = ["#3b82f6", "#14b8a6", "#a855f7", "#f97316", "#ec4899"];
+// Colores de los puntitos por TIPO de propiedad (por nombre, no por posición)
+// Así el color queda fijo aunque la base de datos devuelva las casas en otro orden.
+const getDotColor = (nombre = "") => {
+  const n = nombre.toLowerCase();
+  if (n.includes("mar")) return "#22c55e"; // Frente al mar - verde
+  if (n.includes("pileta")) return "#ec4899"; // Con pileta - rosa claro
+  if (n.includes("familiar")) return "#f97316"; // Familiar - naranja
+  if (n.includes("jujuy")) return "#8b5cf6"; // Jujuy - violeta
+  return "#94a3b8"; // color por defecto si el nombre no matchea ninguna palabra clave
+};
 
 function AdminGallery() {
   const [propiedades, setPropiedades] = useState([]);
@@ -81,7 +89,7 @@ function AdminGallery() {
       </div>
 
       <div className="gallery-list">
-        {propiedades.map((propiedad, index) => (
+        {propiedades.map((propiedad) => (
           <div className="gallery-card" key={propiedad.id}>
             <img
               src={
@@ -97,7 +105,7 @@ function AdminGallery() {
               <div className="gallery-card-info">
                 <div
                   className="gallery-dot"
-                  style={{ background: dotColors[index % dotColors.length] }}
+                  style={{ background: getDotColor(propiedad.nombre) }}
                 ></div>
                 <div className="gallery-card-text">
                   <h4>
