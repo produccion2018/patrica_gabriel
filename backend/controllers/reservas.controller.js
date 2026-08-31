@@ -11,7 +11,7 @@ const { expirarReservasVencidas } = require("../services/expiracion.service");
 // esos NO van en esta lista porque no deben bloquear.
 const ESTADOS_QUE_BLOQUEAN = ["pendiente", "confirmada"];
 
-const crearReserva = (req, res) => {
+const crearReserva = async (req, res) => {
   // Aprovechamos este momento (alguien está reservando) para liberar
   // de paso cualquier reserva vieja que ya venció (48hs sin pago).
   expirarReservasVencidas();
@@ -24,95 +24,87 @@ const crearReserva = (req, res) => {
     return res.status(400).json({ success: false, error: "Faltan datos: casa o fechas." });
   }
 
-  // Usamos una transacción con BEGIN IMMEDIATE: esto "reserva" el permiso
-  // de escritura en la base ANTES de chequear nada. Si llegan dos pedidos
-  // casi al mismo tiempo para la misma casa, el segundo queda esperando
-  // a que el primero termine su chequeo + guardado por completo, en vez
-  // de chequear en paralelo (que era lo que permitía los duplicados).
-  db.run("BEGIN IMMEDIATE TRANSACTION", (errBegin) => {
-    if (errBegin) {
-      console.error("❌ Error iniciando transacción:", errBegin.message);
-      return res.status(500).json({
+  // Con Turso usamos una transacción "de verdad" (no BEGIN/COMMIT sueltos
+  // como con sqlite local): esto "reserva" el permiso de escritura ANTES
+  // de chequear nada. Si llegan dos pedidos casi al mismo tiempo para la
+  // misma casa, el segundo espera a que el primero termine su chequeo +
+  // guardado por completo, evitando que se cuelen duplicados.
+  let tx;
+  try {
+    tx = await db._clienteTurso.transaction("write");
+  } catch (errBegin) {
+    console.error("❌ Error iniciando transacción:", errBegin.message);
+    return res.status(500).json({
+      success: false,
+      error: "El servidor está ocupado procesando otra reserva, probá de nuevo en unos segundos.",
+    });
+  }
+
+  try {
+    // 1) Traemos todas las reservas de esa misma casa que estén en un estado que bloquea.
+    const placeholders = ESTADOS_QUE_BLOQUEAN.map(() => "?").join(",");
+    const resultSelect = await tx.execute({
+      sql: `SELECT id, fechas, estado FROM reservas WHERE casa = ? AND estado IN (${placeholders})`,
+      args: [casa, ...ESTADOS_QUE_BLOQUEAN],
+    });
+    const rows = resultSelect.rows.map((r) => ({ ...r }));
+
+    // 2) Revisamos si alguna fecha nueva ya está ocupada en alguna de esas reservas.
+    const hayCruce = rows.some((r) => {
+      let fechasExistentes = [];
+      try {
+        fechasExistentes = JSON.parse(r.fechas || "[]");
+      } catch {
+        fechasExistentes = [];
+      }
+      return fechasExistentes.some((f) => fechasNuevas.includes(f));
+    });
+
+    if (hayCruce) {
+      await tx.rollback();
+      return res.status(409).json({
         success: false,
-        error: "El servidor está ocupado procesando otra reserva, probá de nuevo en unos segundos.",
+        error: "Esa casa ya tiene una reserva pendiente o confirmada en alguna de esas fechas.",
       });
     }
 
-    // 1) Traemos todas las reservas de esa misma casa que estén en un estado que bloquea.
-    const placeholders = ESTADOS_QUE_BLOQUEAN.map(() => "?").join(",");
-    db.all(
-      `SELECT id, fechas, estado FROM reservas WHERE casa = ? AND estado IN (${placeholders})`,
-      [casa, ...ESTADOS_QUE_BLOQUEAN],
-      (errSelect, rows) => {
-        if (errSelect) {
-          console.error("❌ Error chequeando disponibilidad:", errSelect.message);
-          return db.run("ROLLBACK", () =>
-            res.status(500).json({ success: false, error: errSelect.message })
-          );
-        }
+    // 3) No hay cruce, insertamos la reserva.
+    const resultInsert = await tx.execute({
+      sql: `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      args: [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechasNuevas)],
+    });
 
-        // 2) Revisamos si alguna fecha nueva ya está ocupada en alguna de esas reservas.
-        const hayCruce = rows.some((r) => {
-          let fechasExistentes = [];
-          try {
-            fechasExistentes = JSON.parse(r.fechas || "[]");
-          } catch {
-            fechasExistentes = [];
-          }
-          return fechasExistentes.some((f) => fechasNuevas.includes(f));
-        });
+    const nuevoId = Number(resultInsert.lastInsertRowid);
 
-        if (hayCruce) {
-          return db.run("ROLLBACK", () =>
-            res.status(409).json({
-              success: false,
-              error: "Esa casa ya tiene una reserva pendiente o confirmada en alguna de esas fechas.",
-            })
-          );
-        }
+    // 4) Recién acá liberamos el "candado" de la transacción.
+    await tx.commit();
 
-        // 3) No hay cruce, insertamos la reserva.
-        db.run(
-          `INSERT INTO reservas (casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidad_mascotas, comentarios, mensaje, fechas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-          [casa, nombre, apellido, email, telefono, pais, direccion, huespedes, mascota, cantidadMascotas, comentarios, mensaje, JSON.stringify(fechasNuevas)],
-          function (errInsert) {
-            if (errInsert) {
-              console.error("❌ Error:", errInsert.message);
-              return db.run("ROLLBACK", () => res.status(500).json({ success: false }));
-            }
-
-            const nuevoId = this.lastID;
-
-            // 4) Recién acá liberamos el "candado" de la transacción.
-            db.run("COMMIT", async (errCommit) => {
-              if (errCommit) {
-                console.error("❌ Error confirmando transacción:", errCommit.message);
-                return res.status(500).json({ success: false });
-              }
-
-              if (email) {
-                const html = armarHtmlSolicitudRecibida({
-                  nombre: `${nombre} ${apellido}`,
-                  casa,
-                  telefono,
-                  huespedes,
-                  fechaEntrada: fechasNuevas[0] || "-",
-                  fechaSalida: fechasNuevas[fechasNuevas.length - 1] || "-",
-                });
-                try {
-                  await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
-                } catch (errMail) {
-                  console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
-                }
-              }
-
-              res.json({ success: true, id: nuevoId });
-            });
-          }
-        );
+    if (email) {
+      const html = armarHtmlSolicitudRecibida({
+        nombre: `${nombre} ${apellido}`,
+        casa,
+        telefono,
+        huespedes,
+        fechaEntrada: fechasNuevas[0] || "-",
+        fechaSalida: fechasNuevas[fechasNuevas.length - 1] || "-",
+      });
+      try {
+        await enviarCorreo(email, `Recibimos tu solicitud de reserva | ${casa}`, html);
+      } catch (errMail) {
+        console.error("❌ Error enviando mail de solicitud recibida:", errMail.message);
       }
-    );
-  });
+    }
+
+    return res.json({ success: true, id: nuevoId });
+  } catch (error) {
+    try {
+      await tx.rollback();
+    } catch (_) {
+      // La transacción puede haberse cerrado sola si ya hubo un rollback antes; se ignora.
+    }
+    console.error("❌ Error creando reserva:", error.message);
+    return res.status(500).json({ success: false, error: error.message });
+  }
 };
 
 const listarReservas = (req, res) => {
