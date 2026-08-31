@@ -25,12 +25,20 @@ function AdminPremiumHouses() {
           ? `${API_URL}${propiedad.imagen}`
           : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200";
 
-        // Mantenemos las características fijas originales según el ID de la casa
+        // Características por casa, según su ID
         let caracteristicas = "2 Habitaciones • Jardín • Cochera • 5 Personas";
         if (propiedad.id === 1)
-          caracteristicas = "2 Habitaciones • 2 Baños • Wifi";
+          caracteristicas =
+            "Calle 46 Nº 445 entre 7 y 9 • 2 dormitorios • 2 baños";
         if (propiedad.id === 2)
-          caracteristicas = "2 Habitaciones • Parrilla • Wifi";
+          caracteristicas =
+            "Costanera 2169 entre 46 y 48 • 2 dormitorios • 1 baño";
+        if (propiedad.id === 3)
+          caracteristicas =
+            "Calle 13 Nº 1836 entre 40 y 42 • 2 dormitorios • 1 baño";
+        if (propiedad.id === 4)
+          caracteristicas =
+            "Av. Canadá 160 • 3 dormitorios · 4 ambientes • 1 baño";
 
         return (
           <div className="gabriel-premium-card" key={propiedad.id}>
