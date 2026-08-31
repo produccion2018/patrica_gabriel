@@ -1,20 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const { verificarToken } = require("../middleware/auth.middleware");
-const upload = require("../middleware/upload.middleware");
-const { subirImagen } = require("../controllers/upload.controller");
+const subirImagen = (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false });
 
-router.post("/upload", verificarToken, (req, res, next) => {
-  upload.single("imagen")(req, res, (err) => {
-    if (err) {
-      console.error("Error al subir imagen:", err);
-      return res.status(400).json({
-        success: false,
-        error: err.message || "Error al subir la imagen",
-      });
-    }
-    next();
-  });
-}, subirImagen);
+  // Con Cloudinary, req.file.path ya es la URL completa y pública de
+  // la imagen (no una ruta local tipo /uploads/...), así que se
+  // guarda tal cual viene.
+  res.json({ success: true, imagen: req.file.path });
+};
 
-module.exports = router;
+module.exports = { subirImagen };
