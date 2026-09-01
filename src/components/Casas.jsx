@@ -171,8 +171,17 @@ export default function Casas({ language }) {
       title: propiedad.nombre,
       price: propiedad.precio,
       promocion: propiedad.promocion,
+      // Antes las imágenes se guardaban como paths relativos
+      // (ej: "/uploads/foto.jpg") y había que pegarles el API_URL
+      // adelante. Ahora, con Cloudinary, "propiedad.imagen" ya viene
+      // como una URL completa (https://res.cloudinary.com/...), así
+      // que hay que usarla tal cual y NO agregarle nada adelante.
+      // Se dejan las dos formas por compatibilidad con imágenes
+      // viejas que hayan quedado con el path relativo.
       image: propiedad.imagen
-        ? `${API_URL}${propiedad.imagen}`
+        ? propiedad.imagen.startsWith("http")
+          ? propiedad.imagen
+          : `${API_URL}${propiedad.imagen}`
         : detalles.fallbackImage || "",
       badge: detalles.badge,
       location: detalles.location,
