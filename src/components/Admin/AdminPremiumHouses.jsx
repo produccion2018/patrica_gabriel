@@ -20,9 +20,16 @@ function AdminPremiumHouses() {
   return (
     <div className="gabriel-premium-houses">
       {propiedades.map((propiedad) => {
-        // Armamos la URL de la foto subida
+        // Armamos la URL de la foto subida.
+        // Ahora las imágenes se suben a Cloudinary y ya vienen como
+        // URL completa (https://res.cloudinary.com/...). Si en cambio
+        // es un path viejo (/uploads/...) le agregamos el API_URL
+        // adelante, para no romper propiedades que todavía no
+        // resubieron su foto después de la migración.
         const imageSrc = propiedad.imagen
-          ? `${API_URL}${propiedad.imagen}`
+          ? propiedad.imagen.startsWith("http")
+            ? propiedad.imagen
+            : `${API_URL}${propiedad.imagen}`
           : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200";
 
         // Características por casa, según su ID
