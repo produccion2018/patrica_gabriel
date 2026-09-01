@@ -6,11 +6,11 @@ import collage1_1 from "../assets/Carrusel/collage1/collage1.jpg";
 
 import collage2_1 from "../assets/Carrusel/collage2/collage2.jpg";
 import collage2_2 from "../assets/Carrusel/collage2/collage3.jpg";
-import collage2_3 from "../assets/Carrusel/collage2/collage4.jpg"; // 👈 foto nueva (colocar el archivo acá)
+import collage2_3 from "../assets/Carrusel/collage2/collage4.jpg"; //
 
 import collage3_1 from "../assets/Carrusel/collage3/collage1.jpg";
 import collage3_2 from "../assets/Carrusel/collage3/collage2.jpg";
-import collage3_3 from "../assets/Carrusel/collage3/collage3.jpg"; // 👈 foto nueva (colocar el archivo acá)
+import collage3_3 from "../assets/Carrusel/collage3/collage3.jpg";
 
 import collage4_portada from "../assets/casa4.jpg";
 import collage4_1 from "../assets/Carrusel/collage4/collage1.jpeg";
