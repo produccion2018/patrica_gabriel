@@ -34,12 +34,12 @@ export default function Propiedades() {
 
       pool: "CON PILETA",
       sea: "FRENTE AL MAR",
-      park: "GRAN PARQUE",
+      park: "CASA FAMILIAR",
       jujuy: "PERICO, JUJUY",
 
       housePool: "Casa con pileta",
       houseSea: "Casa frente al mar",
-      housePark: "Casa con gran parque",
+      housePark: "Casa familiar",
       houseJujuy: "Departamento en Jujuy",
 
       rooms: "2 dormitorios",
@@ -74,12 +74,12 @@ export default function Propiedades() {
 
       pool: "WITH POOL",
       sea: "SEA FRONT",
-      park: "BIG PARK",
+      park: "FAMILY HOUSE",
       jujuy: "PERICO, JUJUY",
 
       housePool: "House with pool",
       houseSea: "Sea front house",
-      housePark: "House with big park",
+      housePark: "Family house",
       houseJujuy: "Apartment in Jujuy",
 
       rooms: "2 bedrooms",
@@ -113,12 +113,12 @@ export default function Propiedades() {
 
       pool: "COM PISCINA",
       sea: "FRENTE AO MAR",
-      park: "GRANDE PARQUE",
+      park: "CASA FAMILIAR",
       jujuy: "PERICO, JUJUY",
 
       housePool: "Casa com piscina",
       houseSea: "Casa frente ao mar",
-      housePark: "Casa com grande parque",
+      housePark: "Casa familiar",
       houseJujuy: "Apartamento em Jujuy",
 
       rooms: "2 quartos",
@@ -355,7 +355,7 @@ export default function Propiedades() {
               src="https://www.google.com/maps?q=Las+Toninas&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Mapa Casa con gran parque"
+              title="Mapa Casa familiar"
             />
           </div>
         </div>
