@@ -38,7 +38,14 @@ export default function BookingPadre({
   });
 
   const cargarReservas = () => {
-    fetch(`${API_URL}/api/reservas`)
+    // CORREGIDO: antes pegaba a "/api/reservas" (ruta protegida con
+    // verificarToken). Como el formulario público no tiene login, el
+    // fetch fallaba con 401, caía en el .catch, y "reservas" quedaba
+    // vacío para siempre -> el calendario público nunca mostraba nada
+    // ocupado, aunque ya hubiera una reserva guardada en la base.
+    // Ahora usa "/api/reservas/disponibilidad", que es pública y
+    // devuelve justo lo que este calendario necesita (id, casa, fechas, estado).
+    fetch(`${API_URL}/api/reservas/disponibilidad`)
       .then((res) => res.json())
       .then((data) => {
         const activas = Array.isArray(data)
