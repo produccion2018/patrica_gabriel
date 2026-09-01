@@ -128,7 +128,10 @@ export default function Footer({ language }) {
           </h3>
 
           <p>📞 +54 9 11 7082-2059</p>
-          <p>✉ {EMAIL_PRINCIPAL}</p>
+          <p style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span>✉</span>
+            <span>{EMAIL_PRINCIPAL}</span>
+          </p>
           <p>📍 Las Toninas, Buenos Aires</p>
         </div>
 
