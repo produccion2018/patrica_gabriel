@@ -13,11 +13,7 @@ import logo2 from "../assets/logos/logo2.jpg";
 // ================================
 
 // Correo principal (el que ya está funcionando)
-const EMAIL_PRINCIPAL = "tortuninas@gmail.com";
-
-// Mauro: acá va el correo que te dé el hosting cuando te lo entreguen.
-// Reemplazá el texto de ejemplo por el correo real (sin sacar las comillas).
-const EMAIL_SECUNDARIO = "correo-del-hosting@ejemplo.com";
+const EMAIL_PRINCIPAL = "reservaslastoninas@gmail.com";
 
 // Mauro: acá va el link de la página de Facebook cuando la crees.
 // Ejemplo de formato: "https://facebook.com/tortuninas"
@@ -68,7 +64,7 @@ export default function Footer({ language }) {
               <FaInstagram />
             </a>
 
-            <a
+            
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MENSAJE)}`}
               target="_blank"
               rel="noreferrer"
@@ -133,7 +129,6 @@ export default function Footer({ language }) {
 
           <p>📞 +54 9 11 7082-2059</p>
           <p>✉ {EMAIL_PRINCIPAL}</p>
-          <p>✉ {EMAIL_SECUNDARIO}</p>
           <p>📍 Las Toninas, Buenos Aires</p>
         </div>
 
