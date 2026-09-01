@@ -394,3 +394,22 @@ body.dark-mode .cal-month-label {
   border-radius: 3px;
   display: inline-block;
 }
+
+/* =========================
+   FLASH DE CANCELACIÓN
+========================= */
+.cal-pill--cancelando {
+  animation: calPillCancelFade 1.6s ease forwards;
+}
+
+@keyframes calPillCancelFade {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

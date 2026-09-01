@@ -21,7 +21,9 @@ const HOUSE_ICONS = {
   "departamento en jujuy": "🏔️",
 };
 const PENDING_COLOR = "#f59e0b";
+const CANCELLED_COLOR = "#ef4444";
 const DEFAULT_COLOR = "#94a3b8";
+const CANCEL_FLASH_MS = 1600;
 
 const parseLocalDate = (str) => {
   if (!str) return null;
@@ -37,6 +39,8 @@ function AdminCalendar({
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const archivandoRef = useRef(new Set());
+  const prevReservasRef = useRef(new Map());
+  const [canceladasFlash, setCanceladasFlash] = useState([]);
 
   useEffect(() => {
     if (!Array.isArray(reservas) || reservas.length === 0) return;
@@ -80,6 +84,81 @@ function AdminCalendar({
       }
     });
   }, [reservas, setReservas]);
+
+  // ===== Detecta reservas recién canceladas para el efecto de flash rojo =====
+  useEffect(() => {
+    const listaActual = Array.isArray(reservas) ? reservas : [];
+    const idsActuales = new Set();
+    const nuevasCanceladas = [];
+    const hoyInicio = new Date();
+    hoyInicio.setHours(0, 0, 0, 0);
+
+    listaActual.forEach((r) => {
+      const id = r.id || r._id;
+      if (!id) return;
+      idsActuales.add(id);
+      const prev = prevReservasRef.current.get(id);
+
+      if (r.estado === "eliminada" && prev && prev.estado !== "eliminada") {
+        nuevasCanceladas.push({
+          ...prev,
+          id,
+          estado: "eliminada",
+          timestamp: Date.now(),
+        });
+      }
+    });
+
+    // Reservas que desaparecieron directamente del array (cancelación con borrado)
+    prevReservasRef.current.forEach((snapshot, id) => {
+      if (
+        idsActuales.has(id) ||
+        snapshot.estado === "finalizada" ||
+        snapshot.estado === "eliminada"
+      ) {
+        return;
+      }
+
+      let fechas = [];
+      try {
+        fechas = JSON.parse(snapshot.fechas || "[]");
+      } catch {
+        fechas = [];
+      }
+      const endDate =
+        fechas.length > 0 ? parseLocalDate(fechas[fechas.length - 1]) : null;
+
+      // Si ya estaba vencida, la sacó el archivado automático, no es una cancelación
+      if (endDate && endDate < hoyInicio) return;
+
+      nuevasCanceladas.push({
+        ...snapshot,
+        id,
+        estado: "eliminada",
+        timestamp: Date.now(),
+      });
+    });
+
+    if (nuevasCanceladas.length > 0) {
+      setCanceladasFlash((prev) => [...prev, ...nuevasCanceladas]);
+      nuevasCanceladas.forEach((snap) => {
+        setTimeout(() => {
+          setCanceladasFlash((prev) =>
+            prev.filter(
+              (x) => x.id !== snap.id || x.timestamp !== snap.timestamp,
+            ),
+          );
+        }, CANCEL_FLASH_MS);
+      });
+    }
+
+    const nuevoMap = new Map();
+    listaActual.forEach((r) => {
+      const id = r.id || r._id;
+      if (id) nuevoMap.set(id, r);
+    });
+    prevReservasRef.current = nuevoMap;
+  }, [reservas]);
 
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
@@ -150,9 +229,8 @@ function AdminCalendar({
     month === hoy.getMonth() &&
     year === hoy.getFullYear();
 
-  const reservasProcesadas = useMemo(() => {
-    return reservas
-      .filter((r) => r.estado !== "finalizada")
+  const procesarLista = (lista) =>
+    lista
       .map((r) => {
         let fechas = [];
         try {
@@ -166,18 +244,43 @@ function AdminCalendar({
         return { ...r, startDate, endDate };
       })
       .filter((r) => r.startDate && r.endDate);
+
+  const reservasProcesadas = useMemo(() => {
+    return procesarLista(
+      reservas.filter(
+        (r) => r.estado !== "finalizada" && r.estado !== "eliminada",
+      ),
+    );
   }, [reservas]);
+
+  const canceladasProcesadas = useMemo(() => {
+    return procesarLista(canceladasFlash).map((r) => ({
+      ...r,
+      cancelando: true,
+    }));
+  }, [canceladasFlash]);
 
   const getReservasDia = (day, currentMonth) => {
     if (!currentMonth) return [];
     const fecha = new Date(year, month, day);
-    return reservasProcesadas.filter((r) => {
+
+    const activas = reservasProcesadas.filter((r) => {
       if (casaSeleccionada && casaSeleccionada !== "Todas") {
         if (r.casa?.toLowerCase() !== casaSeleccionada.toLowerCase())
           return false;
       }
       return fecha >= r.startDate && fecha <= r.endDate;
     });
+
+    const cancelando = canceladasProcesadas.filter((r) => {
+      if (casaSeleccionada && casaSeleccionada !== "Todas") {
+        if (r.casa?.toLowerCase() !== casaSeleccionada.toLowerCase())
+          return false;
+      }
+      return fecha >= r.startDate && fecha <= r.endDate;
+    });
+
+    return [...activas, ...cancelando];
   };
 
   const getPillInfo = (reserva, day) => {
@@ -194,6 +297,7 @@ function AdminCalendar({
   };
 
   const getPillColor = (reserva) => {
+    if (reserva.cancelando) return CANCELLED_COLOR;
     if (reserva.estado === "pendiente") return PENDING_COLOR;
     if (reserva.estado === "confirmada") {
       const casaNorm = (reserva.casa || "").toLowerCase();
@@ -316,10 +420,10 @@ function AdminCalendar({
                     const color = getPillColor(r);
                     return (
                       <div
-                        key={i}
-                        className={`cal-pill${isStart ? " pill-start" : ""}${isEnd ? " pill-end" : ""}${!isStart && !isEnd ? " pill-mid" : ""}`}
+                        key={r.id ? `${r.id}-${r.timestamp || ""}-${i}` : i}
+                        className={`cal-pill${isStart ? " pill-start" : ""}${isEnd ? " pill-end" : ""}${!isStart && !isEnd ? " pill-mid" : ""}${r.cancelando ? " cal-pill--cancelando" : ""}`}
                         style={{ background: color }}
-                        title={`${r.casa} — ${r.nombre || ""} ${r.apellido || ""} (${r.estado})`}
+                        title={`${r.casa} — ${r.nombre || ""} ${r.apellido || ""} (${r.cancelando ? "cancelada" : r.estado})`}
                       >
                         {isStart && (
                           <span className="cal-pill-label">
