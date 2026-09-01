@@ -36,7 +36,7 @@ export default function About() {
         "Creemos que todos merecemos unas vacaciones, un lugar donde te sientas como en casa.",
 
       description:
-        "Somos Tortuninas, un proyecto nacido de la pasión por crear espacios acogedores para alquileres temporarios. En cada casa cuidamos cada detalle para que regreses con energía renovada.",
+        "Somos Tortuninas, un proyecto creado con pasión para ofrecer espacios acogedores, cómodos y pensados para disfrutar. En cada casa cuidamos cada detalle para que vivas una estadía especial, te desconectes de la rutina y vuelvas a casa con energía renovada. Tu descanso empieza acá.",
 
       premium: "Casas Premium",
       premiumDesc: "Diseño moderno y confort.",
