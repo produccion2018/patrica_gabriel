@@ -363,17 +363,66 @@ const plantillaFamiliar = (nombre) => {
 };
 
 // ==========================================================
-// DEPARTAMENTO EN JUJUY
-// Todavía no tenemos los datos completos (wifi, dirección, etc.)
-// Se deja un mensaje simple hasta que se agreguen.
+// DEPARTAMENTO EN JUJUY (Perico)
 // ==========================================================
 const plantillaJujuy = (nombre) => {
   const contenido = `
-    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida al <strong>Departamento en Jujuy</strong> 🏔️</p>
-    <p style="color:#475569; font-size:14px; line-height:1.7;">
-      En breve nos comunicamos por WhatsApp o teléfono para pasarte todos los datos de acceso
-      (wifi, indicaciones, etc.).
-    </p>
+    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida al <strong>Departamento en Jujuy</strong> 🏔️ (Perico, a 14 minutos del aeropuerto)</p>
+
+    ${seccion(
+      "🏠 Sobre el departamento",
+      listaConIconos([
+        "4 ambientes, 3 dormitorios, 1 baño",
+        "Alquila por habitación doble y simple",
+        "Acceso por escalera",
+        "Cocheras: 2 autos",
+        "Cocina comedor con microondas",
+        "Internet / wifi",
+        "Parrilla en terraza semicubierta",
+        "Apta para mascotas",
+      ]),
+    )}
+
+    ${seccion(
+      "📍 Datos importantes",
+      cajaDestacada(
+        "#f0f9ff",
+        "#bae6fd",
+        `
+          <p style="margin:0 0 6px; color:#0f172a; font-size:14px;"><strong>Dirección:</strong> Av. Canada N° 160 e/ Santiago del Estero y Buenos Aires. Barrio San Miguel. Perico</p>
+          <p style="margin:0 0 6px; color:#0f172a; font-size:14px;"><strong>Wifi:</strong> Castro-2026 &nbsp;|&nbsp; <strong>Contraseña:</strong> Aventuras18+</p>
+          <p style="margin:0; color:#0f172a; font-size:14px;"><strong>Teléfono fijo:</strong> 388 491-8965 (Miguel Castro)</p>
+        `,
+      ),
+    )}
+
+    ${seccion(
+      "🌟 Comodidades y equipamiento",
+      listaConIconos([
+        "Vajilla completa",
+        "Heladera",
+        "Microondas",
+        "Ropa de cama: sábanas y mantas",
+        "Toallas",
+        "Elementos de aseo y papel higiénico",
+      ]),
+    )}
+
+    ${seccion(
+      "👨‍👩‍👧‍👦 Condiciones especiales",
+      listaConIconos([
+        "Apto para familias con niños",
+        "Juegos de mesa para compartir y divertirse",
+      ]),
+    )}
+
+    ${seccion(
+      "🔐 Privacidad y seguridad",
+      listaConIconos([
+        "Cerraduras en las puertas de los dormitorios",
+        "Cámaras de seguridad en el exterior de la propiedad",
+      ]),
+    )}
   `;
   return envolverEmail("¡Tu estadía ya está confirmada!", "Departamento en Jujuy", contenido);
 };
