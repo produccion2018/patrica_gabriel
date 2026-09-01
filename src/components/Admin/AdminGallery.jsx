@@ -93,8 +93,15 @@ function AdminGallery() {
           <div className="gallery-card" key={propiedad.id}>
             <img
               src={
+                // Igual que en el resto del panel: si "imagen" ya es
+                // una URL completa de Cloudinary (empieza con http),
+                // se usa tal cual. Si es un path viejo (/uploads/...)
+                // se le agrega el API_URL adelante, para no romper
+                // propiedades que todavía no resubieron su foto.
                 propiedad.imagen
-                  ? `${API_URL}${propiedad.imagen}`
+                  ? propiedad.imagen.startsWith("http")
+                    ? propiedad.imagen
+                    : `${API_URL}${propiedad.imagen}`
                   : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200"
               }
               alt={propiedad.nombre}
