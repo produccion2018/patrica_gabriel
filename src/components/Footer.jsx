@@ -64,7 +64,7 @@ export default function Footer({ language }) {
               <FaInstagram />
             </a>
 
-            
+            <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MENSAJE)}`}
               target="_blank"
               rel="noreferrer"
