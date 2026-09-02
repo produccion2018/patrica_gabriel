@@ -304,6 +304,7 @@ const plantillaConPileta = (nombre) => {
       </p>`,
     )}
 
+    ${bloqueGarrafaFamiliar()}
     ${bloqueQueTraer()}
     ${bloqueDeposito()}
   `;

@@ -11,13 +11,13 @@ import {
 const HOUSE_CONFIRM_COLORS = {
   "casa frente al mar": "#22c55e",
   "casa con pileta": "#ec4899",
-  "casa familiar": "#f97316",
+  "casa con gran parque": "#f97316",
   "departamento en jujuy": "#8b5cf6",
 };
 const HOUSE_ICONS = {
   "casa frente al mar": "🌊",
   "casa con pileta": "🏊",
-  "casa familiar": "🏠",
+  "casa con gran parque": "🏠",
   "departamento en jujuy": "🏔️",
 };
 const PENDING_COLOR = "#f59e0b";
@@ -380,7 +380,9 @@ function AdminCalendar({
           <span className="cal-legend-item">
             <i
               className="cal-legend-dot"
-              style={{ background: HOUSE_CONFIRM_COLORS["casa familiar"] }}
+              style={{
+                background: HOUSE_CONFIRM_COLORS["casa con gran parque"],
+              }}
             />
             Casa con Gran Parque
           </span>
