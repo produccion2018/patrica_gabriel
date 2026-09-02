@@ -11,8 +11,12 @@ const OPTIONS = {
     text: "🌊 Casa frente al mar (Las Toninas):\n• Capacidad: 6 personas\n• 2 dormitorios, 1 baño\n• Cochera y Wifi\n• Apta para mascotas",
   },
   C: {
-    title: "Casa familiar",
-    text: "🏡 Casa familiar (Las Toninas):\n• Capacidad: 5-6 personas\n• 2 dormitorios, 1 baño\n• Cochera y Wifi\n• Apta para mascotas",
+    title: "Casa con gran parque",
+    text: "🏡 Casa con gran parque (Las Toninas):\n• Capacidad: 5-6 personas\n• 2 dormitorios, 1 baño\n• Cochera y Wifi\n• Apta para mascotas",
+  },
+  D: {
+    title: "Jujuy",
+    text: "🏔️ Departamento en Perico, Jujuy:\n• 3 dormitorios · 4 ambientes\n• 1 baño\n• Cochera (2 autos) y Wifi\n• Apta para mascotas\n• A 14 minutos del aeropuerto",
   },
 };
 
@@ -29,7 +33,6 @@ export default function ChatBot() {
     }
   }, [messages, open]);
 
-  // Generador de pompas/burbujas en los clics
   const triggerBubbleEffect = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
@@ -122,7 +125,6 @@ export default function ChatBot() {
 
   return (
     <div className="pwb-master-container">
-      {/* BOTÓN FLOTANTE CON POMPAS */}
       {!open && (
         <button className="pwb-fab-trigger" onClick={startChat}>
           <span className="pwb-fab-icon">💬</span>
@@ -146,10 +148,8 @@ export default function ChatBot() {
         </button>
       )}
 
-      {/* VENTANA DEL CHAT */}
       {open && (
         <div className="pwb-chat-window">
-          {/* CABECERA */}
           <div className="pwb-chat-header">
             <div className="pwb-header-profile">
               <div className="pwb-avatar-container">
@@ -162,7 +162,6 @@ export default function ChatBot() {
               </div>
             </div>
 
-            {/* BOTÓN CERRAR CON EFECTO POMPAS ROJAS */}
             <button className="pwb-close-button" onClick={closeChat}>
               ✕
               {particles.map((p) => (
@@ -183,7 +182,6 @@ export default function ChatBot() {
             </button>
           </div>
 
-          {/* HISTORIAL DE MENSAJES */}
           <div className="pwb-chat-body" ref={chatBodyRef}>
             {messages.map((m, i) => (
               <div key={i} className={`pwb-message-row pwb-msg-${m.from}`}>
@@ -201,7 +199,6 @@ export default function ChatBot() {
             ))}
           </div>
 
-          {/* CHIPS INTERACTIVOS */}
           <div className="pwb-chat-suggestions">
             {messages.some((m) => m.isAction) ? (
               <button
@@ -233,16 +230,21 @@ export default function ChatBot() {
                 <button
                   className="pwb-suggest-chip"
                   onClick={() =>
-                    processResponse("C", "Opción C: Casa familiar")
+                    processResponse("C", "Opción C: Casa con gran parque")
                   }
                 >
-                  🏡 Familiar
+                  🏡 Gran Parque
+                </button>
+                <button
+                  className="pwb-suggest-chip"
+                  onClick={() => processResponse("D", "Opción D: Jujuy")}
+                >
+                  🏔️ Jujuy
                 </button>
               </div>
             )}
           </div>
 
-          {/* CUADRO DE ESCRITURA */}
           <div className="pwb-chat-footer">
             <input
               className="pwb-chat-input"

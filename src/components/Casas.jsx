@@ -65,7 +65,7 @@ const detallesPorId = {
     extras: ["Cochera", "WiFi", "Apta mascotas"],
   },
   3: {
-    badge: "CASA FAMILIAR",
+    badge: "CASA CON GRAN PARQUE",
     location: "Calle 13 Nº 1836 entre 40 y 42",
     guests: "5/6 personas",
     rooms: "2 dormitorios",

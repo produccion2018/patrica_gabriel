@@ -382,7 +382,7 @@ function AdminCalendar({
               className="cal-legend-dot"
               style={{ background: HOUSE_CONFIRM_COLORS["casa familiar"] }}
             />
-            Familiar
+            Casa con Gran Parque
           </span>
           <span className="cal-legend-item">
             <i
