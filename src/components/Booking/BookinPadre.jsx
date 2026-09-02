@@ -87,7 +87,12 @@ export default function BookingPadre({
       imagen: casa2,
       ubicacion: "Las Toninas",
     },
-    { id: 3, nombre: "Casa familiar", imagen: casa3, ubicacion: "Las Toninas" },
+    {
+      id: 3,
+      nombre: "Casa con Gran Parque",
+      imagen: casa3,
+      ubicacion: "Las Toninas",
+    },
     {
       id: 4,
       nombre: "Departamento en Jujuy",
