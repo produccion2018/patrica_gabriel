@@ -304,7 +304,6 @@ const plantillaConPileta = (nombre) => {
       </p>`,
     )}
 
-    ${bloqueGarrafaFamiliar()}
     ${bloqueQueTraer()}
     ${bloqueDeposito()}
   `;
@@ -313,13 +312,11 @@ const plantillaConPileta = (nombre) => {
 };
 
 // ==========================================================
-// CASA CON GRAN PARQUE
-// (antes llamada "Casa Familiar" — se actualizó el nombre acá
-// para que coincida con el resto del sitio)
+// CASA FAMILIAR (con gran parque)
 // ==========================================================
-const plantillaConGranParque = (nombre) => {
+const plantillaFamiliar = (nombre) => {
   const contenido = `
-    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida a la <strong>Casa con Gran Parque</strong> 🏡 (a 7 cuadras del mar)</p>
+    <p style="color:#0f172a; font-size:15px; margin:0 0 20px;">¡Hola ${nombre}! Te damos la bienvenida a la <strong>Casa Familiar</strong> 🏡 (con gran parque, a 7 cuadras del mar)</p>
 
     ${seccion(
       "🏠 Sobre la casa",
@@ -362,7 +359,7 @@ const plantillaConGranParque = (nombre) => {
     ${bloqueDeposito()}
   `;
 
-  return envolverEmail("¡Tu estadía ya está confirmada!", "Casa con Gran Parque", contenido);
+  return envolverEmail("¡Tu estadía ya está confirmada!", "Casa Familiar", contenido);
 };
 
 // ==========================================================
@@ -433,7 +430,7 @@ const plantillaJujuy = (nombre) => {
 const plantillasCasa = {
   "casa frente al mar": plantillaFrenteAlMar,
   "casa con pileta": plantillaConPileta,
-  "casa con gran parque": plantillaConGranParque,
+  "casa familiar": plantillaFamiliar,
   "departamento en jujuy": plantillaJujuy,
 };
 
