@@ -32,10 +32,10 @@ export default function About() {
       sectionTitle: "Bienvenido a Tortuninas",
 
       quote:
-        "Creemos que todos merecemos unas vacaciones, un lugar donde te sientas como en casa.",
+        "En Tortuninas creemos que unas buenas vacaciones empiezan cuando te sentís como en casa.",
 
       description:
-        "Somos Tortuninas, un proyecto creado con pasión para ofrecer espacios acogedores, cómodos y pensados para disfrutar. En cada casa cuidamos cada detalle para que vivas una estadía especial, te desconectes de la rutina y vuelvas a casa con energía renovada. Tu descanso empieza acá.",
+        "Por eso creamos espacios cálidos, cómodos y completamente equipados para que solo tengas que ocuparte de disfrutar. Nos encanta recibir familias, amigos y también a sus mascotas, porque sabemos que forman parte de cada viaje. Cuidamos cada detalle y brindamos una atención cercana para que tu estadía sea tranquila, confortable y quieras volver siempre.",
 
       premium: "Casas Premium",
       premiumDesc: "Diseño moderno y confort.",
