@@ -24,9 +24,8 @@ export default function About() {
     es: {
       back: "Volver al inicio",
       who: "QUIÉNES SOMOS",
-      title: "Un proyecto nacido de la pasión",
-      subtitle:
-        "Creamos espacios acogedores para que tus vacaciones se sientan como estar en casa, con tus mascotas también bienvenidas.",
+      title: "Casas pensadas para disfrutar en familia",
+      subtitle: "",
 
       years: "Cuidando cada detalle",
 
