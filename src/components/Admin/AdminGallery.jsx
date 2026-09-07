@@ -173,7 +173,7 @@ function AdminGallery() {
                       <p className="gallery-subtext">
                         {propiedad.reservasMes ?? 0} reservas este mes
                       </p>
-                      
+                      <a
                         href="#"
                         className="gallery-link"
                         onClick={(e) => {
