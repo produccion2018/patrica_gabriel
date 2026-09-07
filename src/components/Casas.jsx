@@ -4,6 +4,8 @@
 // IMPORTS + ESTADOS + CASAS
 // ================================
 import collage1_1 from "../assets/Carrusel/collage1/collage1.jpg";
+import collage1_2 from "../assets/Carrusel/collage1/collage2.jpg";
+import collage1_3 from "../assets/Carrusel/collage1/collage3.jpg";
 
 import collage2_1 from "../assets/Carrusel/collage2/collage2.jpg";
 import collage2_2 from "../assets/Carrusel/collage2/collage3.jpg";
@@ -148,7 +150,7 @@ export default function Casas({ language }) {
   // ================================
 
   const galleries = {
-    1: [collage1_1],
+    1: [collage1_1, collage1_2, collage1_3],
     2: [collage2_1, collage2_2, collage2_3],
     3: [collage3_1, collage3_2, collage3_3],
     4: [collage4_portada, collage4_1],
