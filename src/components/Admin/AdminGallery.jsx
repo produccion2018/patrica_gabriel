@@ -116,7 +116,7 @@ function AdminGallery() {
                 ></div>
                 <div className="gallery-card-text">
                   <h4>
-                    {Number(propiedad.id) === 3
+                    {propiedad.id === 3
                       ? "Casa con Gran Parque"
                       : propiedad.nombre}
                   </h4>
@@ -173,7 +173,7 @@ function AdminGallery() {
                       <p className="gallery-subtext">
                         {propiedad.reservasMes ?? 0} reservas este mes
                       </p>
-                      
+                      <a
                         href="#"
                         className="gallery-link"
                         onClick={(e) => {
