@@ -52,6 +52,18 @@ export default function HouseSelector({
     setSelectedHouse(house);
   };
 
+  const getCorrectedImage = (houseId, currentImage) => {
+    if (houseId === 1) {
+      const house2 = houses.find((h) => h.id === 2);
+      return house2 ? house2.imagen : currentImage;
+    }
+    if (houseId === 2) {
+      const house1 = houses.find((h) => h.id === 1);
+      return house1 ? house1.imagen : currentImage;
+    }
+    return currentImage;
+  };
+
   return (
     <div className="house-selector">
       <div>
@@ -61,6 +73,7 @@ export default function HouseSelector({
 
       <div className="booking-houses">
         {houses.map((house) => {
+          const correctedImg = getCorrectedImage(house.id, house.imagen);
           const detalle = DETALLE_CASA[house.id] || DETALLE_CASA[1];
           const Icono = detalle.Icono;
 
@@ -72,7 +85,7 @@ export default function HouseSelector({
               }`}
               onClick={() => handleSelectHouse(house)}
             >
-              <img src={house.imagen} alt={house.nombre} />
+              <img src={correctedImg} alt={house.nombre} />
 
               <div className="booking-house-info">
                 <div
@@ -103,7 +116,10 @@ export default function HouseSelector({
         <div className="booking-resumen">
           <h3>Resumen de reserva</h3>
           <div className="booking-resumen-card">
-            <img src={selectedHouse.imagen} alt={selectedHouse.nombre} />
+            <img
+              src={getCorrectedImage(selectedHouse.id, selectedHouse.imagen)}
+              alt={selectedHouse.nombre}
+            />
             <div>
               <h4>{selectedHouse.nombre}</h4>
               <p>{selectedHouse.ubicacion}</p>
