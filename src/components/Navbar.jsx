@@ -85,8 +85,8 @@ export default function Navbar({ language, setLanguage, setOpenBooking }) {
             alt="Tortuninas"
             className="logo-icon-float"
             style={{
-              height: "38px",
-              width: "38px",
+              height: "46px",
+              width: "46px",
               objectFit: "contain",
             }}
           />
