@@ -105,7 +105,9 @@ function AdminGalleryPage() {
                   style={{ background: dotColors[index % dotColors.length] }}
                 ></span>
                 <h4>
-                  {propiedad.id === 3 ? "Casa Familiar" : propiedad.nombre}
+                  {Number(propiedad.id) === 3
+                    ? "Casa con Gran Parque"
+                    : propiedad.nombre}
                 </h4>
               </div>
 
