@@ -6,6 +6,8 @@ import ReactCountryFlag from "react-country-flag";
 
 import { Menu, X, CalendarDays, ChevronDown } from "lucide-react";
 
+import tortuninasIcon from "../assets/tortuninas_icono.png";
+
 export default function Navbar({ language, setLanguage, setOpenBooking }) {
   const [scrolled, setScrolled] = useState(false);
 
@@ -71,9 +73,24 @@ export default function Navbar({ language, setLanguage, setOpenBooking }) {
         <div
           className="logo"
           onClick={() => scrollToSection("inicio")}
-          style={{ cursor: "pointer" }}
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
         >
-          Tortuninas
+          <img
+            src={tortuninasIcon}
+            alt="Tortuninas"
+            className="logo-icon-float"
+            style={{
+              height: "38px",
+              width: "38px",
+              objectFit: "contain",
+            }}
+          />
+          <span>Tortuninas</span>
         </div>
 
         {/* LINKS */}
@@ -256,6 +273,25 @@ export default function Navbar({ language, setLanguage, setOpenBooking }) {
             ? "Reservar agora"
             : "Book now"}
       </button>
+
+      {/* Animación del ícono del logo — flotando suave, infinita.
+          Va acá adentro para no tener que tocar Navbar.css */}
+      <style>{`
+        @keyframes tortuninas-float {
+          0%, 100% {
+            transform: translateY(0px);
+            opacity: 0.85;
+          }
+          50% {
+            transform: translateY(-5px);
+            opacity: 1;
+          }
+        }
+
+        .logo-icon-float {
+          animation: tortuninas-float 3s ease-in-out infinite;
+        }
+      `}</style>
     </>
   );
 }
