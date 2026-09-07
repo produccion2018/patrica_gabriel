@@ -116,7 +116,7 @@ function AdminGallery() {
                 ></div>
                 <div className="gallery-card-text">
                   <h4>
-                    {propiedad.id === 3
+                    {Number(propiedad.id) === 3
                       ? "Casa con Gran Parque"
                       : propiedad.nombre}
                   </h4>
