@@ -3,7 +3,14 @@ import "./AdminGalleryPage.css";
 import { API_URL } from "../../config/api";
 import { apiFetch } from "../../utils/apiFetch";
 
-const dotColors = ["#3b82f6", "#14b8a6", "#a855f7", "#f97316", "#ec4899"];
+const getDotColor = (nombre = "") => {
+  const n = nombre.toLowerCase();
+  if (n.includes("mar")) return "#22c55e";
+  if (n.includes("pileta")) return "#ec4899";
+  if (n.includes("parque")) return "#f97316";
+  if (n.includes("jujuy")) return "#8b5cf6";
+  return "#94a3b8";
+};
 
 function AdminGalleryPage() {
   const [propiedades, setPropiedades] = useState([]);
@@ -102,7 +109,7 @@ function AdminGalleryPage() {
               <div className="gallery2-card-title">
                 <span
                   className="gallery2-dot"
-                  style={{ background: dotColors[index % dotColors.length] }}
+                  style={{ background: getDotColor(propiedad.nombre) }}
                 ></span>
                 <h4>
                   {Number(propiedad.id) === 3

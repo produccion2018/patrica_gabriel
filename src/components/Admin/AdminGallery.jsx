@@ -9,7 +9,7 @@ const getDotColor = (nombre = "") => {
   const n = nombre.toLowerCase();
   if (n.includes("mar")) return "#22c55e"; // Frente al mar - verde
   if (n.includes("pileta")) return "#ec4899"; // Con pileta - rosa claro
-  if (n.includes("familiar")) return "#f97316"; // Familiar - naranja
+  if (n.includes("parque")) return "#f97316"; // Con parque - naranja
   if (n.includes("jujuy")) return "#8b5cf6"; // Jujuy - violeta
   return "#94a3b8"; // color por defecto si el nombre no matchea ninguna palabra clave
 };
