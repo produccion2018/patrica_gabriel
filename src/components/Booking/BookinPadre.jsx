@@ -24,11 +24,6 @@ export default function BookingPadre({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reservas, setReservas] = useState([]);
 
-  // NUEVO: propiedades traídas del backend (misma fuente que usa
-  // Casas.jsx), para que la foto que se ve acá sea siempre la misma
-  // que se sube/edita desde el panel admin.
-  const [propiedades, setPropiedades] = useState([]);
-
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
@@ -71,84 +66,40 @@ export default function BookingPadre({
       .catch((err) => console.error("Error al cargar reservas:", err));
   };
 
-  // NUEVO: trae las propiedades del backend (id, nombre, imagen, etc.)
-  // Es la misma llamada que hace Casas.jsx, así ambas pantallas
-  // muestran siempre la misma foto sin importar dónde se haya
-  // actualizado.
-  const cargarPropiedades = () => {
-    fetch(`${API_URL}/api/propiedades`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPropiedades(Array.isArray(data) ? data : []);
-      })
-      .catch((err) => console.error("Error al cargar propiedades:", err));
-  };
-
   useEffect(() => {
-    if (openBooking) {
-      cargarReservas();
-      cargarPropiedades();
-    }
+    if (openBooking) cargarReservas();
   }, [openBooking]);
 
   useEffect(() => {
     setSelectedDates([]);
   }, [selectedHouse]);
 
-  // Datos base de cada casa (nombre, ubicación, foto de respaldo).
-  // El "id" acá es solo interno de este selector, no tiene por qué
-  // coincidir con el id de la propiedad en la base de datos, por eso
-  // el cruce con el backend se hace por "nombre", no por "id".
-  const housesBase = [
+  const houses = [
     {
       id: 1,
       nombre: "Casa frente al mar",
-      imagenFallback: casa1,
+      imagen: casa1,
       ubicacion: "Las Toninas",
     },
     {
       id: 2,
       nombre: "Casa con pileta",
-      imagenFallback: casa2,
+      imagen: casa2,
       ubicacion: "Las Toninas",
     },
     {
       id: 3,
       nombre: "Casa con Gran Parque",
-      imagenFallback: casa3,
+      imagen: casa3,
       ubicacion: "Las Toninas",
     },
     {
       id: 4,
       nombre: "Departamento en Jujuy",
-      imagenFallback: casa4,
+      imagen: casa4,
       ubicacion: "Perico, Jujuy",
     },
   ];
-
-  // NUEVO: arma la lista final de casas, reemplazando la foto fija
-  // por la que viene del backend cuando encuentra una propiedad con
-  // el mismo nombre. Si todavía no hay foto cargada (o el nombre no
-  // matchea), usa la imagen de assets como respaldo, para que nunca
-  // se rompa la pantalla.
-  const houses = housesBase.map((h) => {
-    const propiedad = propiedades.find(
-      (p) => p.nombre?.trim().toLowerCase() === h.nombre.trim().toLowerCase(),
-    );
-
-    const imagenBackend = propiedad?.imagen
-      ? propiedad.imagen.startsWith("http")
-        ? propiedad.imagen
-        : `${API_URL}${propiedad.imagen}`
-      : null;
-
-    return {
-      id: h.id,
-      nombre: h.nombre,
-      imagen: imagenBackend || h.imagenFallback,
-      ubicacion: h.ubicacion,
-    };
-  });
 
   if (!openBooking) return null;
 
