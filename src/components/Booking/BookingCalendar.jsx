@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 const HOUSE_COLORS = {
   "Casa frente al mar": { bg: "#22c55e", border: "#16a34a", icon: "🌊" },
   "Casa con pileta": { bg: "#ec4899", border: "#db2777", icon: "🏊" },
-  "Casa familiar": { bg: "#f97316", border: "#ea580c", icon: "🏠" },
+  "Casa con Gran Parque": { bg: "#f97316", border: "#ea580c", icon: "🏠" }, // 👈 CAMBIO: antes "Casa familiar"
   "Departamento en Jujuy": { bg: "#8b5cf6", border: "#7c3aed", icon: "🏔️" },
 };
 
@@ -254,9 +254,9 @@ export default function BookingCalendar({
         <div className="calendar-legend-item">
           <span
             className="calendar-legend-dot"
-            style={{ background: HOUSE_COLORS["Casa familiar"].bg }}
+            style={{ background: HOUSE_COLORS["Casa con Gran Parque"].bg }}
           />
-          Familiar
+          Casa con Gran Parque
         </div>
         <div className="calendar-legend-item">
           <span
