@@ -2,18 +2,17 @@ require("dotenv").config();
 
 const https = require("https");
 
-// Cambiamos de Gmail/SMTP a Resend: Render (plan gratis) bloquea las
+// Usamos Resend en vez de Gmail/SMTP: Render (plan gratis) bloquea las
 // conexiones salientes por los puertos que usa el envío tradicional de
 // mail (SMTP), por eso nunca llegaba a conectar. Resend manda el mail
 // por HTTPS (el mismo tipo de conexión que usa cualquier página web),
 // que sí está permitida.
 //
-// OJO: hasta que no se verifique un dominio propio en Resend (se hace
-// cuando el sitio ya esté en su hosting definitivo), esta cuenta gratis
-// SOLO puede mandar mails a la casilla con la que se registró la cuenta
-// de Resend. Para mandarle a cualquier cliente hace falta ese paso.
+// Dominio propio (tortuninas.com) ya verificado en Resend (DKIM + SPF
+// confirmados), por lo que ya se puede enviar a cualquier casilla de
+// cliente, sin la limitación de la cuenta gratis de antes.
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const REMITENTE = "Reservas Las Toninas <onboarding@resend.dev>";
+const REMITENTE = "Reservas Las Toninas <info@tortuninas.com>";
 
 const enviarCorreo = (destinatario, asunto, html) => {
   return new Promise((resolve) => {
