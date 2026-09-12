@@ -13,7 +13,7 @@ import logo2 from "../assets/logos/logo2.jpg";
 // ================================
 
 // Correo principal (el que ya está funcionando)
-const EMAIL_PRINCIPAL = "reservaslastoninas@gmail.com";
+const EMAIL_PRINCIPAL = "info@tortuninas.com";
 
 // Mauro: acá va el link de la página de Facebook cuando la crees.
 // Ejemplo de formato: "https://facebook.com/tortuninas"
