@@ -325,3 +325,18 @@
   }
 
 }
+
+
+@media(max-width:992px){
+
+  .language-btn span,
+  .language-btn svg:last-child{
+    display:none;
+  }
+
+  .language-btn{
+    padding:0 12px;
+    gap:0;
+  }
+
+}
