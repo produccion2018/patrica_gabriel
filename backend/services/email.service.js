@@ -14,14 +14,30 @@ const https = require("https");
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const REMITENTE = "Reservas Las Toninas <info@tortuninas.com>";
 
+// CAMBIO: copia oculta (BCC) de cada mail enviado a la casilla de Hostinger,
+// para que Patricia y Gabriel puedan ver desde su mail lo que le llegó al
+// huésped. El huésped no ve esta copia.
+const COPIA_INTERNA = "info@tortuninas.com";
+
 const enviarCorreo = (destinatario, asunto, html) => {
   return new Promise((resolve) => {
-    const payload = JSON.stringify({
+    const cuerpo = {
       from: REMITENTE,
       to: [destinatario],
       subject: asunto,
       html,
-    });
+    };
+
+    // Si el destinatario ya es la propia casilla, no se agrega la copia
+    // (evita mandar el mismo mail dos veces a la misma dirección).
+    if (
+      String(destinatario || "").trim().toLowerCase() !==
+      COPIA_INTERNA.toLowerCase()
+    ) {
+      cuerpo.bcc = [COPIA_INTERNA];
+    }
+
+    const payload = JSON.stringify(cuerpo);
 
     const options = {
       hostname: "api.resend.com",
