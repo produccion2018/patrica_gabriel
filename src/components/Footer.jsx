@@ -131,14 +131,14 @@ export default function Footer({ language }) {
           </h3>
 
           <p>📞 +54 9 11 7082-2059</p>
-          <p style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          {/* CAMBIO: los dos correos juntos en el mismo bloque, uno debajo del otro */}
+          <p style={{ display: "flex", alignItems: "flex-start", gap: "6px" }}>
             <span>✉</span>
-            <span>{EMAIL_PRINCIPAL}</span>
-          </p>
-          {/* CAMBIO: segundo correo (Gmail), mismo estilo que el principal */}
-          <p style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <span>✉</span>
-            <span>{EMAIL_SECUNDARIO}</span>
+            <span>
+              {EMAIL_PRINCIPAL}
+              <br />
+              {EMAIL_SECUNDARIO}
+            </span>
           </p>
           <p>📍 Las Toninas, Buenos Aires</p>
         </div>
