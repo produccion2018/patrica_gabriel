@@ -15,9 +15,6 @@ import logo2 from "../assets/logos/logo2.jpg";
 // Correo principal (el que ya está funcionando)
 const EMAIL_PRINCIPAL = "info@tortuninas.com";
 
-// CAMBIO: segundo correo de contacto (Gmail)
-const EMAIL_SECUNDARIO = "tortuninas@gmail.com";
-
 // Mauro: acá va el link de la página de Facebook cuando la crees.
 // Ejemplo de formato: "https://facebook.com/tortuninas"
 const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61592405843335";
@@ -67,7 +64,7 @@ export default function Footer({ language }) {
               <FaInstagram />
             </a>
 
-            
+            <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MENSAJE)}`}
               target="_blank"
               rel="noreferrer"
@@ -131,13 +128,12 @@ export default function Footer({ language }) {
           </h3>
 
           <p>📞 +54 9 11 7082-2059</p>
-          {/* CAMBIO: los dos correos juntos en el mismo bloque, uno debajo del otro */}
-          <p style={{ display: "flex", alignItems: "flex-start", gap: "6px" }}>
+          <p style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <span>✉</span>
             <span>
               {EMAIL_PRINCIPAL}
               <br />
-              {EMAIL_SECUNDARIO}
+              tortuninas@gmail.com
             </span>
           </p>
           <p>📍 Las Toninas, Buenos Aires</p>
