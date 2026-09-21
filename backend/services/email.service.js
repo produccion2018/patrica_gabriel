@@ -15,10 +15,10 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const REMITENTE = "Reservas Las Toninas <info@tortuninas.com>";
 
 // CAMBIO: copia oculta (BCC) de cada mail enviado, para que Patricia y
-// Gabriel puedan ver desde su mail lo que le llegó al huésped. El huésped
-// no ve esta copia. Va a una casilla distinta del remitente (info@) para
-// que los filtros de spam no la tomen como sospechosa.
-const COPIA_INTERNA = "reservas@tortuninas.com";
+// Gabriel puedan ver lo que le llegó al huésped. El huésped no ve esta
+// copia. Va a un Gmail (y no a una casilla @tortuninas.com) porque el
+// filtro de Hostinger mandaba las copias a spam.
+const COPIA_INTERNA = "tortuninas@gmail.com";
 
 const enviarCorreo = (destinatario, asunto, html) => {
   return new Promise((resolve) => {
