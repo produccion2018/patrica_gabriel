@@ -3,20 +3,60 @@
 // PRIMERA PARTE
 // IMPORTS + ESTADOS + CASAS
 // ================================
-import collage1_1 from "../assets/Carrusel/collage1/collage1.jpg";
-import collage1_2 from "../assets/Carrusel/collage1/collage2.jpg";
-import collage1_3 from "../assets/Carrusel/collage1/collage3.jpg";
 
-import collage2_1 from "../assets/Carrusel/collage2/collage2.jpg";
-import collage2_2 from "../assets/Carrusel/collage2/collage3.jpg";
-import collage2_3 from "../assets/Carrusel/collage2/collage4.jpg"; //
+// --- Casa con pileta (id 1): 11 fotos ---
+import pileta1 from "../assets/Carrusel/pileta/01-atardecer.jpg";
+import pileta2 from "../assets/Carrusel/pileta/02-pileta.jpg";
+import pileta3 from "../assets/Carrusel/pileta/03-entrada.jpg";
+import pileta4 from "../assets/Carrusel/pileta/04-parrilla.jpg";
+import pileta5 from "../assets/Carrusel/pileta/05-comedor.jpg";
+import pileta6 from "../assets/Carrusel/pileta/06-cocina.jpg";
+import pileta7 from "../assets/Carrusel/pileta/07-pasillo.jpg";
+import pileta8 from "../assets/Carrusel/pileta/08-dormitorio.jpg";
+import pileta9 from "../assets/Carrusel/pileta/09-habitacion.jpg";
+import pileta10 from "../assets/Carrusel/pileta/10-bano.jpg";
+import pileta11 from "../assets/Carrusel/pileta/11-bano2.jpg";
 
-import collage3_1 from "../assets/Carrusel/collage3/collage1.jpg";
-import collage3_2 from "../assets/Carrusel/collage3/collage2.jpg";
-import collage3_3 from "../assets/Carrusel/collage3/collage3.jpg";
+// --- Casa frente al mar (id 2): 12 fotos ---
+import mar1 from "../assets/Carrusel/mar/01-mar.jpg";
+import mar2 from "../assets/Carrusel/mar/02-frente.jpg";
+import mar3 from "../assets/Carrusel/mar/03-cocina.jpg";
+import mar4 from "../assets/Carrusel/mar/04-comedor.jpg";
+import mar5 from "../assets/Carrusel/mar/05-dormitorio.jpg";
+import mar6 from "../assets/Carrusel/mar/06-habitacion.jpg";
+import mar7 from "../assets/Carrusel/mar/07-bano.jpg";
+import mar8 from "../assets/Carrusel/mar/08-parrilla.jpg";
+import mar9 from "../assets/Carrusel/mar/09-patio-parrilla.jpg";
+import mar10 from "../assets/Carrusel/mar/10-patio.jpg";
+import mar11 from "../assets/Carrusel/mar/11-patio2.jpg";
+import mar12 from "../assets/Carrusel/mar/12-tendedero.jpg";
+
+// --- Casa con Gran Parque (id 3): 15 fotos ---
+import parque1 from "../assets/Carrusel/parque/01-frente.jpg";
+import parque3 from "../assets/Carrusel/parque/03-lateral.png";
+import parque4 from "../assets/Carrusel/parque/04-parque.png";
+import parque5 from "../assets/Carrusel/parque/05-galeria.png";
+import parque6 from "../assets/Carrusel/parque/06-arbol.png";
+import parque7 from "../assets/Carrusel/parque/07-camino.png";
+import parque8 from "../assets/Carrusel/parque/08-living.png";
+import parque9 from "../assets/Carrusel/parque/09-cocina.png";
+import parque10 from "../assets/Carrusel/parque/10-dormitorio.png";
+import parque11 from "../assets/Carrusel/parque/11-placard.png";
+import parque12 from "../assets/Carrusel/parque/12-habitacion.png";
+import parque13 from "../assets/Carrusel/parque/13-cuchetas.png";
+import parque14 from "../assets/Carrusel/parque/14-tocador.png";
+import parque15 from "../assets/Carrusel/parque/15-bano.png";
 
 import collage4_portada from "../assets/casa4.jpg";
-import collage4_1 from "../assets/Carrusel/collage4/collage1.jpeg";
+// --- Casa de Perico, Jujuy (id 4): 8 fotos ---
+import jujuy1 from "../assets/Carrusel/jujuy/01-frente.jpg";
+import jujuy2 from "../assets/Carrusel/jujuy/02-living.jpg";
+import jujuy3 from "../assets/Carrusel/jujuy/03-cocina.jpg";
+import jujuy4 from "../assets/Carrusel/jujuy/04-dormitorio.jpg";
+import jujuy5 from "../assets/Carrusel/jujuy/05-habitacion.jpg";
+import jujuy6 from "../assets/Carrusel/jujuy/06-bano.jpg";
+import jujuy7 from "../assets/Carrusel/jujuy/07-bano2.jpg";
+import jujuy8 from "../assets/Carrusel/jujuy/08-escalera.jpg";
 
 import "./Casas.css";
 import { useState, useEffect } from "react";
@@ -150,10 +190,50 @@ export default function Casas({ language }) {
   // ================================
 
   const galleries = {
-    1: [collage1_1, collage1_2, collage1_3],
-    2: [collage2_1, collage2_2, collage2_3],
-    3: [collage3_1, collage3_2, collage3_3],
-    4: [collage4_portada, collage4_1],
+    1: [
+      pileta1,
+      pileta2,
+      pileta3,
+      pileta4,
+      pileta5,
+      pileta6,
+      pileta7,
+      pileta8,
+      pileta9,
+      pileta10,
+      pileta11,
+    ],
+    2: [
+      mar1,
+      mar2,
+      mar3,
+      mar4,
+      mar5,
+      mar6,
+      mar7,
+      mar8,
+      mar9,
+      mar10,
+      mar11,
+      mar12,
+    ],
+    3: [
+      parque1,
+      parque3,
+      parque4,
+      parque5,
+      parque6,
+      parque7,
+      parque8,
+      parque9,
+      parque10,
+      parque11,
+      parque12,
+      parque13,
+      parque14,
+      parque15,
+    ],
+    4: [jujuy1, jujuy2, jujuy3, jujuy4, jujuy5, jujuy6, jujuy7, jujuy8],
   };
 
   const handleOpenGallery = (id) => {

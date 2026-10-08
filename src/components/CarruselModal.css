@@ -140,3 +140,332 @@
 .summary-item strong{
   color:#ffffff;
 }
+
+
+/* =========================
+   VISOR NUEVO (prefijo cm-)
+========================= */
+
+.cm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 30% 20%, rgba(11, 67, 87, 0.55), rgba(5, 9, 16, 0.97) 60%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: cm-fade-in 0.25s ease;
+}
+
+.cm-content {
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 22px 20px;
+  box-sizing: border-box;
+  gap: 14px;
+}
+
+/* ---------- BARRA SUPERIOR ---------- */
+.cm-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.cm-counter {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 7px 16px;
+  border-radius: 999px;
+}
+
+.cm-icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cm-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.24);
+  transform: rotate(90deg) scale(1.05);
+}
+
+/* ---------- CUERPO: FOTO GRANDE + COLUMNA DE MINIATURAS ---------- */
+.cm-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 124px;
+  gap: 16px;
+}
+
+/* ---------- ESCENARIO ---------- */
+.cm-stage {
+  position: relative;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: zoom-in;
+}
+
+.cm-stage.is-zoomed {
+  cursor: grab;
+}
+
+.cm-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.cm-img-wrap {
+  position: relative;
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+  will-change: transform;
+}
+
+.cm-main-image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  -webkit-user-drag: none;
+  animation: cm-fade-in 0.35s ease;
+}
+
+/* ---------- MARCA DE AGUA ---------- */
+.cm-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='170'%3E%3Ctext x='140' y='85' text-anchor='middle' transform='rotate(-25 140 85)' fill='white' fill-opacity='0.2' font-family='Georgia, serif' font-size='24' font-weight='700' letter-spacing='5'%3ETORTUNINAS%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ---------- FLECHAS ---------- */
+.cm-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cm-arrow:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.cm-arrow-left {
+  left: 16px;
+}
+
+.cm-arrow-right {
+  right: 16px;
+}
+
+/* ---------- CONTROLES DE ZOOM ---------- */
+.cm-zoom-bar {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 3;
+  cursor: default;
+}
+
+.cm-zoom-bar button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cm-zoom-bar button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cm-zoom-bar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.cm-zoom-level {
+  min-width: 50px;
+  text-align: center;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- MINIATURAS (columna a la derecha) ---------- */
+.cm-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  padding: 4px;
+  scrollbar-width: none;
+}
+
+.cm-thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.cm-thumb {
+  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.cm-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cm-thumb:hover {
+  opacity: 0.95;
+  transform: scale(1.04);
+}
+
+.cm-thumb.active {
+  opacity: 1;
+  border-color: #00a8e8;
+  box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.25);
+  transform: scale(1.04);
+}
+
+/* ---------- ANIMACIÓN ---------- */
+@keyframes cm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- TABLET Y CELULAR: miniaturas pasan abajo en fila ---------- */
+@media (max-width: 760px) {
+  .cm-content {
+    padding: 10px 10px 12px;
+    gap: 10px;
+  }
+
+  .cm-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .cm-stage {
+    border-radius: 18px;
+  }
+
+  .cm-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 0.9rem;
+  }
+
+  .cm-arrow-left {
+    left: 8px;
+  }
+
+  .cm-arrow-right {
+    right: 8px;
+  }
+
+  .cm-thumbs {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px;
+  }
+
+  .cm-thumb {
+    width: 76px;
+    aspect-ratio: auto;
+    height: 56px;
+    border-radius: 10px;
+  }
+
+  .cm-zoom-bar {
+    bottom: 10px;
+  }
+}
