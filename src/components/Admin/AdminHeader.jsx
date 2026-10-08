@@ -2,6 +2,7 @@ import "./AdminHeader.css";
 import { useEffect, useRef } from "react";
 import { Bell, Plus, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import InstallAppButton from "./InstallAppButton";
 
 function AdminHeader({ reservas = [] }) {
   const navigate = useNavigate();
@@ -123,6 +124,8 @@ function AdminHeader({ reservas = [] }) {
             <span className="notification-badge">{pendientes}</span>
           )}
         </button>
+
+        <InstallAppButton />
 
         <button
           className="mireya-btn"
