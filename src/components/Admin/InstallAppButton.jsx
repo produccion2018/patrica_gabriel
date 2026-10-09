@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaDownload, FaTimes } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 // ¿Ya está abierta como app instalada?
 const esAppInstalada = () =>
@@ -13,7 +14,11 @@ const esIOS = () =>
 
 export default function InstallAppButton() {
   // Evento que el navegador (Chrome, Edge, Android) nos da para poder instalar.
-  const [promptEvent, setPromptEvent] = useState(null);
+  // El evento lo captura index.html apenas carga la página (antes de que
+  // React arme el panel), así no se pierde.
+  const [promptEvent, setPromptEvent] = useState(
+    () => window.__installPrompt || null,
+  );
   const [instalada, setInstalada] = useState(() => esAppInstalada());
   const [ayuda, setAyuda] = useState(false);
 
@@ -23,20 +28,18 @@ export default function InstallAppButton() {
       navigator.serviceWorker.register("/sw.js").catch(() => {});
     }
 
-    const onBeforeInstall = (e) => {
-      e.preventDefault();
-      setPromptEvent(e);
-    };
+    const onReady = () => setPromptEvent(window.__installPrompt || null);
     const onInstalled = () => {
       setInstalada(true);
       setPromptEvent(null);
+      window.__installPrompt = null;
     };
 
-    window.addEventListener("beforeinstallprompt", onBeforeInstall);
+    window.addEventListener("installprompt-ready", onReady);
     window.addEventListener("appinstalled", onInstalled);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
+      window.removeEventListener("installprompt-ready", onReady);
       window.removeEventListener("appinstalled", onInstalled);
     };
   }, []);
@@ -47,12 +50,35 @@ export default function InstallAppButton() {
   const ios = esIOS();
 
   // El botón se muestra siempre (mientras la app no esté instalada).
-  // Si el navegador permite instalar con un toque, instala directo;
+  // Si el navegador permite instalar con un toque, muestra primero una card
+  // de confirmación (SweetAlert2) y después instala;
   // si no, muestra una ayuda con los pasos manuales.
   const instalar = async () => {
     if (promptEvent) {
+      const { isConfirmed } = await Swal.fire({
+        iconHtml: "🏡",
+        title: "Instalá Las Toninas",
+        html: "Tené el panel de administración a un toque, directo desde tu escritorio o celular, como una app más.",
+        showCancelButton: true,
+        confirmButtonText: "Instalar",
+        cancelButtonText: "Ahora no",
+        reverseButtons: true,
+        confirmButtonColor: "#0369a1",
+        cancelButtonColor: "#64748b",
+        background: "#0f172a",
+        color: "#ffffff",
+        customClass: {
+          container: "install-swal-container",
+          icon: "install-swal-icon",
+          popup: "install-swal-popup",
+        },
+      });
+
+      if (!isConfirmed) return;
+
       promptEvent.prompt();
       await promptEvent.userChoice;
+      window.__installPrompt = null;
       setPromptEvent(null);
     } else {
       setAyuda(true);
@@ -80,6 +106,18 @@ export default function InstallAppButton() {
         .install-app-btn:hover{
           transform:translateY(-2px);
           box-shadow:0 10px 22px rgba(14,165,233,.5);
+        }
+        .install-swal-container{
+          z-index:999999 !important;
+        }
+        .install-swal-popup{
+          border-radius:20px !important;
+          border:1px solid rgba(14,165,233,.35) !important;
+          box-shadow:0 20px 50px rgba(0,0,0,.5) !important;
+        }
+        .install-swal-icon{
+          border:none !important;
+          font-size:2.6em !important;
         }
         .install-ios-overlay{
           position:fixed;
