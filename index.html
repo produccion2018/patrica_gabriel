@@ -11,6 +11,17 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+    <!-- Guarda el aviso de instalación del navegador apenas llega,
+         para que el botón "Instalar app" del panel pueda usarlo -->
+    <script>
+      window.__installPrompt = null;
+      window.addEventListener("beforeinstallprompt", function (e) {
+        e.preventDefault();
+        window.__installPrompt = e;
+        window.dispatchEvent(new Event("installprompt-ready"));
+      });
+    </script>
+
     <!-- RESPONSIVE -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
