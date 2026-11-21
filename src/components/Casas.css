@@ -202,43 +202,69 @@
 
 .bottom{
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:space-between;
   gap:16px;
+  padding-top:18px;
+  border-top:1px solid #efe7db;
 }
 
-/* PRECIO — píldora oscura destacada */
+/* PRECIO — estilo limpio premium (sin caja), monto en una línea */
 
 .price{
-  background:#062f3d;
-  border-radius:16px;
-  padding:10px 18px;
   display:flex;
   flex-direction:column;
+  gap:4px;
+  min-width:0;
   line-height:1.15;
 }
 
-.price span{
-  font-size:11px;
-  color:#9fb8c2;
+.price > span{
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#8b7355;
+}
+
+.price-row{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  column-gap:6px;
+  row-gap:2px;
 }
 
 .price h4{
-  font-size:20px;
-  color:#ffffff;
-  margin:2px 0;
-  line-height:1.1;
+  font-family:'Inter', sans-serif;
+  font-size:21px;
   font-weight:700;
+  letter-spacing:-0.3px;
+  color:#062f3d;
+  margin:0;
+  line-height:1.1;
+  white-space:nowrap;
 }
 
 .price p{
-  font-size:11px;
-  color:#9fb8c2;
+  font-size:12.5px;
+  font-weight:500;
+  color:#6b7280;
+  margin:0;
+  white-space:nowrap;
 }
 
 .price small{
-  font-size:10.5px;
-  color:#f4c76a;
+  display:inline-flex;
+  width:fit-content;
+  margin-top:4px;
+  font-size:11px;
+  font-weight:600;
+  color:#8a5a00;
+  background:#fdf3dc;
+  border:1px solid #f4dfa8;
+  padding:3px 9px;
+  border-radius:999px;
 }
 
 /* BOTON */
@@ -257,6 +283,8 @@
   font-weight:600;
   cursor:pointer;
   transition:.3s;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 
 .more-btn:hover{
@@ -596,8 +624,20 @@
 
 }
 
-/* jujuy */
+/* jujuy — mismo estilo de precio, con la paleta cálida de la sección */
+.otra-zona-bottom{
+  align-items:flex-end;
+}
+
+.otra-zona-feature-info .price > span{
+  color:#b5651d;
+}
+
 .otra-zona-feature-info .price h4{
-  font-size:20px;
-  color:#ffffff;
+  font-size:24px;
+  color:#7c3f14;
+}
+
+.otra-zona-feature-info .price p{
+  color:#8a6238;
 }

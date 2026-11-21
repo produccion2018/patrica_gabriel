@@ -17,7 +17,7 @@ import pileta9 from "../assets/Carrusel/pileta/09-habitacion.jpg";
 import pileta10 from "../assets/Carrusel/pileta/10-bano.jpg";
 import pileta11 from "../assets/Carrusel/pileta/11-bano2.jpg";
 
-// --- Casa frente al mar (id 2): 12 fotos ---
+// --- Casa frente al mar (id 2): 11 fotos ---
 import mar1 from "../assets/Carrusel/mar/01-mar.jpg";
 import mar2 from "../assets/Carrusel/mar/02-frente.jpg";
 import mar3 from "../assets/Carrusel/mar/03-cocina.jpg";
@@ -29,7 +29,6 @@ import mar8 from "../assets/Carrusel/mar/08-parrilla.jpg";
 import mar9 from "../assets/Carrusel/mar/09-patio-parrilla.jpg";
 import mar10 from "../assets/Carrusel/mar/10-patio.jpg";
 import mar11 from "../assets/Carrusel/mar/11-patio2.jpg";
-import mar12 from "../assets/Carrusel/mar/12-tendedero.jpg";
 
 // --- Casa con Gran Parque (id 3): 15 fotos ---
 import parque1 from "../assets/Carrusel/parque/01-frente.jpg";
@@ -145,6 +144,15 @@ const detallesPorDefecto = {
   extras: ["Cochera", "WiFi", "Apta mascotas"],
 };
 
+// Algunos precios cargados desde el panel ya empiezan con "Desde"
+// (ej: "Desde $ 95.000-120.000"). Para no mostrar "Desde" dos veces,
+// acá solo se separa esa palabra al MOSTRAR el precio: el valor que
+// cargaron los dueños no se modifica.
+const montoSinDesde = (precio) => {
+  const texto = String(precio ?? "").trim();
+  return texto.replace(/^desde\s*/i, "");
+};
+
 export default function Casas({ language }) {
   const navigate = useNavigate();
 
@@ -215,7 +223,6 @@ export default function Casas({ language }) {
       mar9,
       mar10,
       mar11,
-      mar12,
     ],
     3: [
       parque1,
@@ -357,9 +364,11 @@ export default function Casas({ language }) {
         <div className="bottom">
           <div className="price">
             <span>{language === "es" ? "Desde" : "From"}</span>
-            <h4>{house.price}</h4>
-            <p>{language === "es" ? "por noche" : "per night"}</p>
-            <small>{house.promocion}</small>
+            <div className="price-row">
+              <h4>{montoSinDesde(house.price)}</h4>
+              <p>{language === "es" ? "/ noche" : "/ night"}</p>
+            </div>
+            {house.promocion && <small>{house.promocion}</small>}
           </div>
 
           <button
@@ -505,9 +514,11 @@ export default function Casas({ language }) {
                   <div className="otra-zona-bottom">
                     <div className="price">
                       <span>{language === "es" ? "Desde" : "From"}</span>
-                      <h4>{house.price}</h4>
-                      <p>{language === "es" ? "por noche" : "per night"}</p>
-                      <small>{house.promocion}</small>
+                      <div className="price-row">
+                        <h4>{montoSinDesde(house.price)}</h4>
+                        <p>{language === "es" ? "/ noche" : "/ night"}</p>
+                      </div>
+                      {house.promocion && <small>{house.promocion}</small>}
                     </div>
 
                     <button
