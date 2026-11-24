@@ -4,18 +4,23 @@
 // IMPORTS + ESTADOS + CASAS
 // ================================
 
-// --- Casa con pileta (id 1): 11 fotos ---
-import pileta1 from "../assets/Carrusel/pileta/01-atardecer.jpg";
+// --- Casa con pileta (id 1): 16 fotos ---
+import pileta1 from "../assets/Carrusel/pileta/01-parque.jpg";
 import pileta2 from "../assets/Carrusel/pileta/02-pileta.jpg";
-import pileta3 from "../assets/Carrusel/pileta/03-entrada.jpg";
-import pileta4 from "../assets/Carrusel/pileta/04-parrilla.jpg";
-import pileta5 from "../assets/Carrusel/pileta/05-comedor.jpg";
-import pileta6 from "../assets/Carrusel/pileta/06-cocina.jpg";
-import pileta7 from "../assets/Carrusel/pileta/07-pasillo.jpg";
-import pileta8 from "../assets/Carrusel/pileta/08-dormitorio.jpg";
-import pileta9 from "../assets/Carrusel/pileta/09-habitacion.jpg";
-import pileta10 from "../assets/Carrusel/pileta/10-bano.jpg";
-import pileta11 from "../assets/Carrusel/pileta/11-bano2.jpg";
+import pileta3 from "../assets/Carrusel/pileta/03-frente.jpg";
+import pileta4 from "../assets/Carrusel/pileta/04-porton.jpg";
+import pileta5 from "../assets/Carrusel/pileta/05-vereda.jpg";
+import pileta6 from "../assets/Carrusel/pileta/06-entrada.jpg";
+import pileta7 from "../assets/Carrusel/pileta/07-jardin.jpg";
+import pileta8 from "../assets/Carrusel/pileta/08-villa-rosa.jpg";
+import pileta9 from "../assets/Carrusel/pileta/09-parrilla.jpg";
+import pileta10 from "../assets/Carrusel/pileta/10-comedor.jpg";
+import pileta11 from "../assets/Carrusel/pileta/11-cocina.jpg";
+import pileta12 from "../assets/Carrusel/pileta/12-pasillo.jpg";
+import pileta13 from "../assets/Carrusel/pileta/13-dormitorio.jpg";
+import pileta14 from "../assets/Carrusel/pileta/14-habitacion.jpg";
+import pileta15 from "../assets/Carrusel/pileta/15-bano.jpg";
+import pileta16 from "../assets/Carrusel/pileta/16-bano2.jpg";
 
 // --- Casa frente al mar (id 2): 11 fotos ---
 import mar1 from "../assets/Carrusel/mar/01-mar.jpg";
@@ -210,6 +215,11 @@ export default function Casas({ language }) {
       pileta9,
       pileta10,
       pileta11,
+      pileta12,
+      pileta13,
+      pileta14,
+      pileta15,
+      pileta16,
     ],
     2: [
       mar1,
