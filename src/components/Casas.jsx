@@ -35,21 +35,25 @@ import mar9 from "../assets/Carrusel/mar/09-patio-parrilla.jpg";
 import mar10 from "../assets/Carrusel/mar/10-patio.jpg";
 import mar11 from "../assets/Carrusel/mar/11-patio2.jpg";
 
-// --- Casa con Gran Parque (id 3): 15 fotos ---
+// --- Casa con Gran Parque (id 3): 18 fotos ---
 import parque1 from "../assets/Carrusel/parque/01-frente.jpg";
-import parque3 from "../assets/Carrusel/parque/03-lateral.png";
-import parque4 from "../assets/Carrusel/parque/04-parque.png";
-import parque5 from "../assets/Carrusel/parque/05-galeria.png";
-import parque6 from "../assets/Carrusel/parque/06-arbol.png";
-import parque7 from "../assets/Carrusel/parque/07-camino.png";
-import parque8 from "../assets/Carrusel/parque/08-living.png";
-import parque9 from "../assets/Carrusel/parque/09-cocina.png";
-import parque10 from "../assets/Carrusel/parque/10-dormitorio.png";
-import parque11 from "../assets/Carrusel/parque/11-placard.png";
-import parque12 from "../assets/Carrusel/parque/12-habitacion.png";
-import parque13 from "../assets/Carrusel/parque/13-cuchetas.png";
-import parque14 from "../assets/Carrusel/parque/14-tocador.png";
-import parque15 from "../assets/Carrusel/parque/15-bano.png";
+import parque2 from "../assets/Carrusel/parque/02-reja.jpg";
+import parque3 from "../assets/Carrusel/parque/03-reja2.jpg";
+import parque4 from "../assets/Carrusel/parque/04-lateral.jpg";
+import parque5 from "../assets/Carrusel/parque/05-camino.jpg";
+import parque6 from "../assets/Carrusel/parque/06-jardin.jpg";
+import parque7 from "../assets/Carrusel/parque/07-parque.jpg";
+import parque8 from "../assets/Carrusel/parque/08-parque2.jpg";
+import parque9 from "../assets/Carrusel/parque/09-living.jpg";
+import parque10 from "../assets/Carrusel/parque/10-comedor.jpg";
+import parque11 from "../assets/Carrusel/parque/11-cocina.jpg";
+import parque12 from "../assets/Carrusel/parque/12-dormitorio.jpg";
+import parque13 from "../assets/Carrusel/parque/13-dormitorio2.jpg";
+import parque14 from "../assets/Carrusel/parque/14-tocador.jpg";
+import parque15 from "../assets/Carrusel/parque/15-placard.jpg";
+import parque16 from "../assets/Carrusel/parque/16-cuchetas.jpg";
+import parque17 from "../assets/Carrusel/parque/17-cuchetas2.jpg";
+import parque18 from "../assets/Carrusel/parque/18-bano.jpg";
 
 import collage4_portada from "../assets/casa4.jpg";
 // --- Casa de Perico, Jujuy (id 4): 8 fotos ---
@@ -236,6 +240,7 @@ export default function Casas({ language }) {
     ],
     3: [
       parque1,
+      parque2,
       parque3,
       parque4,
       parque5,
@@ -249,6 +254,9 @@ export default function Casas({ language }) {
       parque13,
       parque14,
       parque15,
+      parque16,
+      parque17,
+      parque18,
     ],
     4: [jujuy1, jujuy2, jujuy3, jujuy4, jujuy5, jujuy6, jujuy7, jujuy8],
   };
